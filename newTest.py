@@ -9,6 +9,7 @@ import random
 import sys
 from time import sleep
 import Tkinter
+from Tkinter import N,S,E,W
 
 
 #Race name: size,speed,[Str,Dex,Con,Int,Wis,Cha]
@@ -100,48 +101,28 @@ dItemsWeaponsRanged = {
 
 
 class GuiSetup(Tkinter.Tk):
-	def __init__(self,parent):
+	def __init__(self,parent,heroName):
 		Tkinter.Tk.__init__(self,parent)
 		self.parent = parent
+		self.heroName = heroName
+		# self.geometry("400x250+600+600")
+		# self.resizable(width=False,height=False)
 		self.initialize()
-
 		
 	def initialize(self):
 		self.grid()
 		
-		self.button1 = Tkinter.Button(self,text=u"run simulator",
-									command=self.runSimulator)
-		
+		self.button1 = Tkinter.Button(self,text=u"run simulator",command=self.runSimulator)
 		self.text_title = Tkinter.Label(self,text="Battle:")
-		
-		# self.text_hero_name_head = Tkinter.Label(self,text="hero name:")
-		# self.text_hero_name = Tkinter.Label(self)
-		# self.text_hero_HP = Tkinter.Label(self)
-		# self.text_hero_XP = Tkinter.Label(self)
-		# self.text_hero_KILLS = Tkinter.Label(self)
-		# self.text_monster_name_head = Tkinter.Label(self,text="monster name:")
-		# self.text_monster_name = Tkinter.Label(self)
-		# self.text_monster_HP = Tkinter.Label(self)
-		# self.text_HP = Tkinter.Label(self,text="HP:")
-		# self.text_XP = Tkinter.Label(self,text="XP:")
-		# self.text_KILLS = Tkinter.Label(self,text="KILLS:")
-		
-		### grid mapping
 		self.text_title.grid(				column=5,row=0)
 		self.button1.grid(					column=5,row=10)
-		# self.text_hero_name_head.grid(		column=1,row=2)
-		# self.text_hero_name.grid(			column=1,row=3)
-		# self.text_hero_HP.grid(				column=1,row=4)
-		# self.text_hero_XP.grid(				column=1,row=5)
-		# self.text_hero_KILLS.grid(			column=1,row=6)
 		
-		# self.text_monster_name_head.grid(	column=3,row=2)
-		# self.text_monster_name.grid(		column=3,row=3)
-		# self.text_monster_HP.grid(			column=3,row=4)
+		mainFrame = Tkinter.Frame(self, borderwidth=5, relief="sunken", width=400, height=200)
+		mainFrame.grid(column=0, row=1, columnspan=10, rowspan=9, sticky=(N, S, E, W))
 		
-		# self.text_HP.grid(					column=0,row=4)
-		# self.text_XP.grid(					column=0,row=5)
-		# self.text_KILLS.grid(				column=0,row=6)
+		# self.text_KILLS = Tkinter.Label(self,text="KILLS:")
+		# self.text_KILLS.grid(				column=0,row=6)	
+		
 		###################################################
 		# window setup
 		self.text_hero_name			= Tkinter.Label(self,text="Name:")
@@ -193,58 +174,60 @@ class GuiSetup(Tkinter.Tk):
 
 
 		#GRID
-		self.text_hero_name.grid(			column=0,row=1)	
-		self.text_hero_race.grid(			column=0,row=2)	
-		self.text_hero_class.grid(			column=0,row=3)
-		self.text_hero_Str.grid(			column=0,row=4)	
-		self.text_hero_Dex.grid(			column=0,row=5)	
-		self.text_hero_Con.grid(			column=0,row=6)	
-		self.text_hero_Int.grid(			column=0,row=7)	
-		self.text_hero_Wis.grid(			column=0,row=8)	
-		self.text_hero_Cha.grid(			column=0,row=9)
-		self.text_hero_name_V.grid(			column=1,row=1)	
-		self.text_hero_race_V.grid(			column=1,row=2)	
-		self.text_hero_class_V.grid(		column=1,row=3)
-		self.text_hero_Str_V.grid(			column=1,row=4)	
-		self.text_hero_Dex_V.grid(			column=1,row=5)	
-		self.text_hero_Con_V.grid(			column=1,row=6)	
-		self.text_hero_Int_V.grid(			column=1,row=7)	
-		self.text_hero_Wis_V.grid(			column=1,row=8)	
-		self.text_hero_Cha_V.grid(			column=1,row=9)	
+		self.text_hero_name.grid(			column=0,row=1, sticky='W')	
+		self.text_hero_race.grid(			column=0,row=2, sticky='W')	
+		self.text_hero_class.grid(			column=0,row=3, sticky='W')
+		self.text_hero_Str.grid(			column=0,row=4, sticky='W')	
+		self.text_hero_Dex.grid(			column=0,row=5, sticky='W')	
+		self.text_hero_Con.grid(			column=0,row=6, sticky='W')	
+		self.text_hero_Int.grid(			column=0,row=7, sticky='W')	
+		self.text_hero_Wis.grid(			column=0,row=8, sticky='W')	
+		self.text_hero_Cha.grid(			column=0,row=9, sticky='W')
+		self.text_hero_name_V.grid(			column=1,row=1, sticky='W')	
+		self.text_hero_race_V.grid(			column=1,row=2, sticky='W')	
+		self.text_hero_class_V.grid(		column=1,row=3, sticky='W')
+		self.text_hero_Str_V.grid(			column=1,row=4, sticky='W')	
+		self.text_hero_Dex_V.grid(			column=1,row=5, sticky='W')	
+		self.text_hero_Con_V.grid(			column=1,row=6, sticky='W')	
+		self.text_hero_Int_V.grid(			column=1,row=7, sticky='W')	
+		self.text_hero_Wis_V.grid(			column=1,row=8, sticky='W')	
+		self.text_hero_Cha_V.grid(			column=1,row=9, sticky='W')	
 		self.text_hero_HitPoints.grid(		column=2,row=2)
 		self.text_hero_HitPoints_V.grid(	column=2,row=3)
 		self.text_hero_AC.grid(				column=2,row=4)
 		self.text_hero_AC_V.grid(			column=2,row=5)
 			
-		self.text_monster_name.grid(		column=7,row=1)	
-		self.text_monster_race.grid(		column=7,row=2)	
-		self.text_monster_class.grid(		column=7,row=3)	
-		self.text_monster_Str.grid(			column=7,row=4)	
-		self.text_monster_Dex.grid(			column=7,row=5)	
-		self.text_monster_Con.grid(			column=7,row=6)	
-		self.text_monster_Int.grid(			column=7,row=7)	
-		self.text_monster_Wis.grid(			column=7,row=8)	
-		self.text_monster_Cha.grid(			column=7,row=9)	
-		self.text_monster_name_V.grid(		column=8,row=1)	
-		self.text_monster_race_V.grid(		column=8,row=2)	
-		self.text_monster_class_V.grid(		column=8,row=3)	
-		self.text_monster_Str_V.grid(		column=8,row=4)	
-		self.text_monster_Dex_V.grid(		column=8,row=5)	
-		self.text_monster_Con_V.grid(		column=8,row=6)	
-		self.text_monster_Int_V.grid(		column=8,row=7)	
-		self.text_monster_Wis_V.grid(		column=8,row=8)	
-		self.text_monster_Cha_V.grid(		column=8,row=9)	
+		self.text_monster_name.grid(		column=7,row=1, sticky='W')	
+		self.text_monster_race.grid(		column=7,row=2, sticky='W')	
+		self.text_monster_class.grid(		column=7,row=3, sticky='W')	
+		self.text_monster_Str.grid(			column=7,row=4, sticky='W')	
+		self.text_monster_Dex.grid(			column=7,row=5, sticky='W')	
+		self.text_monster_Con.grid(			column=7,row=6, sticky='W')	
+		self.text_monster_Int.grid(			column=7,row=7, sticky='W')	
+		self.text_monster_Wis.grid(			column=7,row=8, sticky='W')	
+		self.text_monster_Cha.grid(			column=7,row=9, sticky='W')	
+		self.text_monster_name_V.grid(		column=8,row=1, sticky='W')	
+		self.text_monster_race_V.grid(		column=8,row=2, sticky='W')	
+		self.text_monster_class_V.grid(		column=8,row=3, sticky='W')	
+		self.text_monster_Str_V.grid(		column=8,row=4, sticky='W')	
+		self.text_monster_Dex_V.grid(		column=8,row=5, sticky='W')	
+		self.text_monster_Con_V.grid(		column=8,row=6, sticky='W')	
+		self.text_monster_Int_V.grid(		column=8,row=7, sticky='W')	
+		self.text_monster_Wis_V.grid(		column=8,row=8, sticky='W')	
+		self.text_monster_Cha_V.grid(		column=8,row=9, sticky='W')	
 		self.text_monster_HitPoints.grid(	column=6,row=2)
 		self.text_monster_HitPoints_V.grid(	column=6,row=3)
 		self.text_monster_AC.grid(			column=6,row=4)
 		self.text_monster_AC_V.grid(		column=6,row=5)
+		
+
 		
 	def runSimulator(self):
 		# self.gui_battle()
 		self.gui_dBattle()
 	
 	def gui_dBattle(self):
-		hero = Hero(sys.argv[1])
+		hero = Hero(self.heroName)
 		while hero.alive:
 			monster = Hero(mobNameGen())
 			self.updateGameInfo(hero,monster)
@@ -472,7 +455,7 @@ def game(name):
 
 	
 def gui_test():
-	app = GuiSetup(None)
+	app = GuiSetup(None,"mafrum")
 	app.title("test")
 	app.mainloop()
 	
@@ -481,6 +464,30 @@ if(__name__ == "__main__"):
 	# main(sys.argv[1])
 	gui_test()
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
