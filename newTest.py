@@ -3,7 +3,7 @@
 #https://docs.google.com/spreadsheets/d/1fjnoCiYUCOcrMxffWNwppHfuUDlY1Ae0HQ4t-XCaiPA/edit#gid=0
 #https://drive.google.com/file/d/0B8mF8uNMRN_mLUJRNmkwaDB3R3M/view
 #https://www.dandwiki.com/wiki/5e_Weapons
-#
+#https://stackoverflow.com/questions/20149483/python-canvas-and-grid-tkinter
 ########
 import random
 import sys
