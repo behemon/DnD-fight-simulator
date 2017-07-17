@@ -303,36 +303,6 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_AC_V.config(		text=monster.AC)		
 	
 		# self.text_hero_KILLS.config(text=hero.kills)
-
-		
-	def gui_battle(self):
-		hero = Hero(sys.argv[1])
-
-		while hero.alive:
-			monster = Mob()
-			self.text_hero_name.config(text=hero.name)
-			self.text_hero_XP.config(text=hero.XP)
-			self.text_monster_name.config(text=monster.name)	
-			self.text_hero_KILLS.config(text=hero.kills)			
-			self.gui_fight(hero,monster)
-			if hero.alive:
-				hero.XP += monster.XpReword
-				hero.kills += 1
-				hero.checkStatus()
-		
-	def gui_fight(self,hero,monster):
-		while True:
-			sleep(0.1)
-			hero.HP 	-= monster.Dmg*randGen(0,3)
-			monster.HP 	-= hero.Dmg*randGen(0,3)
-			hero.checkStatus()
-			monster.checkStatus()
-			self.text_hero_HP.config(text=hero.HP) 
-			self.text_monster_HP.config(text=monster.HP) 
-			
-			self.update()
-			if not (hero.alive and monster.alive):
-				break
 		
 
 class Unit:
@@ -368,18 +338,7 @@ class Unit:
 		if dmg < 1:
 			dmg = 1
 		return dmg
-	
-	
-	def checkStatus(self):
-		if self.HP > 0:
-			self.alive = True
-		else:
-			self.alive = False
 		
-		if self.XP >= 10:
-			self.HP = self.MaxHP
-			self.XP -= 10
-
 			
 	def calcAC(self):
 		AC = 10
@@ -424,43 +383,6 @@ def abilityGen(numOfRolls):
 		rollsList.append(randGen(1,6))
 	
 	return sum(sorted(rollsList)[1:])	
-
-def fight(hero,mob):
-	while True:
-		sleep(0.1)
-		hero.HP -= mob.Dmg*randGen(0,3)
-		mob.HP 	-= hero.Dmg*randGen(0,3)
-		hero.checkStatus()
-		mob.checkStatus()
-		sys.stdout.write( "%s:%s %s:%s   \r"%(hero.name,hero.HP,mob.name,mob.HP))
-		sys.stdout.flush()
-		if not (hero.alive and mob.alive):
-			break
-
-
-def battle(hero):	
-	while hero.alive:
-		mob = Mob()
-		print ""
-		fight(hero,mob)
-		if hero.alive:
-			hero.XP += mob.XpReword
-			hero.kills += 1
-	print "\nKills:",hero.kills
-
-		
-def main(name):
-	mob = Mob()
-	hero = Hero(name)
-	battle(hero)
-
-	
-def game(name):
-	# mob = Mob()
-	hero = Hero(name)
-	# app.text_hero_name.config(text=hero.name)
-	battle(hero)
-
 
 	
 def gui_test():
