@@ -27,8 +27,8 @@ def runSimulation():
 
 class mainMap():
 	def __init__(self,gui):
-		self.columns = 30
-		self.rows = 30
+		self.columns = 10
+		self.rows = 10
 		self.mapMatrix = {}
 		self.makeMatrixDict()
 		# print self.mapMatrix
@@ -37,6 +37,14 @@ class mainMap():
 		for x in range(self.columns):
 			for y in range(self.rows):
 				self.mapMatrix[y,x]=[None,None]
+
+def setCanvasGrid(canv , rows , columns):
+	for line in range(rows):
+		x = line*(canv.canvasWidth/rows)
+		canv.canvas.create_line(x,0,x,canv.canvasHeight,fill="black")
+	for line in range(columns):
+		y = line*(canv.canvasWidth/columns)
+		canv.canvas.create_line(0,y,canv.canvasWidth,y,fill="black")
 				
 def movment(gui):
 	pass

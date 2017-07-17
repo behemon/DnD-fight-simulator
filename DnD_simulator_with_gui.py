@@ -11,6 +11,7 @@ from time import sleep
 import Tkinter
 from Tkinter import N,S,E,W
 
+import canvas_test as maps
 
 #Race name: size,speed,[Str,Dex,Con,Int,Wis,Cha]
 dRacess = {	
@@ -118,6 +119,8 @@ class GuiSetup(Tkinter.Tk):
 		self.canvas=Tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
 		self.canvas.grid(row=0,column=11,rowspan=11)
 		
+		self.myMap = maps.mainMap(self)
+		maps.setCanvasGrid(self,self.myMap.rows,self.myMap.columns)
 		
 		mainFrame = Tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
 		mainFrame.grid(column=0, row=0, columnspan=10, rowspan=11, sticky=(N, S, E, W))
@@ -156,6 +159,8 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_HitPoints_V	= Tkinter.Label(self)
 		self.text_hero_AC			= Tkinter.Label(self,text="AC")
 		self.text_hero_AC_V			= Tkinter.Label(self)
+		self.text_hero_kills		= Tkinter.Label(self,text="Kills")
+		self.text_hero_kills_V		= Tkinter.Label(self)
 
 		self.text_monster_name		= Tkinter.Label(self,text="Name:")
 		self.text_monster_race		= Tkinter.Label(self,text="Race:")
@@ -206,7 +211,9 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_HitPoints_V.grid(	column=3,row=3)
 		self.text_hero_AC.grid(				column=3,row=4)
 		self.text_hero_AC_V.grid(			column=3,row=5)
-			
+		self.text_hero_kills.grid(			column=3,row=6)
+		self.text_hero_kills_V.grid(		column=3,row=7)
+		
 		self.text_monster_name.grid(		column=7,row=1, sticky=W+E)	
 		self.text_monster_race.grid(		column=7,row=2, sticky=W+E)	
 		self.text_monster_class.grid(		column=7,row=3, sticky=W+E)	
@@ -289,7 +296,8 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_Cha_V.config(		text=hero.dCha)		
 		self.text_hero_HitPoints_V.config(	text=hero.HitPoints)		
 		self.text_hero_AC_V.config(			text=hero.AC)		
-
+		self.text_hero_kills_V.config(		text=hero.kills)
+		
 		self.text_monster_name_V.config(	text=monster.name)	
 		self.text_monster_race_V.config(	text=monster.dRaceName)	
 		self.text_monster_class_V.config(	text=monster.dClass)		
@@ -302,7 +310,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_HitPoints_V.config(	text=monster.HitPoints)		
 		self.text_monster_AC_V.config(		text=monster.AC)		
 	
-		# self.text_hero_KILLS.config(text=hero.kills)
+
 		
 
 class Unit:
