@@ -4,6 +4,7 @@
 #https://drive.google.com/file/d/0B8mF8uNMRN_mLUJRNmkwaDB3R3M/view
 #https://www.dandwiki.com/wiki/5e_Weapons
 #https://stackoverflow.com/questions/20149483/python-canvas-and-grid-tkinter
+# http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
 ########
 import random
 import sys
