@@ -306,9 +306,7 @@ def randGen(startNum,endNum):
 
 	
 def mobNameGen():
-	nameList = ["Grolla","mugdolen","ahab","shlunzon"]
-	return nameList[randGen(0,len(nameList)-1)]
-
+	return random.choice(dListOfNames)
 
 def abilityGen(numOfRolls):
 	rollsList = []
