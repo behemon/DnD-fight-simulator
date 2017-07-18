@@ -177,11 +177,11 @@ class GuiSetup(Tkinter.Tk):
 			sleep(1)
 			hero_initiative = dScoreModifier[hero.dDex]
 			monster_initiative = dScoreModifier[monster.dDex]
-			
 			if hero_initiative >= monster_initiative:
 				self.gui_dAttack(hero,monster)
 			else:
 				self.gui_dAttack(monster,hero)
+
 			
 			self.text_hero_HitPoints_V.config(text=hero.HitPoints) 
 			self.text_monster_HitPoints_V.config(text=monster.HitPoints)
@@ -189,14 +189,29 @@ class GuiSetup(Tkinter.Tk):
 			monster.dCheckStatus()
 			self.update()
 		
+		
 	def gui_dAttack(self,first,second):
 		#first attacks
 		if randGen(1,20) > second.AC:
-			second.HitPoints -= randGen(dItemsWeaponsMele.get(first.weapon)[0],dItemsWeaponsMele.get(first.weapon)[1]) + dScoreModifier[first.dDex]
+			self.gui_dAttackTurns(first,second)
+			second.dCheckStatus()	
 		#second attacks
-		if randGen(1,20) > first.AC:
-			first.HitPoints -= randGen(dItemsWeaponsMele.get(second.weapon)[0],dItemsWeaponsMele.get(second.weapon)[1]) + dScoreModifier[second.dDex]
+		if randGen(1,20) > first.AC and second.alive:	
+			self.gui_dAttackTurns(second,first)	
+
 			
+	def gui_dAttackTurns(self,attacker,attacked):
+		diceRoll = randGen(1,20)
+		if diceRoll == 1:
+			return
+		elif diceRoll == 20:
+			attacked.HitPoints -= self.demageCalc(attacker)+self.demageCalc(attacker)
+		else:
+			attacked.HitPoints -= self.demageCalc(attacker)
+			
+			
+	def demageCalc(self,attacker):
+		return randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
 
 		
 	def updateGameInfo(self,hero,monster):
@@ -226,16 +241,9 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_AC_V.config(		text=monster.AC)		
 	
 
-		
-
 class Unit:
 	def __init__(self,name,HP):
 		self.name 	= name
-		self.Str 	= randGen(1,20) 
-		self.Sta 	= randGen(1,20)
-		self.MaxHP 	= HP*self.Sta
-		self.HP 	= HP*self.Sta
-		self.Dmg	= self.dmgCalc()
 		self.alive 	= True
 		self.XP		= 0
 		############################
@@ -255,6 +263,7 @@ class Unit:
 		self.AC			= self.calcAC()
 		self.weapon		= random.choice(dItemsWeaponsMele.keys())
 		self.XpReword	= 1
+		self.inventory	= {}
 		
 	def dmgCalc(self):
 		dmg = int(self.Str/4)
@@ -278,7 +287,8 @@ class Unit:
 		if self.XP >= 10:
 			self.HitPoints = self.MaxHP
 			self.XP -= 10		
-	
+
+
 class Hero(Unit):
 	def __init__(self,name):
 		Unit.__init__(self,name,randGen(20,45))
