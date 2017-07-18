@@ -1,0 +1,240 @@
+Acolyte
+Medium humanoid (any race), any alignment
+Armor Class 10
+Hit Points 9 (2d8)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+10 (+0) 10 (+0) 10 (+0) 10 (+0) 14 (+2) 11 (+0)
+Skills Medicine +4, Religion +2
+Senses passive Perception 12
+Languages any one language (usually Common)
+Challenge 1/4 (50 XP)
+Spellcasting. The acolyte is a 1st-level spellcaster. Its
+spellcasting ability is Wisdom (spell save DC 12, +4 to hit with
+spell attacks). The acolyte has following cleric spells prepared:
+Cantrips (at will): light, sacred flame, thaumaturgy
+1st level (3 slots): bless, cure wounds, sanctuary
+Actions
+Club. Melee Weapon Attack: +2 to hit, reach 5 ft., one target.
+Hit: 2 (1d4) bludgeoning damage.
+Acolytes are junior members of a clergy, usually
+answerable to a priest. They perform a variety of
+functions in a temple and are granted minor spellcasting
+power by their deities.
+
+Bandit
+Medium humanoid (any race), any non-lawful alignment
+Armor Class 12 (leather armor)
+Hit Points 11 (2d8 + 2)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+11 (+0) 12 (+1) 12 (+1) 10 (+0) 10 (+0) 10 (+0)
+Senses passive Perception 10
+Languages any one language (usually Common)
+Challenge 1/8 (25 XP)
+Actions
+Scimitar. Melee Weapon Attack: +3 to hit, reach 5 ft., one
+target. Hit: 4 (1d6 + 1) slashing damage.
+Light Crossbow. Ranged Weapon Attack: +3 to hit, range 80/320
+ft., one target. Hit: 5 (1d8 + 1) piercing damage.
+Bandits rove in gangs and are sometimes led by more
+powerful NPCs, including spellcasters. Not all bandits
+are evil. Oppression, drought, disease, or famine can
+often drive otherwise honest folk to a life of banditry.
+
+Berserker
+Medium humanoid (any race), any chaotic alignment
+Armor Class 13 (hide armor)
+Hit Points 67 (9d8 + 27)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+16 (+3) 12 (+1) 17 (+3) 9 (−1) 11 (+0) 9 (−1)
+Senses passive Perception 10
+Languages any one language (usually Common)
+Challenge 2 (450 XP)
+Reckless. At the start of its turn, the berserker can gain
+advantage on all melee weapon attack rolls during that turn,
+but attack rolls against it have advantage until the start of
+its next turn.
+Actions
+Greataxe. Melee Weapon Attack: +5 to hit, reach 5 ft., one
+target. Hit: 9 (1d12 + 3) slashing damage.
+Hailing from uncivilized lands, unpredictable
+berserkers come together in war parties and seek
+conflict wherever they can find it.
+
+Commoner
+Medium humanoid (any race), any alignment
+Armor Class 10
+Hit Points 4 (1d8)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+10 (+0) 10 (+0) 10 (+0) 10 (+0) 10 (+0) 10 (+0)
+Senses passive Perception 10
+Languages any one language (usually Common)
+Challenge 0 (10 XP)
+Actions
+Club. Melee Weapon Attack: +2 to hit, reach 5 ft., one target.
+Hit: 2 (1d4) bludgeoning damage.
+Commoners include peasants, serfs, slaves, servants,
+pilgrims, merchants, artisans, and hermits.
+
+Cultist
+Medium humanoid (any race), any non-good alignment
+Armor Class 12 (leather armor)
+Hit Points 9 (2d8)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+11 (+0) 12 (+1) 10 (+0) 10 (+0) 11 (+0) 10 (+0)
+Skills Deception +2, Religion +2
+Senses passive Perception 10
+Languages any one language (usually Common)
+Challenge 1/8 (25 XP)
+Dark Devotion. The cultist has advantage on saving throws
+against being charmed or frightened.
+Actions
+Scimitar. Melee Weapon Attack: +3 to hit, reach 5 ft., one
+creature. Hit: 4 (1d6 + 1) slashing damage.
+Cultists swear allegiance to dark powers, and often
+show signs of insanity in their beliefs and practices.
+
+Guard
+Medium humanoid (any race), any alignment
+Armor Class 16 (chain shirt, shield)
+Hit Points 11 (2d8 + 2)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+13 (+1) 12 (+1) 12 (+1) 10 (+0) 11 (+0) 10 (+0)
+Skills Perception +2
+Senses passive Perception 12
+Languages any one language (usually Common)
+Challenge 1/8 (25 XP)
+Actions
+Spear. Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or
+range 20/60 ft., one target. Hit: 4 (1d6 + 1) piercing damage, or
+5 (1d8 + 1) piercing damage if used with two hands to make a
+melee attack.
+Guards include members of a city watch, sentries
+in a citadel or fortified town, and the bodyguards of
+merchants and nobles.
+
+Knight
+Medium humanoid (any race), any alignment
+Armor Class 18 (plate)
+Hit Points 52 (8d8 + 16)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+16 (+3) 11 (+0) 14 (+2) 11 (+0) 11 (+0) 15 (+2)
+Saving Throws Con +4, Wis +2
+Senses passive Perception 10
+Languages any one language (usually Common)
+Challenge 3 (700 XP)
+Brave. The knight has advantage on saving throws against
+being frightened.
+Actions
+Multiattack. The knight makes two melee attacks.
+Greatsword. Melee Weapon Attack: +5 to hit, reach 5 ft., one
+target. Hit: 10 (2d6 + 3) slashing damage.
+Heavy Crossbow. Ranged Weapon Attack: +2 to hit, range
+100/400 ft., one target. Hit: 5 (1d10) piercing damage.
+Leadership (Recharges after a Short or Long Rest). For 1
+minute, the knight can utter a special command or warning
+whenever a nonhostile creature that it can see within 30 feet of
+it makes an attack roll or a saving throw. The creature can add
+a d4 to its roll provided it can hear and understand the knight.
+A creature can benefit from only one Leadership die at a time.
+This effect ends if the knight is incapacitated.
+Reactions
+Parry. The knight adds 2 to its AC against one melee attack that
+would hit it. To do so, the knight must see the attacker and be
+wielding a melee weapon.
+Knights are warriors who pledge service to rulers,
+religious orders, and noble causes. A knight’s alignment
+determines the extent to which a pledge is honored.
+
+Mage
+Medium humanoid (any race), any alignment
+Armor Class 12 (15 with mage armor)
+Hit Points 40 (9d8)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+9 (−1) 14 (+2) 11 (+0) 17 (+3) 12 (+1) 11 (+0)
+Saving Throws Int +6, Wis +4
+Skills Arcana +6, History +6
+Senses passive Perception 11
+Languages any four languages
+Challenge 6 (2,300 XP)
+Spellcasting. The mage is a 9th-level spellcaster. Its
+spellcasting ability is Intelligence (spell save DC 14, +6 to
+hit with spell attacks). The mage has the following wizard
+spells prepared:
+Cantrips (at will): fire bolt, light, mage hand, prestidigitation
+1st level (4 slots): detect magic, mage armor, magic
+missile, shield
+2nd level (3 slots): misty step, suggestion
+3rd level (3 slots): counterspell, fireball, fly
+4th level (3 slots): greater invisibility, ice storm
+5th level (1 slot): cone of cold
+Actions
+Dagger. Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or
+range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.
+Mages spend their lives in the study and
+practice of magic.
+
+Priest
+Medium humanoid (any race), any alignment
+Armor Class 13 (chain shirt)
+Hit Points 27 (5d8 + 5)
+Speed 25 ft.
+STR DEX CON INT WIS CHA
+10 (+0) 10 (+0) 12 (+1) 13 (+1) 16 (+3) 13 (+1)
+Skills Medicine +7, Persuasion +3, Religion +4
+Senses passive Perception 13
+Languages any two languages
+Challenge 2 (450 XP)
+Divine Eminence. As a bonus action, the priest can expend a
+spell slot to cause its melee weapon attacks to magically deal
+an extra 10 (3d6) radiant damage to a target on a hit. This
+benefit lasts until the end of the turn. If the priest expends a
+spell slot of 2nd level or higher, the extra damage increases by
+1d6 for each level above 1st.
+Spellcasting. The priest is a 5th-level spellcaster. Its
+spellcasting ability is Wisdom (spell save DC 13, +5 to
+hit with spell attacks). The priest has the following cleric
+spells prepared:
+Cantrips (at will): light, sacred flame, thaumaturgy
+1st level (4 slots): cure wounds, guiding bolt, sanctuary
+2nd level (3 slots): lesser restoration, spiritual weapon
+3rd level (2 slots): dispel magic, spirit guardians
+Actions
+Mace. Melee Weapon Attack: +2 to hit, reach 5 ft., one target.
+Hit: 3 (1d6) bludgeoning damage.
+Priests are the spiritual leaders of temples and shrines.
+
+Thug
+Medium humanoid (any race), any non-good alignment
+Armor Class 11 (leather armor)
+Hit Points 32 (5d8 + 10)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+15 (+2) 11 (+0) 14 (+2) 10 (+0) 10 (+0) 11 (+0)
+Skills Intimidation +2
+Senses passive Perception 10
+Languages any one language (usually Common)
+Challenge 1/2 (100 XP)
+Pack Tactics. The thug has advantage on an attack roll against
+a creature if at least one of the thug’s allies is within 5 feet of
+the creature and the ally isn’t incapacitated.
+Actions
+Multiattack. The thug makes two melee attacks.
+Mace. Melee Weapon Attack: +4 to hit, reach 5 ft., one creature.
+Hit: 5 (1d6 + 2) bludgeoning damage.
+Heavy Crossbow. Ranged Weapon Attack: +2 to hit, range
+100/400 ft., one target. Hit: 5 (1d10) piercing damage.
+Thugs are ruthless enforcers skilled at intimidation and
+violence. They work for money and have few scruples.
+
+
+
+
+

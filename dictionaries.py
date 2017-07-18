@@ -60,6 +60,7 @@ dScoreModifier = {
 					22:6,23:6
 					}
 
+
 #name : AR , set or add,score Modifer addon
 dItemsArmors = {	'Leather Lamellar':(12,'s','DEX'),
 					'Plated Leather Armor':(13,'s','DEX'),
@@ -70,12 +71,14 @@ dItemsArmors = {	'Leather Lamellar':(12,'s','DEX'),
 					'Wyvern Bone Armor':(17,'s')
 					}
 
+					
 dItemsSields = {	
 					'Bukler':(1,'a'),
 					'Wicker shield':(1,'a'),
 					'Wyvern Bone Shield':(2,'a'),
 					'Tower Shield':(3,'a')
 				}
+
 
 dItemsWeaponsMele = {
 						'Sword':(1,4)
@@ -85,8 +88,7 @@ dItemsWeaponsRanged = {
 						'bow':(1,4)
 						}
 
-						
-# dListOfNames = [
+
 dListOfNamesD = {
 				'Dian':(), 'Nese':(), 'Falledrick':(), 'Mae':(), 'Valhein':(), 'Dol':(), 'Earl':(), 'Cedria':(),
 				'Azulei':(), 'Yun':(), 'Cybel':(), 'Ina':(), 'Foolly':(), 'Skili':(), 'Juddol':(), 'Janver':(),
@@ -110,3 +112,4 @@ dListOfNamesD = {
 				'Urtench':(), 'Kesta':(), 'Helahona':(), 'Ryte':(), 'Falcia':(), 'Umannos':(),
 				'Urkensvall':(), 'Fedra':(), 'Bulkensar':(), 'Comia':(), 'Tyul':(), 'Lasendarl':()
 				}
+
