@@ -8,6 +8,7 @@
 ########
 import random
 import sys
+import copy
 from time import sleep
 import Tkinter
 from Tkinter import N,S,E,W
@@ -247,6 +248,7 @@ class Unit:
 		self.name 	= name
 		self.alive 	= True
 		self.XP		= 0
+		self.lvl	= 1
 		############################
 		self.dRaceName	= random.choice(dRacess.keys())
 		self.dRace		= dRacess[self.dRaceName]
@@ -258,12 +260,14 @@ class Unit:
 		self.dCha		= abilityGen(4) + self.dRace[2][5]
 		self.dClass 	= random.choice(dClasses.keys())
 		self.HitDice 	= dClasses.get(self.dClass)
+		self.HitDiceCount = 1
 		self.HitPoints 	= self.HitDice + dScoreModifier[self.dCons]
+		self.MaxHP		= copy.deepcopy(self.HitPoints)
 		self.armor		= None
 		self.shield		= 0
 		self.AC			= self.calcAC()
 		self.weapon		= random.choice(dItemsWeaponsMele.keys())
-		self.XpReword	= 1
+		self.XpReword	= 300
 		self.inventory	= {}
 		
 	def dmgCalc(self):
@@ -284,11 +288,16 @@ class Unit:
 			self.alive = True
 		else:
 			self.alive = False
-		
-		if self.XP >= 10:
-			self.HitPoints = self.MaxHP
-			self.XP -= 10		
-
+		if self.XP >= dXPlevelUP[self.lvl+1][0]:
+			self.levelUP()
+	
+	
+	def levelUP(self):
+			self.lvl += 1
+			self.HitDiceCount += 1
+			addHP = randGen(1,self.HitDice)+dScoreModifier[self.dCons]
+			self.MaxHP += addHP
+			self.HitPoints = copy.deepcopy(self.MaxHP)
 
 class Hero(Unit):
 	def __init__(self,name):
