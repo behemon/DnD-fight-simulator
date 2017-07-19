@@ -48,10 +48,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_title.grid(	column=5,row=0)
 		self.button1.grid(		column=5,row=10,sticky=N+S+E+W)
 
-		
-		# self.text_KILLS = Tkinter.Label(self,text="KILLS:")
-		# self.text_KILLS.grid(				column=0,row=6)	
-		
+
 		###################################################
 		# window setup
 		self.text_hero_name			= Tkinter.Label(self,text="Name:")
@@ -156,11 +153,24 @@ class GuiSetup(Tkinter.Tk):
 		
 		
 	def runSimulator(self):
-		# self.gui_battle()
 		self.gui_dBattle()
 	
 	def gui_dBattle(self):
 		hero = Hero(self.heroName)
+		
+		
+		# print self.myMap.mapMatrix
+		figuresSizeX = self.canvasWidth/self.myMap.columns
+		figuresSizeY = self.canvasHeight/self.myMap.rows
+		# print figuresSizeX
+		# print figuresSizeY
+		figure1=self.canvas.create_oval(0, 0, figuresSizeX, figuresSizeY, fill="blue")
+		self.update()
+		sleep(5)
+		self.canvas.move(figure1,figuresSizeX,figuresSizeY)
+		
+		return
+		
 		while hero.alive:
 			monster = Hero(mobNameGen())
 			self.updateGameInfo(hero,monster)
@@ -213,7 +223,10 @@ class GuiSetup(Tkinter.Tk):
 			
 			
 	def demageCalc(self,attacker):
-		return randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
+		#mele attack
+		return randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dStr]
+		#ranged attack
+		return randGen(dItemsWeaponsRanged.get(attacker.weapon)[0],dItemsWeaponsRanged.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
 
 		
 	def updateGameInfo(self,hero,monster):
@@ -296,8 +309,11 @@ class Unit:
 			self.lvl += 1
 			self.HitDiceCount += 1
 			addHP = randGen(1,self.HitDice)+dScoreModifier[self.dCons]
+			if addHP < 1:
+				addHP = 1
 			self.MaxHP += addHP
 			self.HitPoints = copy.deepcopy(self.MaxHP)
+
 
 class Hero(Unit):
 	def __init__(self,name):
@@ -317,6 +333,7 @@ def randGen(startNum,endNum):
 	
 def mobNameGen():
 	return random.choice(dListOfNamesD.keys())
+
 
 def abilityGen(numOfRolls):
 	rollsList = []

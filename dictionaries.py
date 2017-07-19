@@ -62,15 +62,30 @@ dScoreModifier = {
 
 
 #name : AR , set or add,score Modifer addon
-dItemsArmors = {	'Leather Lamellar':(12,'s','DEX'),
-					'Plated Leather Armor':(13,'s','DEX'),
-					'Battle Robe':(11,'s','DEX'),
-					'Chain Cloth':(16,'s','DEX'),
-					'Lorica Segmentata':(15,'s'),
-					'Steam Armor':(18,'s'),
-					'Wyvern Bone Armor':(17,'s')
-					}
-
+dItemsArmors = {	
+					'Light Armor Padded':(11,'s','DEX'),
+					'Light Armor Leather':(11,'s','DEX'),
+					'Light Armor Studded leather':(12,'s','DEX'),
+					'Medium Armor Hide':(12,'s','DEX'),
+					'Medium Armor Chain shirt':(13,'s','DEX'),
+					'Medium Armor Scale mail':(14,'s','DEX'),
+					'Medium Armor Breastplate':(14,'s','DEX'),
+					'Medium Armor Half plate':(15,'s','DEX'),
+					'Heavy Armor Ring mail':(14,'s',''),
+					'Heavy Armor Chain mail':(16,'s',''),
+					'Heavy Armor Splint':(17,'s',''),
+					'Heavy Armor Plate':(18,'s','')
+				}
+'''	'Leather Lamellar':(12,'s','DEX'),
+'Plated Leather Armor':(13,'s','DEX'),
+'Battle Robe':(11,'s','DEX'),
+'Chain Cloth':(16,'s','DEX'),
+'Lorica Segmentata':(15,'s'),
+'Steam Armor':(18,'s'),
+'Wyvern Bone Armor':(17,'s')
+}
+'''
+				
 					
 dItemsSields = {	
 					'Bukler':(1,'a'),

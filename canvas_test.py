@@ -31,7 +31,6 @@ class mainMap():
 		self.rows = 10
 		self.mapMatrix = {}
 		self.makeMatrixDict()
-		# print self.mapMatrix
 	
 	def makeMatrixDict(self):
 		for x in range(self.columns):
