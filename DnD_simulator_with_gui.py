@@ -12,6 +12,7 @@ import copy
 from time import sleep
 import Tkinter
 from Tkinter import N,S,E,W
+from A_star_algorithm import pathFind
 
 import canvas_test as maps
 from dictionaries import *
@@ -38,6 +39,17 @@ class GuiSetup(Tkinter.Tk):
 		
 		self.myMap = maps.mainMap(self)
 		maps.setCanvasGrid(self,self.myMap.rows,self.myMap.columns)
+		self.horizonLength = self.canvasWidth / self.myMap.columns
+		self.verticalLength = self.canvasHeight / self.myMap.rows 
+		
+		self.pathfindingMap = self.pathfindingMapGenerator()
+		self.fredom_directions = 8 # number of possible directions to move on the map
+		if self.fredom_directions == 4:
+			self.dx = [1, 0, -1, 0]
+			self.dy = [0, 1, 0, -1]
+		elif self.fredom_directions == 8:
+			self.dx = [1, 1, 0, -1, -1, -1, 0, 1]
+			self.dy = [0, 1, 1, 1, 0, -1, -1, -1]
 		
 		mainFrame = Tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
 		mainFrame.grid(column=0, row=0, columnspan=10, rowspan=11, sticky=(N, S, E, W))
@@ -153,24 +165,64 @@ class GuiSetup(Tkinter.Tk):
 		
 		
 	def runSimulator(self):
-		self.gui_dBattle()
+		self.canvas_lgoic()
+		
+		#self.gui_dBattle()
+		
 	
-	def gui_dBattle(self):
-		hero = Hero(self.heroName)
-		
-		
-		# print self.myMap.mapMatrix
+	def canvas_lgoic(self):
+		#print self.myMap.mapMatrix
 		figuresSizeX = self.canvasWidth/self.myMap.columns
 		figuresSizeY = self.canvasHeight/self.myMap.rows
-		# print figuresSizeX
-		# print figuresSizeY
-		figure1=self.canvas.create_oval(0, 0, figuresSizeX, figuresSizeY, fill="blue")
-		self.update()
-		sleep(5)
-		self.canvas.move(figure1,figuresSizeX,figuresSizeY)
+		startLocation = random.choice(self.myMap.mapMatrix.keys())
+		x0 = startLocation[0]*figuresSizeX
+		x1 = (1+startLocation[0])*figuresSizeX
+		y0 = startLocation[1]*figuresSizeY
+		y1 = (1+startLocation[1])*figuresSizeY
 		
-		return
+		figure1=self.canvas.create_oval(x0, y0, x1, y1, fill="blue")
+		self.update()		
 		
+		xA = startLocation[0]
+		xB = 9
+		yA = startLocation[1]
+		yB = 9
+		
+		route = pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, xA, yA, xB, yB, self.myMap.columns, self.myMap.rows)
+		print route
+		for i in route:
+			sleep(1)
+			self.canvas.move(figure1,self.dx[int(i)]*self.horizonLength,self.dy[int(i)]*self.verticalLength)
+			self.update()
+			
+			
+	def move_N(self,unit):
+		self.canvas.move(unit,0,-1*self.verticalLength)
+	def move_NE(self,unit):
+		self.canvas.move(unit,self.horizonLength,-1*self.verticalLength)
+	def move_E(self,unit):
+		self.canvas.move(unit,self.horizonLength,0)
+	def move_SE(self,unit):
+		self.canvas.move(unit,self.horizonLength,self.verticalLength)
+	def move_S(self,unit):
+		self.canvas.move(unit,0,self.verticalLength)
+	def move_SW(self,unit):
+		self.canvas.move(unit,-1*self.horizonLength,self.verticalLength)
+	def move_W(self,unit):
+		self.canvas.move(unit,-1*self.horizonLength,0)
+	def move_NW(self,unit):
+		self.canvas.move(unit,-1*self.horizonLength,-1*self.verticalLength)
+
+	def pathfindingMapGenerator(self):
+		the_map = []
+		row = [0] * self.myMap.columns
+		for i in range(self.myMap.rows):
+			the_map.append(list(row))
+		return the_map
+
+		
+	def gui_dBattle(self):
+		hero = Hero(self.heroName)
 		while hero.alive:
 			monster = Hero(mobNameGen())
 			self.updateGameInfo(hero,monster)
