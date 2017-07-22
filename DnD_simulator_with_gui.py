@@ -72,6 +72,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_Int			= Tkinter.Label(self,text="Int:")
 		self.text_hero_Wis			= Tkinter.Label(self,text="Wis:")
 		self.text_hero_Cha			= Tkinter.Label(self,text="Cha:")
+		
 		self.text_hero_name_V		= Tkinter.Label(self)
 		self.text_hero_race_V		= Tkinter.Label(self)
 		self.text_hero_class_V		= Tkinter.Label(self)
@@ -81,6 +82,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_Int_V		= Tkinter.Label(self)
 		self.text_hero_Wis_V		= Tkinter.Label(self)
 		self.text_hero_Cha_V		= Tkinter.Label(self)
+		
 		self.text_hero_HitPoints	= Tkinter.Label(self,text="Hit Points")
 		self.text_hero_HitPoints_V	= Tkinter.Label(self)
 		self.text_hero_AC			= Tkinter.Label(self,text="AC")
@@ -97,6 +99,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_Int		= Tkinter.Label(self,text="Int:")
 		self.text_monster_Wis		= Tkinter.Label(self,text="Wis:")
 		self.text_monster_Cha		= Tkinter.Label(self,text="Cha:")
+		
 		self.text_monster_name_V	= Tkinter.Label(self)
 		self.text_monster_race_V	= Tkinter.Label(self)
 		self.text_monster_class_V	= Tkinter.Label(self)
@@ -106,6 +109,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_Int_V		= Tkinter.Label(self)
 		self.text_monster_Wis_V		= Tkinter.Label(self)
 		self.text_monster_Cha_V		= Tkinter.Label(self)
+		
 		self.text_monster_HitPoints	= Tkinter.Label(self,text="Hit Points")
 		self.text_monster_HitPoints_V	= Tkinter.Label(self)
 		self.text_monster_AC		= Tkinter.Label(self,text="AC")
@@ -165,35 +169,51 @@ class GuiSetup(Tkinter.Tk):
 		
 		
 	def runSimulator(self):
-		self.canvas_lgoic()
+		while True:
+			self.canvas_lgoic()
 		
 		#self.gui_dBattle()
 		
 	
 	def canvas_lgoic(self):
 		#print self.myMap.mapMatrix
+		
+		#dimentions of the player or mob in the grid
 		figuresSizeX = self.canvasWidth/self.myMap.columns
 		figuresSizeY = self.canvasHeight/self.myMap.rows
+		
+		#generation of the start and the finish of the unit
 		startLocation = random.choice(self.myMap.mapMatrix.keys())
+		endLocation = random.choice(self.myMap.mapMatrix.keys())
+		
+		#calculate size for the unit 
 		x0 = startLocation[0]*figuresSizeX
 		x1 = (1+startLocation[0])*figuresSizeX
 		y0 = startLocation[1]*figuresSizeY
 		y1 = (1+startLocation[1])*figuresSizeY
 		
+		#create the unit 
 		figure1=self.canvas.create_oval(x0, y0, x1, y1, fill="blue")
-		self.update()		
+		self.update()	
 		
+		#for pathfinding start x0,y0 and end of path x1 y1
 		xA = startLocation[0]
-		xB = 9
+		xB = endLocation[0]
 		yA = startLocation[1]
-		yB = 9
+		yB = endLocation[1]
 		
+		# use A*star algorithm to find the path from start to end
 		route = pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, xA, yA, xB, yB, self.myMap.columns, self.myMap.rows)
 		print route
+		
+		#move the unit all the way from start location to finish location
 		for i in route:
-			sleep(1)
+			sleep(0.1)
 			self.canvas.move(figure1,self.dx[int(i)]*self.horizonLength,self.dy[int(i)]*self.verticalLength)
 			self.update()
+		
+		#terminate the unit from memory and the board
+		self.canvas.delete(figure1)	
 			
 			
 	def move_N(self,unit):
