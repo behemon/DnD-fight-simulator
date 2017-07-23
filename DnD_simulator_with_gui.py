@@ -169,10 +169,10 @@ class GuiSetup(Tkinter.Tk):
 		
 		
 	def runSimulator(self):
-		while True:
-			self.canvas_lgoic()
+		# while True:
+			# self.canvas_lgoic()
 		
-		#self.gui_dBattle()
+		self.gui_dBattle()
 		
 	
 	def canvas_lgoic(self):
@@ -404,6 +404,8 @@ def randGen(startNum,endNum):
 
 	
 def mobNameGen():
+	print random.choice(random.choice(challenge_all))
+	
 	return random.choice(dListOfNamesD.keys())
 
 

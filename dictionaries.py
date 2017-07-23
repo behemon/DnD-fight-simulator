@@ -151,3 +151,249 @@ dXPlevelUP = {
 				19:(305000 	, +6),
 				20:(355000 	, +6)
 			}
+
+############
+#http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
+############
+#Challenge 0 (0-10 XP)
+challenge_0 = [
+				'Awakened shrub',
+				'Baboon',
+				'Badger',
+				'Bat',
+				'Cat',
+				'Commoner',
+				'Crab',
+				'Deer',
+				'Eagle',
+				'Frog',
+				'Giant fire beetle',
+				'Goat',
+				'Hawk',
+				'Hyena',
+				'Jackal',
+				'Lizard',
+				'Octopus',
+				'Owl',
+				'Quipper',
+				'Rat',
+				'Raven',
+				'Scorpion',
+				'Sea horse',
+				'Spider',
+				'Vulture',
+				'Wease'
+				]
+
+#Challenge 1/8 (25 XP)
+challenge_1 = [
+				'Bandit',
+				'Blood hawk',
+				'Camel',
+				'Cultist',
+				'Flying snake',
+				'Giant crab',
+				'Giant rat',
+				'Giant weasel',
+				'Guard',
+				'Kobold',
+				'Mastiff',
+				'Merfolk',
+				'Mule',
+				'Poisonous snake',
+				'Pony',
+				'Stirge',
+				'Twig blight'
+				]
+
+#Challenge 1/4 (50 XP)
+challenge_2 = [
+				'Acolyte',
+				'Axe beak',
+				'Blink dog',
+				'Boar',
+				'Constrictor snake',
+				'Draft horse',
+				'Elk',
+				'Flying sword',
+				'Giant badger',
+				'Giant bat',
+				'Giant centipede',
+				'Giant frog',
+				'Giant lizard',
+				'Giant owl',
+				'Giant poisonous snake',
+				'Giant wolf spider',
+				'Goblin',
+				'Panther',
+				'Pteranodon',
+				'Riding horse',
+				'Skeleton',
+				'Swarm of bats',
+				'Swarm of rats',
+				'Swarm of ravens',
+				'Wolf',
+				'Zombie'
+				]
+
+#Challenge 1/2 (100 XP)
+challenge_3 = [
+				'Ape',
+				'Black bear',
+				'Cockatrice',
+				'Crocodile',
+				'Giant goat',
+				'Giant sea horse',
+				'Giant wasp',
+				'Gnoll',
+				'Hobgoblin',
+				'Lizardfolk',
+				'Orc',
+				'Reef shark',
+				'Satyr',
+				'Swarm of insects',
+				'Thug',
+				'Warhorse',
+				'Worg'
+				]
+
+#Challenge 1 (200 XP)
+challenge_4 = [
+				'Animated armor',
+				'Brown bear',
+				'Bugbear',
+				'Death dog',
+				'Dire wolf',
+				'Ghoul',
+				'Giant eagle',
+				'Giant hyena',
+				'Giant octopus',
+				'Giant spider',
+				'Giant toad',
+				'Giant vulture',
+				'Harpy',
+				'Hippogriff',
+				'Lion',
+				'Swarm of quippers',
+				'Tiger'
+				]
+
+#Challenge 2 (450 XP)
+challenge_5 = [
+				'Allosaurus',
+				'Awakened tree',
+				'Berserker',
+				'Centaur',
+				'Gargoyle',
+				'Giant boar',
+				'Giant constrictor snake',
+				'Giant elk',
+				'Grick',
+				'Griffon',
+				'Hunter shark',
+				'Nothic',
+				'Ochre jelly',
+				'Ogre',
+				'Pegasus',
+				'Plesiosaurus',
+				'Polar bear',
+				'Priest',
+				'Rhinoceros',
+				'Saber-toothed tiger',
+				'Swarm of poisonous snakes'
+				]
+
+#Challenge 3 (700 XP)
+challenge_6 = [
+				'Ankylosaurus',
+				'Basilisk',
+				'Doppelganger',
+				'Giant scorpion',
+				'Hell hound',
+				'Killer whale',
+				'Knight',
+				'Manticore',
+				'Minotaur',
+				'Mummy',
+				'Owlbear',
+				'Phase spider',
+				'Spectator',
+				'Werewolf',
+				'Wight',
+				'Winter wolf',
+				'Yeti'
+				]
+
+#Challenge 4 (1',100 XP)
+challenge_7 = [
+				'Banshee',
+				'Elephant',
+				'Flameskull',
+				'Ghost'
+				]
+
+#Challenge 5 (1',800 XP)
+challenge_8 = [
+				'Air elemental',
+				'Earth elemental',
+				'Fire elemental',
+				'Flesh golem',
+				'Giant crocodile',
+				'Giant shark',
+				'Hill giant',
+				'Triceratops',
+				'Troll',
+				'Water elemental'
+				]
+
+#Challenge 6 (2',300 XP)
+challenge_9 = [
+				'Chimera',
+				'Cyclops',
+				'Mage',
+				'Mammoth',
+				'Medusa',
+				'Wyvern'
+				]
+
+#Challenge 7 (2',900 XP)
+challenge_10 = ['Giant ape']
+
+#Challenge 8 (3',900 XP)
+challenge_11 = [
+				'Frost giant',
+				'Hydra',
+				'Tyrannosaurus rex',
+				'Young green dragon'
+				]
+
+#Challenge 9 (5',000 XP)
+challenge_12 = ['Fire giant']
+
+#Challenge 10 (5,900 XP)
+challenge_13 = ['Stone golem']
+
+#Challenge 17 (18,000 XP)
+challenge_14 = ['Adult red dragon']
+
+challenge_all = [
+				challenge_0,
+				challenge_1,
+				challenge_2,
+				challenge_3,
+				challenge_4,
+				challenge_5,
+				challenge_6,
+				challenge_7,
+				challenge_8,
+				challenge_9,
+				challenge_10,
+				challenge_11,
+				challenge_12,
+				challenge_13,
+				challenge_14
+				]
+
+
+
+
