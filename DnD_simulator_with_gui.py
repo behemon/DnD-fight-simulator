@@ -422,10 +422,39 @@ def gui_test():
 	app.title("test")
 	app.mainloop()
 	
+
+def parse_monster_list():
+	fileList = open("monster list.txt","r").readlines()
+	# dummyFile = open("temp.txt","w")
+	textList = []
+	sets = []
+	x=[]
+	for line in fileList:
+		if line == '\n':
+			sets.append(x)
+			x=[]
+			continue
+		x.append(line.strip())
 	
+	for set in sets:
+		# for line in set:
+			# if "Hit Points" in line:
+				# print line
+				# break
+		print set
+		# print set[0]
+		# print set[1]
+		# print set[2]
+		# print set[3]
+		# print set[4]
+		# print set[5]
+		# print set[6]
+		# print set[7]
+
 if(__name__ == "__main__"):
 	# main(sys.argv[1])
-	gui_test()
+	# gui_test()
+	parse_monster_list()
 
 	
 	
