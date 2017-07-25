@@ -160,7 +160,7 @@ dXPlevelUP = {
 ############
 #Challenge 0 (0-10 XP)
 challenge_0 = [
-				'Awakened shrub',
+				'Awakened Shrub',
 				'Baboon',
 				'Badger',
 				'Bat',
@@ -170,7 +170,7 @@ challenge_0 = [
 				'Deer',
 				'Eagle',
 				'Frog',
-				'Giant fire beetle',
+				'Giant Fire Beetle',
 				'Goat',
 				'Hawk',
 				'Hyena',
@@ -182,31 +182,31 @@ challenge_0 = [
 				'Rat',
 				'Raven',
 				'Scorpion',
-				'Sea horse',
+				'Sea Horse',
 				'Spider',
 				'Vulture',
-				'Wease'
+				'Weasel'
 				]
 
 #Challenge 1/8 (25 XP)
 challenge_1 = [
 				'Bandit',
-				'Blood hawk',
+				'Blood Hawk',
 				'Camel',
 				'Cultist',
-				'Flying snake',
-				'Giant crab',
-				'Giant rat',
-				'Giant weasel',
+				'Flying Snake',
+				'Giant Crab',
+				'Giant Rat',
+				'Giant Weasel',
 				'Guard',
 				'Kobold',
 				'Mastiff',
 				'Merfolk',
 				'Mule',
-				'Poisonous snake',
+				'Poisonous Snake',
 				'Pony',
 				'Stirge',
-				'Twig blight'
+				'Twig Blight'
 				]
 
 #Challenge 1/4 (50 XP)

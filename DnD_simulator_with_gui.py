@@ -16,6 +16,7 @@ from A_star_algorithm import pathFind
 
 import canvas_test as maps
 from dictionaries import *
+import monster_dictionary as MD
 
 
 
@@ -89,6 +90,8 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_AC_V			= Tkinter.Label(self)
 		self.text_hero_kills		= Tkinter.Label(self,text="Kills")
 		self.text_hero_kills_V		= Tkinter.Label(self)
+		self.text_hero_XP			= Tkinter.Label(self,text="XP")
+		self.text_hero_XP_V			= Tkinter.Label(self)
 
 		self.text_monster_name		= Tkinter.Label(self,text="Name:")
 		self.text_monster_race		= Tkinter.Label(self,text="Race:")
@@ -143,6 +146,8 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_AC_V.grid(			column=3,row=5)
 		self.text_hero_kills.grid(			column=3,row=6)
 		self.text_hero_kills_V.grid(		column=3,row=7)
+		self.text_hero_XP.grid(				column=3,row=8)
+		self.text_hero_XP_V.grid(			column=3,row=9)
 		
 		self.text_monster_name.grid(		column=7,row=1, sticky=W+E)	
 		self.text_monster_race.grid(		column=7,row=2, sticky=W+E)	
@@ -244,7 +249,8 @@ class GuiSetup(Tkinter.Tk):
 	def gui_dBattle(self):
 		hero = Hero(self.heroName)
 		while hero.alive:
-			monster = Hero(mobNameGen())
+			# monster = Hero(mobNameGen())
+			monster = Mob()
 			self.updateGameInfo(hero,monster)
 			self.update()
 			sleep(1)
@@ -296,7 +302,10 @@ class GuiSetup(Tkinter.Tk):
 			
 	def demageCalc(self,attacker):
 		#mele attack
-		return randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dStr]
+		x = randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dStr]
+		if x<0:
+			x= 0
+		return x
 		#ranged attack
 		return randGen(dItemsWeaponsRanged.get(attacker.weapon)[0],dItemsWeaponsRanged.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
 
@@ -314,6 +323,7 @@ class GuiSetup(Tkinter.Tk):
 		self.text_hero_HitPoints_V.config(	text=hero.HitPoints)		
 		self.text_hero_AC_V.config(			text=hero.AC)		
 		self.text_hero_kills_V.config(		text=hero.kills)
+		self.text_hero_XP_V.config(			text=hero.XP)
 		
 		self.text_monster_name_V.config(	text=monster.name)	
 		self.text_monster_race_V.config(	text=monster.dRaceName)	
@@ -326,10 +336,10 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_Cha_V.config(		text=monster.dCha)		
 		self.text_monster_HitPoints_V.config(	text=monster.HitPoints)		
 		self.text_monster_AC_V.config(		text=monster.AC)		
-	
+
 
 class Unit:
-	def __init__(self,name,HP):
+	def __init__(self,name):
 		self.name 	= name
 		self.alive 	= True
 		self.XP		= 0
@@ -389,20 +399,62 @@ class Unit:
 
 class Hero(Unit):
 	def __init__(self,name):
-		Unit.__init__(self,name,randGen(20,45))
+		Unit.__init__(self,name)
 		self.kills = 0
 
 		
 class Mob(Unit):
 	def __init__(self):
-		Unit.__init__(self,mobNameGen(),randGen(20,45))
-		self.XpReword = randGen(1,5)
+		Unit.__init__(self,"")
+		
+		self.name = random.choice(challenge_0)
+		mobParams =  MD.monsterDict[self.name]
+		print mobParams[5]
+		
+		self.dRaceName	= "monster"
+		self.dRace		= "monster"
+		self.dStr		= mobParams[5][0]
+		self.dDex		= mobParams[5][1]
+		self.dCons		= mobParams[5][2]
+		self.dInt		= mobParams[5][3]
+		self.dWis		= mobParams[5][4]
+		self.dCha		= mobParams[5][5]
+		# self.dClass 	= random.choice(dClasses.keys())
+		# self.HitDice 	= mobParams[]
+		# self.HitDiceCount = 1
+		# self.HitPoints 	= self.HitDice + dScoreModifier[self.dCons]
+		self.HitPoints 	= self.calcHP(mobParams[3])
+		self.MaxHP		= copy.deepcopy(self.HitPoints)
+		self.armor		= None
+		self.shield		= 0
+		self.AC			= int(mobParams[2])
+		self.weapon		= random.choice(dItemsWeaponsMele.keys())
+		self.XpReword	= int(mobParams[9])
+		
+		
+	def calcHP(self,x):
+		x = x.split()
+		result = diceRoll(x[0])
+		if len(x)> 1:
+			stringa = "%s%s%s"%(result, x[1],x[2]) 
+			result = eval(stringa)
+		if result <= 0:
+			result = 1
+		return result
 
-			
+
+def diceRoll(dice):
+	x = dice.split("d")
+	result = 0
+	for times in range(int(x[0])):
+		result += randGen(1,int(x[1]))
+	return result
+
+
 def randGen(startNum,endNum):
 	return random.randint(startNum,endNum)
 
-	
+
 def mobNameGen():
 	print random.choice(random.choice(challenge_all))
 	
@@ -416,16 +468,17 @@ def abilityGen(numOfRolls):
 	
 	return sum(sorted(rollsList)[1:])	
 
-	
+
 def gui_test():
 	app = GuiSetup(None,"mafrum")
 	app.title("test")
 	app.mainloop()
-	
+
 
 def parse_monster_list():
 	import re
-	fileList = open("monster list.txt","r").readlines()
+	# fileList = open("monster list.txt","r").readlines()
+	fileList = open("Nonplayer Characters example.txt","r").readlines()
 	# dummyFile = open("temp.txt","w")
 	textList = []
 	sets = []
@@ -490,13 +543,20 @@ def parse_monster_list():
 		# print ("'"+%s+"'"+":"+ %s + %s + %s + %s + %s + %s + %s)%name,size_alighment,AC,HP,speed,params,hardDmg,calcDmg
 		print ("'%s':( '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' ),")%(
 			name,size,alighment,AC,HP,speed,params,hardDmg,calcDmg,challenge,XP)
-		
-		
-if(__name__ == "__main__"):
-	# main(sys.argv[1])
-	# gui_test()
-	parse_monster_list()
 
+
+def monster_generator_test():
+	mob = Mob()
+	
+	
+if(__name__ == "__main__"):
+	gui_test()
+	
+	# main(sys.argv[1])
+	# parse_monster_list()
+	
+	# monster_generator_test()
+	
 	
 	
 	
