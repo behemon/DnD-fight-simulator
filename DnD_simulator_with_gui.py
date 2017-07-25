@@ -424,6 +424,7 @@ def gui_test():
 	
 
 def parse_monster_list():
+	import re
 	fileList = open("monster list.txt","r").readlines()
 	# dummyFile = open("temp.txt","w")
 	textList = []
@@ -437,20 +438,60 @@ def parse_monster_list():
 		x.append(line.strip())
 	
 	for set in sets:
-		# for line in set:
-			# if "Hit Points" in line:
-				# print line
-				# break
-		print set
-		# print set[0]
-		# print set[1]
-		# print set[2]
-		# print set[3]
-		# print set[4]
-		# print set[5]
-		# print set[6]
-		# print set[7]
+		if set == []:
+			continue
+		name,size,alighment,AC,HP,speed,params,hardDmg,calcDmg,challenge,XP = "","","","","","","","","","",""
+		
+		# print "\n"
 
+		# print set
+
+		# print set[0] 	# name
+		name = set[0] 	# name
+		
+		# print set[1] 	# size , alighment
+		size = set[1].split(",")[0].split(" ")[0]	# size , alighment
+		alighment = set[1].split(",")[1].strip()	# size , alighment
+		
+		# print set[2]	# armor class
+		AC = set[2].split(" ")[2]	# armor class
+		
+		# print set[3].split("(")[1].split(")")[0]	# hit points
+		HP = set[3].split("(")[1].split(")")[0]	# hit points
+		
+		# print set[4]	# speed
+		speed =  set[4].split(" ")[1]	# speed
+		
+		# print set[5]	# "STR DEX CON INT WIS CHA"
+		
+		# print map(int,set[6].split()[0::2])	# STR DEX CON INT WIS CHA
+		params =  map(int,set[6].split()[0::2])	# STR DEX CON INT WIS CHA
+		
+		for line in set:
+			if "Challenge" in line:
+				# print line
+				challenge = line.split(" ")[1]
+				XP = line.split("(")[1].split(" XP")[0]
+			if "Hit:" in line:
+				p1 = re.compile(r"[\:]\s\d+")
+				p2 = re.compile(r"\d+[d]\d+\s.\s\d+|\d+[d]\d+")
+				# p3 = re.compile(r"\d+[d]\d+^\s")
+				try:
+					# print p1.search(str(line)).group().split(": ")[1]
+					hardDmg = p1.search(str(line)).group().split(": ")[1]
+				except:
+					pass
+				try:
+					# print p2.search(str(line)).group()
+					calcDmg = p2.search(str(line)).group()
+				except:
+					pass
+		
+		# print ("'"+%s+"'"+":"+ %s + %s + %s + %s + %s + %s + %s)%name,size_alighment,AC,HP,speed,params,hardDmg,calcDmg
+		print ("'%s':( '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' , '%s' ),")%(
+			name,size,alighment,AC,HP,speed,params,hardDmg,calcDmg,challenge,XP)
+		
+		
 if(__name__ == "__main__"):
 	# main(sys.argv[1])
 	# gui_test()

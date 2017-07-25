@@ -217,8 +217,7 @@ Languages -
 Challenge 1/2 (100 XP)
 Actions
 Multiattack. The ape makes two fist attacks.
-Fist. Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit:
-6 (1d6 + 3) bludgeoning damage.
+Fist. Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.
 Rock. Ranged Weapon Attack: +5 to hit, range 25/50 ft., one
 target. Hit: 6 (1d6 + 3) bludgeoning damage.
 
@@ -3587,8 +3586,7 @@ Hit: 2 (1d4) piercing damage.
 
 Werewolf
 Medium humanoid (human, shapechanger), chaotic evil
-Armor Class 11 in humanoid form, 12 (natural armor) in wolf
-or hybrid form
+Armor Class 11 in humanoid form, 12 (natural armor) in wolf or hybrid form
 Hit Points 58 (9d8 + 18)
 Speed 30 ft. (40 ft. in wolf form)
 STR DEX CON INT WIS CHA
