@@ -408,6 +408,7 @@ class Mob(Unit):
 		Unit.__init__(self,"")
 		
 		self.name = random.choice(challenge_0)
+		print self.name
 		mobParams =  MD.monsterDict[self.name]
 		self.dRaceName	= "monster"
 		self.dRace		= "monster"

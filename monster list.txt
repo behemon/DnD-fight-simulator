@@ -2187,6 +2187,7 @@ the creature and the ally isnt incapacitated.
 Actions
 Bite. Melee Weapon Attack: +1 to hit, reach 5 ft., one target.
 Hit: 1 (1d4 - 1) piercing damage.
+
 Hunter Shark
 Large beast, unaligned
 Armor Class 12 (natural armor)
@@ -2824,6 +2825,7 @@ Bite. Melee Weapon Attack: +5 to hit, reach 5 ft., one target.
 Hit: 1 piercing damage, and the target must make a DC 10
 Constitution saving throw, taking 5 (2d4) poison damage on a
 failed save, or half as much damage on a successful one.
+
 Pegasus
 Large celestial, chaotic good
 Armor Class 12
@@ -3157,13 +3159,14 @@ Actions
 Bite. Melee Weapon Attack: +4 to hit, reach 5 ft., one creature.
 Hit: 1 piercing damage, and the target must succeed on a DC 9
 Constitution saving throw or take 2 (1d4) poison damage.
+
 Stirge
 Tiny beast, unaligned
 Armor Class 14 (natural armor)
 Hit Points 2 (1d4)
 Speed 10 ft., fly 40 ft.
-STR DEX CON INT WIS CHA 4
-(-3)16 (+3) 11 (+0) 2 (-4) 8 (-1) 6 (-2)
+STR DEX CON INT WIS CHA 
+4(-3) 16 (+3) 11 (+0) 2 (-4) 8 (-1) 6 (-2)
 Senses darkvision 60 ft., passive Perception 9
 Languages -
 Challenge 1/8 (25 XP)
@@ -3365,6 +3368,7 @@ Actions
 Beaks. Melee Weapon Attack: +4 to hit, reach 5 ft., one target
 in the swarms space. Hit: 7 (2d6) piercing damage, or 3 (1d6)
 piercing damage if the swarm has half of its hit points or fewer.
+
 Swarm of Poisonous Snakes
 Medium swarm of Tiny beasts, unaligned
 Armor Class 14
