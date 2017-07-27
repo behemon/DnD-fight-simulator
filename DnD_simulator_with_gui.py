@@ -249,12 +249,15 @@ class GuiSetup(Tkinter.Tk):
 	def gui_dBattle(self):
 		hero = Hero(self.heroName)
 		while hero.alive:
-			# monster = Hero(mobNameGen())
 			monster = Mob()
 			self.updateGameInfo(hero,monster)
 			self.update()
 			sleep(1)
-			# break ###########################
+			
+			################
+			# self.canvas_lgoic()
+			################
+			
 			self.gui_dFight(hero,monster)
 			if hero.alive:
 				hero.XP += monster.XpReword
@@ -408,7 +411,6 @@ class Mob(Unit):
 		Unit.__init__(self,"")
 		
 		self.name = random.choice(challenge_0)
-		print self.name
 		mobParams =  MD.monsterDict[self.name]
 		self.dRaceName	= "monster"
 		self.dRace		= "monster"
