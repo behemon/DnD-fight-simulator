@@ -212,29 +212,29 @@ challenge_1 = [
 #Challenge 1/4 (50 XP)
 challenge_2 = [
 				'Acolyte',
-				'Axe beak',
-				'Blink dog',
+				'Axe Beak',
+				'Blink Dog',
 				'Boar',
-				'Constrictor snake',
-				'Draft horse',
+				'Constrictor Snake',
+				'Draft Horse',
 				'Elk',
-				'Flying sword',
-				'Giant badger',
-				'Giant bat',
-				'Giant centipede',
-				'Giant frog',
-				'Giant lizard',
-				'Giant owl',
-				'Giant poisonous snake',
-				'Giant wolf spider',
+				'Flying Sword',
+				'Giant Badger',
+				'Giant Bat',
+				'Giant Centipede',
+				'Giant Frog',
+				'Giant Lizard',
+				'Giant Owl',
+				'Giant Poisonous Snake',
+				'Giant Wolf Spider',
 				'Goblin',
 				'Panther',
 				'Pteranodon',
-				'Riding horse',
+				'Riding Horse',
 				'Skeleton',
-				'Swarm of bats',
-				'Swarm of rats',
-				'Swarm of ravens',
+				'Swarm of Bats',
+				'Swarm of Rats',
+				'Swarm of Ravens',
 				'Wolf',
 				'Zombie'
 				]
@@ -242,19 +242,19 @@ challenge_2 = [
 #Challenge 1/2 (100 XP)
 challenge_3 = [
 				'Ape',
-				'Black bear',
+				'Black Bear',
 				'Cockatrice',
 				'Crocodile',
-				'Giant goat',
-				'Giant sea horse',
-				'Giant wasp',
+				'Giant Goat',
+				'Giant Sea Horse',
+				'Giant Wasp',
 				'Gnoll',
 				'Hobgoblin',
 				'Lizardfolk',
 				'Orc',
-				'Reef shark',
+				'Reef Shark',
 				'Satyr',
-				'Swarm of insects',
+				'Swarm of Insects',
 				'Thug',
 				'Warhorse',
 				'Worg'
@@ -262,48 +262,48 @@ challenge_3 = [
 
 #Challenge 1 (200 XP)
 challenge_4 = [
-				'Animated armor',
-				'Brown bear',
+				'Animated Armor',
+				'Brown Bear',
 				'Bugbear',
-				'Death dog',
-				'Dire wolf',
+				'Death Dog',
+				'Dire Wolf',
 				'Ghoul',
-				'Giant eagle',
-				'Giant hyena',
-				'Giant octopus',
-				'Giant spider',
-				'Giant toad',
-				'Giant vulture',
+				'Giant Eagle',
+				'Giant Hyena',
+				'Giant Octopus',
+				'Giant Spider',
+				'Giant Toad',
+				'Giant Vulture',
 				'Harpy',
 				'Hippogriff',
 				'Lion',
-				'Swarm of quippers',
+				'Swarm of Quippers',
 				'Tiger'
 				]
 
 #Challenge 2 (450 XP)
 challenge_5 = [
 				'Allosaurus',
-				'Awakened tree',
+				'Awakened Tree',
 				'Berserker',
 				'Centaur',
 				'Gargoyle',
-				'Giant boar',
-				'Giant constrictor snake',
-				'Giant elk',
+				'Giant Boar',
+				'Giant Constrictor Snake',
+				'Giant Elk',
 				'Grick',
 				'Griffon',
-				'Hunter shark',
+				'Hunter Shark',
 				'Nothic',
-				'Ochre jelly',
+				'Ochre Jelly',
 				'Ogre',
 				'Pegasus',
 				'Plesiosaurus',
-				'Polar bear',
+				'Polar Bear',
 				'Priest',
 				'Rhinoceros',
-				'Saber-toothed tiger',
-				'Swarm of poisonous snakes'
+				'Saber-toothed Tiger',
+				'Swarm of Poisonous Snakes'
 				]
 
 #Challenge 3 (700 XP)
@@ -311,19 +311,19 @@ challenge_6 = [
 				'Ankylosaurus',
 				'Basilisk',
 				'Doppelganger',
-				'Giant scorpion',
-				'Hell hound',
-				'Killer whale',
+				'Giant Scorpion',
+				'Hell Hound',
+				'Killer Whale',
 				'Knight',
 				'Manticore',
 				'Minotaur',
 				'Mummy',
 				'Owlbear',
-				'Phase spider',
+				'Phase Spider',
 				'Spectator',
 				'Werewolf',
 				'Wight',
-				'Winter wolf',
+				'Winter Wolf',
 				'Yeti'
 				]
 
@@ -337,16 +337,16 @@ challenge_7 = [
 
 #Challenge 5 (1',800 XP)
 challenge_8 = [
-				'Air elemental',
-				'Earth elemental',
-				'Fire elemental',
-				'Flesh golem',
-				'Giant crocodile',
-				'Giant shark',
-				'Hill giant',
+				'Air Elemental',
+				'Earth Elemental',
+				'Fire Elemental',
+				'Flesh Golem',
+				'Giant Crocodile',
+				'Giant Shark',
+				'Hill Giant',
 				'Triceratops',
 				'Troll',
-				'Water elemental'
+				'Water Elemental'
 				]
 
 #Challenge 6 (2',300 XP)
@@ -364,20 +364,20 @@ challenge_10 = ['Giant ape']
 
 #Challenge 8 (3',900 XP)
 challenge_11 = [
-				'Frost giant',
+				'Frost Giant',
 				'Hydra',
-				'Tyrannosaurus rex',
-				'Young green dragon'
+				'Tyrannosaurus Rex',
+				'Young Green Dragon'
 				]
 
 #Challenge 9 (5',000 XP)
-challenge_12 = ['Fire giant']
+challenge_12 = ['Fire Giant']
 
 #Challenge 10 (5,900 XP)
-challenge_13 = ['Stone golem']
+challenge_13 = ['Stone Golem']
 
 #Challenge 17 (18,000 XP)
-challenge_14 = ['Adult red dragon']
+challenge_14 = ['Adult Red Dragon']
 
 challenge_all = [
 				challenge_0,
