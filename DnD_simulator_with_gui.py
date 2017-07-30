@@ -32,25 +32,28 @@ class GuiSetup(Tkinter.Tk):
 	def initialize(self):
 		self.grid()
 		
-		
+		#canvas size configuration
 		self.canvasWidth = 300
 		self.canvasHeight = 300
 		self.canvas=Tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
 		self.canvas.grid(row=0,column=11,rowspan=11)
 		
+		# making the map chess grid
 		self.myMap = maps.mainMap(self)
 		maps.setCanvasGrid(self,self.myMap.rows,self.myMap.columns)
 		self.horizonLength = self.canvasWidth / self.myMap.columns
 		self.verticalLength = self.canvasHeight / self.myMap.rows 
 		
+		# pathfinder freedom configuration
 		self.pathfindingMap = self.pathfindingMapGenerator()
 		self.fredom_directions = 8 # number of possible directions to move on the map
 		if self.fredom_directions == 4:
 			self.dx = [1, 0, -1, 0]
 			self.dy = [0, 1, 0, -1]
 		elif self.fredom_directions == 8:
-			self.dx = [1, 1, 0, -1, -1, -1, 0, 1]
-			self.dy = [0, 1, 1, 1, 0, -1, -1, -1]
+			self.dx = [1, 1, 0, -1, -1, -1,  0,  1]
+			self.dy = [0, 1, 1,  1,  0, -1, -1, -1]
+		
 		
 		mainFrame = Tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
 		mainFrame.grid(column=0, row=0, columnspan=10, rowspan=11, sticky=(N, S, E, W))
@@ -174,11 +177,27 @@ class GuiSetup(Tkinter.Tk):
 		
 		
 	def runSimulator(self):
+		'''
+		1. two randomly generated locatios for mob and hero
+		2. seeking each other
+		3. when in next sells start attack rounds
+		4. try to disangage when low on health
+		5. death and new round , mob randdom location ,hero from his spot
+		'''
 		# while True:
 			# self.canvas_lgoic()
+		self.hero = Hero(self.heroName)
+		self.hero.populate_space_on_grid(self)
+		#create the unit on grid
+		self.heroAvatar=self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
+		self.update()
 		
-		self.gui_dBattle()
-		
+		while self.hero.alive:
+			self.gui_dBattle()
+			
+		#clear the board
+		self.canvas.delete(self.heroAvatar)
+		self.update()
 	
 	def canvas_lgoic(self):
 		#print self.myMap.mapMatrix
@@ -187,7 +206,7 @@ class GuiSetup(Tkinter.Tk):
 		figuresSizeX = self.canvasWidth/self.myMap.columns
 		figuresSizeY = self.canvasHeight/self.myMap.rows
 		
-		#generation of the start and the finish of the unit
+		#generation of the start and the finish sells path of the unit
 		startLocation = random.choice(self.myMap.mapMatrix.keys())
 		endLocation = random.choice(self.myMap.mapMatrix.keys())
 		
@@ -214,7 +233,7 @@ class GuiSetup(Tkinter.Tk):
 		#move the unit all the way from start location to finish location
 		for i in route:
 			sleep(0.1)
-			self.canvas.move(figure1,self.dx[int(i)]*self.horizonLength,self.dy[int(i)]*self.verticalLength)
+			self.canvas.move(figure1, self.dx[int(i)]*self.horizonLength, self.dy[int(i)]*self.verticalLength )
 			self.update()
 		
 		#terminate the unit from memory and the board
@@ -247,23 +266,52 @@ class GuiSetup(Tkinter.Tk):
 
 		
 	def gui_dBattle(self):
-		hero = Hero(self.heroName)
-		while hero.alive:
-			monster = Mob()
-			self.updateGameInfo(hero,monster)
-			self.update()
-			sleep(1)
-			
-			################
-			# self.canvas_lgoic()
-			################
-			
-			self.gui_dFight(hero,monster)
-			if hero.alive:
-				hero.XP += monster.XpReword
-				hero.kills += 1
-				hero.dCheckStatus()		
+		monster = Mob()
+		monster.populate_space_on_grid(self)
+		#create the monster unit on grid
+		self.monsterAvatar=self.canvas.create_oval(monster.x0, monster.y0, monster.x1, monster.y1, fill="red")
+		self.updateGameInfo(self.hero,monster)
+		self.update()
+		sleep(1)
 		
+		# seek and angage  
+		
+		# print monster.x0, monster.y0, monster.x1, monster.y1
+		# print self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1
+		print "----"
+		print monster.startLocation
+		print self.hero.startLocation
+		print monster.startLocation[0], monster.startLocation[1], self.hero.startLocation[0], self.hero.startLocation[0]
+		print self.hero.startLocation[0], self.hero.startLocation[0], monster.startLocation[0], monster.startLocation[1]
+		print "===="
+		
+		while True:	
+			sleep(1)
+			heroRouteStep = self.pathFindStep(self.hero , monster)
+			monsterRouteStep = self.pathFindStep( monster, self.hero)
+			print heroRouteStep ,monsterRouteStep
+
+			#move hero
+			self.canvas.move(self.heroAvatar, self.dx[int(heroRouteStep)]*self.horizonLength, self.dy[int(heroRouteStep)]*self.verticalLength )
+			self.hero.startLocation = (int(self.hero.startLocation[1]+self.dx[int(heroRouteStep)]),int(self.hero.startLocation[1]+self.dx[int(heroRouteStep)]))
+		
+			#move monster
+			self.canvas.move(self.monsterAvatar, self.dx[int(monsterRouteStep)]*self.horizonLength, self.dy[int(monsterRouteStep)]*self.verticalLength )
+			monster.startLocation = (int(monster.startLocation[1]+self.dx[int(monsterRouteStep)]),int(monster.startLocation[1]+self.dx[int(monsterRouteStep)]))
+		
+			self.update()
+		
+		################
+		# self.canvas_lgoic()
+		################
+		
+		self.gui_dFight(self.hero,monster)
+		if self.hero.alive:
+			self.hero.XP += monster.XpReword
+			self.hero.kills += 1
+			self.hero.dCheckStatus()		
+
+			
 	def	gui_dFight(self,hero,monster):	
 	
 		while hero.alive and monster.alive:
@@ -282,6 +330,9 @@ class GuiSetup(Tkinter.Tk):
 			monster.dCheckStatus()
 			self.update()
 		
+		#remove dead monster
+		self.canvas.delete(self.monsterAvatar)
+		self.update()
 		
 	def gui_dAttack(self,first,second):
 		#first attacks
@@ -340,9 +391,21 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_HitPoints_V.config(	text=monster.HitPoints)		
 		self.text_monster_AC_V.config(		text=monster.AC)		
 
+	
+	def pathFindStep(self,startObject,endObject):
+		return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.startLocation[0], startObject.startLocation[0], endObject.startLocation[0], endObject.startLocation[1], self.myMap.columns, self.myMap.rows)[0]
+	
 
 class Unit:
 	def __init__(self,name):
+	
+		# grid configuration
+		# self.figuresSizeX = None
+		# self.figuresSizeY = None
+		
+		
+
+		# charecter configuration
 		self.name 	= name
 		self.alive 	= True
 		self.XP		= 0
@@ -367,6 +430,18 @@ class Unit:
 		self.weapon		= random.choice(dItemsWeaponsMele.keys())
 		self.XpReword	= 300
 		self.inventory	= {}
+
+		
+	def populate_space_on_grid(self,gui):
+		self.startLocation = random.choice(gui.myMap.mapMatrix.keys())
+		self.figuresSizeX = gui.canvasWidth/gui.myMap.columns
+		self.figuresSizeY = gui.canvasHeight/gui.myMap.rows
+		#calculate size for the unit 
+		self.x0 = self.startLocation[0]*self.figuresSizeX
+		self.x1 = (1+self.startLocation[0])*self.figuresSizeX
+		self.y0 = self.startLocation[1]*self.figuresSizeY
+		self.y1 = (1+self.startLocation[1])*self.figuresSizeY
+
 		
 	def dmgCalc(self):
 		dmg = int(self.Str/4)
