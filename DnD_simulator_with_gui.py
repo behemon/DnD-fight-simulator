@@ -198,73 +198,8 @@ class GuiSetup(Tkinter.Tk):
 		#clear the board
 		self.canvas.delete(self.heroAvatar)
 		self.update()
-	
-	def canvas_lgoic(self):
-		#print self.myMap.mapMatrix
-		
-		#dimentions of the player or mob in the grid
-		figuresSizeX = self.canvasWidth/self.myMap.columns
-		figuresSizeY = self.canvasHeight/self.myMap.rows
-		
-		#generation of the start and the finish sells path of the unit
-		startLocation = random.choice(self.myMap.mapMatrix.keys())
-		endLocation = random.choice(self.myMap.mapMatrix.keys())
-		
-		#calculate size for the unit 
-		x0 = startLocation[0]*figuresSizeX
-		x1 = (1+startLocation[0])*figuresSizeX
-		y0 = startLocation[1]*figuresSizeY
-		y1 = (1+startLocation[1])*figuresSizeY
-		
-		#create the unit 
-		figure1=self.canvas.create_oval(x0, y0, x1, y1, fill="blue")
-		self.update()	
-		
-		#for pathfinding start x0,y0 and end of path x1 y1
-		xA = startLocation[0]
-		xB = endLocation[0]
-		yA = startLocation[1]
-		yB = endLocation[1]
-		
-		# use A*star algorithm to find the path from start to end
-		route = pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, xA, yA, xB, yB, self.myMap.columns, self.myMap.rows)
-		print route
-		
-		#move the unit all the way from start location to finish location
-		for i in route:
-			sleep(0.1)
-			self.canvas.move(figure1, self.dx[int(i)]*self.horizonLength, self.dy[int(i)]*self.verticalLength )
-			self.update()
-		
-		#terminate the unit from memory and the board
-		self.canvas.delete(figure1)	
-			
-			
-	def move_N(self,unit):
-		self.canvas.move(unit,0,-1*self.verticalLength)
-	def move_NE(self,unit):
-		self.canvas.move(unit,self.horizonLength,-1*self.verticalLength)
-	def move_E(self,unit):
-		self.canvas.move(unit,self.horizonLength,0)
-	def move_SE(self,unit):
-		self.canvas.move(unit,self.horizonLength,self.verticalLength)
-	def move_S(self,unit):
-		self.canvas.move(unit,0,self.verticalLength)
-	def move_SW(self,unit):
-		self.canvas.move(unit,-1*self.horizonLength,self.verticalLength)
-	def move_W(self,unit):
-		self.canvas.move(unit,-1*self.horizonLength,0)
-	def move_NW(self,unit):
-		self.canvas.move(unit,-1*self.horizonLength,-1*self.verticalLength)
 
-	def pathfindingMapGenerator(self):
-		the_map = []
-		row = [0] * self.myMap.columns
-		for i in range(self.myMap.rows):
-			the_map.append(list(row))
-		return the_map
 
-		
 	def gui_dBattle(self):
 		monster = Mob()
 		monster.populate_space_on_grid(self)
@@ -276,34 +211,35 @@ class GuiSetup(Tkinter.Tk):
 		
 		# seek and angage  
 		
-		# print monster.x0, monster.y0, monster.x1, monster.y1
-		# print self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1
-		print "----"
-		print monster.startLocation
-		print self.hero.startLocation
-		print monster.startLocation[0], monster.startLocation[1], self.hero.startLocation[0], self.hero.startLocation[0]
-		print self.hero.startLocation[0], self.hero.startLocation[0], monster.startLocation[0], monster.startLocation[1]
-		print "===="
+		#select action for both units , one action = one turn.
+		#hunt - move one square towords the target
+		#attack - if in next square attack target
+		#flee - move away one square away from target
+		#heal - use HitDice if avalble for healing 
+		#get loot
 		
 		while True:	
-			sleep(1)
+			
 			heroRouteStep = self.pathFindStep(self.hero , monster)
 			monsterRouteStep = self.pathFindStep( monster, self.hero)
-			print heroRouteStep ,monsterRouteStep
 
 			#move hero
+			sleep(0.5)
 			self.canvas.move(self.heroAvatar, self.dx[int(heroRouteStep)]*self.horizonLength, self.dy[int(heroRouteStep)]*self.verticalLength )
-			self.hero.startLocation = (int(self.hero.startLocation[1]+self.dx[int(heroRouteStep)]),int(self.hero.startLocation[1]+self.dx[int(heroRouteStep)]))
-		
-			#move monster
-			self.canvas.move(self.monsterAvatar, self.dx[int(monsterRouteStep)]*self.horizonLength, self.dy[int(monsterRouteStep)]*self.verticalLength )
-			monster.startLocation = (int(monster.startLocation[1]+self.dx[int(monsterRouteStep)]),int(monster.startLocation[1]+self.dx[int(monsterRouteStep)]))
-		
+			self.hero.startLocation = (int( self.hero.startLocation[0] + self.dx[int(heroRouteStep)] ) , int( self.hero.startLocation[1] + self.dy[int(heroRouteStep)] ) )
 			self.update()
-		
-		################
-		# self.canvas_lgoic()
-		################
+			
+			if  abs(self.hero.startLocation[0] - monster.startLocation[0])<=1 and abs(self.hero.startLocation[1] - monster.startLocation[1])<=1:
+				break
+				
+			#move monster
+			sleep(0.5)
+			self.canvas.move(self.monsterAvatar, self.dx[int(monsterRouteStep)]*self.horizonLength, self.dy[int(monsterRouteStep)]*self.verticalLength )
+			monster.startLocation = (int( monster.startLocation[0] + self.dx[int(monsterRouteStep)]) , int( monster.startLocation[1] + self.dy[int(monsterRouteStep)] ) )
+			self.update()
+			
+			if  abs(self.hero.startLocation[0] - monster.startLocation[0])<=1 and abs(self.hero.startLocation[1] - monster.startLocation[1])<=1:
+				break
 		
 		self.gui_dFight(self.hero,monster)
 		if self.hero.alive:
@@ -333,6 +269,7 @@ class GuiSetup(Tkinter.Tk):
 		#remove dead monster
 		self.canvas.delete(self.monsterAvatar)
 		self.update()
+
 		
 	def gui_dAttack(self,first,second):
 		#first attacks
@@ -392,9 +329,76 @@ class GuiSetup(Tkinter.Tk):
 		self.text_monster_AC_V.config(		text=monster.AC)		
 
 	
+	def pathfindingMapGenerator(self):
+		the_map = []
+		row = [0] * self.myMap.columns
+		for i in range(self.myMap.rows):
+			the_map.append(list(row))
+		return the_map
+
+		
 	def pathFindStep(self,startObject,endObject):
-		return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.startLocation[0], startObject.startLocation[0], endObject.startLocation[0], endObject.startLocation[1], self.myMap.columns, self.myMap.rows)[0]
-	
+		return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.startLocation[0], startObject.startLocation[1], endObject.startLocation[0], endObject.startLocation[1], self.myMap.columns, self.myMap.rows)[0]
+
+	################ not in use ####################
+	def move_N(self,unit):
+		self.canvas.move(unit,0,-1*self.verticalLength)
+	def move_NE(self,unit):
+		self.canvas.move(unit,self.horizonLength,-1*self.verticalLength)
+	def move_E(self,unit):
+		self.canvas.move(unit,self.horizonLength,0)
+	def move_SE(self,unit):
+		self.canvas.move(unit,self.horizonLength,self.verticalLength)
+	def move_S(self,unit):
+		self.canvas.move(unit,0,self.verticalLength)
+	def move_SW(self,unit):
+		self.canvas.move(unit,-1*self.horizonLength,self.verticalLength)
+	def move_W(self,unit):
+		self.canvas.move(unit,-1*self.horizonLength,0)
+	def move_NW(self,unit):
+		self.canvas.move(unit,-1*self.horizonLength,-1*self.verticalLength)
+
+
+	def canvas_lgoic(self):
+		#print self.myMap.mapMatrix
+		
+		#dimentions of the player or mob in the grid
+		figuresSizeX = self.canvasWidth/self.myMap.columns
+		figuresSizeY = self.canvasHeight/self.myMap.rows
+		
+		#generation of the start and the finish sells path of the unit
+		startLocation = random.choice(self.myMap.mapMatrix.keys())
+		endLocation = random.choice(self.myMap.mapMatrix.keys())
+		
+		#calculate size for the unit 
+		x0 = startLocation[0]*figuresSizeX
+		x1 = (1+startLocation[0])*figuresSizeX
+		y0 = startLocation[1]*figuresSizeY
+		y1 = (1+startLocation[1])*figuresSizeY
+		
+		#create the unit 
+		figure1=self.canvas.create_oval(x0, y0, x1, y1, fill="blue")
+		self.update()	
+		
+		#for pathfinding start x0,y0 and end of path x1 y1
+		xA = startLocation[0]
+		xB = endLocation[0]
+		yA = startLocation[1]
+		yB = endLocation[1]
+		
+		# use A*star algorithm to find the path from start to end
+		route = pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, xA, yA, xB, yB, self.myMap.columns, self.myMap.rows)
+		print route
+		
+		#move the unit all the way from start location to finish location
+		for i in route:
+			sleep(0.1)
+			self.canvas.move(figure1, self.dx[int(i)]*self.horizonLength, self.dy[int(i)]*self.verticalLength )
+			self.update()
+		
+		#terminate the unit from memory and the board
+		self.canvas.delete(figure1)			
+
 
 class Unit:
 	def __init__(self,name):
