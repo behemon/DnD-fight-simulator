@@ -40,6 +40,11 @@ class GuiSetup(Tkinter.Tk):
 		
 		# making the map chess grid
 		self.myMap = maps.mainMap(self)
+		#grid X*Y configuration
+		self.myMap.rows = 20
+		self.myMap.columns = 20
+		self.myMap.makeMatrixDict()
+		#create the grid
 		maps.setCanvasGrid(self,self.myMap.rows,self.myMap.columns)
 		self.horizonLength = self.canvasWidth / self.myMap.columns
 		self.verticalLength = self.canvasHeight / self.myMap.rows 
@@ -217,7 +222,6 @@ class GuiSetup(Tkinter.Tk):
 		#flee - move away one square away from target
 		#heal - use HitDice if avalble for healing 
 		#get loot
-		
 		while True:	
 			
 			heroRouteStep = self.pathFindStep(self.hero , monster)
@@ -402,13 +406,6 @@ class GuiSetup(Tkinter.Tk):
 
 class Unit:
 	def __init__(self,name):
-	
-		# grid configuration
-		# self.figuresSizeX = None
-		# self.figuresSizeY = None
-		
-		
-
 		# charecter configuration
 		self.name 	= name
 		self.alive 	= True
