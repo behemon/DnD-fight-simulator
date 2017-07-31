@@ -225,8 +225,8 @@ class GuiSetup(Tkinter.Tk):
 		#equip items
 		#unequip items 
 		
-		self.hero.action = self.selectAction()
-		monster.action = self.selectAction()
+		self.hero.action = self.selectAction(self.hero)
+		monster.action = self.selectAction(monster)
 		
 		
 		while True:	
