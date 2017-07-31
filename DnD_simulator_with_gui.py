@@ -216,12 +216,19 @@ class GuiSetup(Tkinter.Tk):
 		
 		# seek and angage  
 		
-		#select action for both units , one action = one turn.
+		###select action for both units , one action = one turn.
 		#hunt - move one square towords the target
 		#attack - if in next square attack target
 		#flee - move away one square away from target
 		#heal - use HitDice if avalble for healing 
 		#get loot
+		#equip items
+		#unequip items 
+		
+		self.hero.action = self.selectAction()
+		monster.action = self.selectAction()
+		
+		
 		while True:	
 			
 			heroRouteStep = self.pathFindStep(self.hero , monster)
@@ -250,6 +257,10 @@ class GuiSetup(Tkinter.Tk):
 			self.hero.XP += monster.XpReword
 			self.hero.kills += 1
 			self.hero.dCheckStatus()		
+
+
+	def selectAction(self,unit):
+		pass
 
 			
 	def	gui_dFight(self,hero,monster):	
@@ -409,6 +420,7 @@ class Unit:
 		# charecter configuration
 		self.name 	= name
 		self.alive 	= True
+		self.action = None
 		self.XP		= 0
 		self.lvl	= 1
 		############################
