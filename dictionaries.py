@@ -1,34 +1,34 @@
-#Race name: size,speed,[Str,Dex,Con,Int,Wis,Cha]
+# Race name: size,speed,[Str,Dex,Con,Int,Wis,Cha]
 dRacess = {	
-            'Aarakorca'	:('M',25,[0,2,0,0,1,0]),
-            'Aasimar'	:('M',30,[0,0,0,0,0,2]),
-            'Bugnear'	:('M',30,[2,1,0,0,0,0]),
-            'Dragonborn':('M',30,[2,0,0,0,0,1]),
-            'Dwarf'		:('M',25,[0,0,2,0,0,0]),
-            'Elf'		:('M',30,[0,2,0,0,0,0]),
-            'Firbolg'	:('M',30,[1,0,0,0,2,0]),
-            'Genasi'	:('M',30,[0,0,1,0,0,0]),
-            'Gnome'		:('S',25,[0,0,0,0,0,0]),
-            'Goblin'	:('S',30,[0,2,1,0,0,0]),
-            'Goliath'	:('M',30,[2,0,1,0,0,0]),
-            'Hafling'	:('S',25,[0,2,0,0,0,0]),
-            'Half-Elf'	:('M',30,[0,0,0,0,0,2]),
-            'Half-Orc'	:('M',30,[2,0,1,0,0,0]),
-            'Hobgoblin'	:('M',30,[0,0,2,1,0,0]),
-            'Human'		:('M',30,[1,1,1,1,1,1]),
-            'Kender'	:('S',25,[0,1,0,0,0,1]),
-            'Kenku'		:('M',30,[0,2,0,0,1,0]),
-            'Kobold'	:('S',30,[-2,2,0,0,0,0]),
-            'Lizardfolk':('M',30,[0,0,2,0,1,0]),
-            'Orc'		:('M',30,[2,0,1,-2,0,0]),
-            'Tabaxi'	:('M',30,[0,2,0,0,0,1]),
-            'Tifling'	:('M',30,[0,0,0,1,0,2]),
-            'Triton'	:('M',30,[1,0,1,0,0,1]),
-            'Yuan-Ti'	:('M',30,[0,0,0,1,0,2]),
+            'Aarakorca'	:('M', 25, [0, 2, 0, 0, 1, 0]),
+            'Aasimar'	:('M', 30, [0, 0, 0, 0, 0, 2]),
+            'Bugnear'	:('M', 30, [2, 1, 0, 0, 0, 0]),
+            'Dragonborn':('M', 30, [2, 0, 0, 0, 0, 1]),
+            'Dwarf'		:('M', 25, [0, 0, 2, 0, 0, 0]),
+            'Elf'		:('M', 30, [0, 2, 0, 0, 0, 0]),
+            'Firbolg'	:('M', 30, [1, 0, 0, 0, 2, 0]),
+            'Genasi'	:('M', 30, [0, 0, 1, 0, 0, 0]),
+            'Gnome'		:('S', 25, [0, 0, 0, 0, 0, 0]),
+            'Goblin'	:('S', 30, [0, 2, 1, 0, 0, 0]),
+            'Goliath'	:('M', 30, [2, 0, 1, 0, 0, 0]),
+            'Hafling'	:('S', 25, [0, 2, 0, 0, 0, 0]),
+            'Half-Elf'	:('M', 30, [0, 0, 0, 0, 0, 2]),
+            'Half-Orc'	:('M', 30, [2, 0, 1, 0, 0, 0]),
+            'Hobgoblin'	:('M', 30, [0, 0, 2, 1, 0, 0]),
+            'Human'		:('M', 30, [1, 1, 1, 1, 1, 1]),
+            'Kender'	:('S', 25, [0, 1, 0, 0, 0, 1]),
+            'Kenku'		:('M', 30, [0, 2, 0, 0, 1, 0]),
+            'Kobold'	:('S', 30, [-2 ,2 ,0 ,0 ,0 ,0]),
+            'Lizardfolk':('M', 30, [0, 0, 2, 0, 1, 0]),
+            'Orc'		:('M', 30, [2, 0, 1, -2 ,0 ,0]),
+            'Tabaxi'	:('M', 30, [0, 2, 0, 0, 0, 1]),
+            'Tifling'	:('M', 30, [0, 0, 0, 1, 0, 2]),
+            'Triton'	:('M', 30, [1, 0, 1, 0, 0, 1]),
+            'Yuan-Ti'	:('M', 30, [0, 0, 0, 1, 0, 2]),
             }
 
 
-#class name , hitdie
+# class name , hitdie
 dClasses = {	
             'barbarian':12,
             'bard':		8,
@@ -64,7 +64,7 @@ dScoreModifier = {
                     }
 
 
-#name : AR , set or add,score Modifer addon
+# name : AR , set or add,score Modifer addon
 dItemsArmors = {	
                     'Light Armor Padded':(11,'s','DEX'),
                     'Light Armor Leather':(11,'s','DEX'),
@@ -131,7 +131,7 @@ dListOfNamesD = {
                 'Urkensvall':(), 'Fedra':(), 'Bulkensar':(), 'Comia':(), 'Tyul':(), 'Lasendarl':()
                 }
 
-#level:needed XP , Proficiency Bonus
+# level:needed XP , Proficiency Bonus
 dXPlevelUP = {
                 1:(0		, +2),
                 2:(300 		, +2),
@@ -154,11 +154,22 @@ dXPlevelUP = {
                 19:(305000 	, +6),
                 20:(355000 	, +6)
             }
+# action number: (action name,hero useble , monster useble)
+actions = {
+            1: ("melee",    True,   True),
+            2: ("ranged",   True,   True),
+            3: ("hunt",     True,   True),
+            4: ("flee",     True,   True),
+            5: ("heal",     True,   False),
+            6: ("get loot", True,   False),
+            7: ("equip",    True,   False),
+            8: ("unequip",  True,   False)
+            }
 
 ############
-#http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
+# http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
 ############
-#Challenge 0 (0-10 XP)
+# Challenge 0 (0-10 XP)
 challenge_0 = [
                 'Awakened Shrub',
                 'Baboon',
@@ -188,7 +199,7 @@ challenge_0 = [
                 'Weasel'
                 ]
 
-#Challenge 1/8 (25 XP)
+# Challenge 1/8 (25 XP)
 challenge_1 = [
                 'Bandit',
                 'Blood Hawk',
@@ -209,7 +220,7 @@ challenge_1 = [
                 'Twig Blight'
                 ]
 
-#Challenge 1/4 (50 XP)
+# Challenge 1/4 (50 XP)
 challenge_2 = [
                 'Acolyte',
                 'Axe Beak',
@@ -239,7 +250,7 @@ challenge_2 = [
                 'Zombie'
                 ]
 
-#Challenge 1/2 (100 XP)
+# Challenge 1/2 (100 XP)
 challenge_3 = [
                 'Ape',
                 'Black Bear',
@@ -260,7 +271,7 @@ challenge_3 = [
                 'Worg'
                 ]
 
-#Challenge 1 (200 XP)
+# Challenge 1 (200 XP)
 challenge_4 = [
                 'Animated Armor',
                 'Brown Bear',
@@ -281,7 +292,7 @@ challenge_4 = [
                 'Tiger'
                 ]
 
-#Challenge 2 (450 XP)
+# Challenge 2 (450 XP)
 challenge_5 = [
                 'Allosaurus',
                 'Awakened Tree',
@@ -306,7 +317,7 @@ challenge_5 = [
                 'Swarm of Poisonous Snakes'
                 ]
 
-#Challenge 3 (700 XP)
+# Challenge 3 (700 XP)
 challenge_6 = [
                 'Ankylosaurus',
                 'Basilisk',
@@ -327,7 +338,7 @@ challenge_6 = [
                 'Yeti'
                 ]
 
-#Challenge 4 (1',100 XP)
+# Challenge 4 (1',100 XP)
 challenge_7 = [
                 'Banshee',
                 'Elephant',
@@ -335,7 +346,7 @@ challenge_7 = [
                 'Ghost'
                 ]
 
-#Challenge 5 (1',800 XP)
+# Challenge 5 (1',800 XP)
 challenge_8 = [
                 'Air Elemental',
                 'Earth Elemental',
@@ -349,7 +360,7 @@ challenge_8 = [
                 'Water Elemental'
                 ]
 
-#Challenge 6 (2',300 XP)
+# Challenge 6 (2',300 XP)
 challenge_9 = [
                 'Chimera',
                 'Cyclops',
@@ -359,10 +370,10 @@ challenge_9 = [
                 'Wyvern'
                 ]
 
-#Challenge 7 (2',900 XP)
+# Challenge 7 (2',900 XP)
 challenge_10 = ['Giant ape']
 
-#Challenge 8 (3',900 XP)
+# Challenge 8 (3',900 XP)
 challenge_11 = [
                 'Frost Giant',
                 'Hydra',
@@ -370,13 +381,13 @@ challenge_11 = [
                 'Young Green Dragon'
                 ]
 
-#Challenge 9 (5',000 XP)
+# Challenge 9 (5',000 XP)
 challenge_12 = ['Fire Giant']
 
-#Challenge 10 (5,900 XP)
+# Challenge 10 (5,900 XP)
 challenge_13 = ['Stone Golem']
 
-#Challenge 17 (18,000 XP)
+# Challenge 17 (18,000 XP)
 challenge_14 = ['Adult Red Dragon']
 
 challenge_all = [
