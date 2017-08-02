@@ -14,9 +14,21 @@ import Tkinter
 from Tkinter import N,S,E,W
 from A_star_algorithm import pathFind
 
-import canvas_test as maps
+# import canvas_test as maps
 from dictionaries import *
 import monster_dictionary as MD
+
+class mainMap():
+    def __init__(self,gui):
+        self.columns = 10
+        self.rows = 10
+        self.mapMatrix = {}
+        self.makeMatrixDict()
+
+    def makeMatrixDict(self):
+        for x in range(self.columns):
+            for y in range(self.rows):
+                self.mapMatrix[y,x]=[None,None]
 
 
 class GuiSetup(Tkinter.Tk):
@@ -36,13 +48,13 @@ class GuiSetup(Tkinter.Tk):
         self.canvas.grid(row=0,column=11,rowspan=11)
 
         # making the map chess grid
-        self.myMap = maps.mainMap(self)
+        self.myMap = mainMap(self)
         # grid X*Y configuration
         self.myMap.rows = 20
         self.myMap.columns = 20
         self.myMap.makeMatrixDict()
         # create the grid
-        maps.setCanvasGrid(self,self.myMap.rows,self.myMap.columns)
+        setCanvasGrid(self,self.myMap.rows,self.myMap.columns)
         self.horizonLength = self.canvasWidth / self.myMap.columns
         self.verticalLength = self.canvasHeight / self.myMap.rows
 
@@ -182,11 +194,9 @@ class GuiSetup(Tkinter.Tk):
         1. two randomly generated locatios for mob and hero
         2. seeking each other
         3. when in next sells start attack rounds
-        4. try to disangage when low on health
-        5. death and new round , mob randdom location ,hero from his spot
+        4. try to disengage when low on health
+        5. death and new round , mob random location ,hero from his spot
         '''
-        # while True:
-        #     self.canvas_lgoic()
         self.hero = Hero(self.heroName)
         self.hero.populate_space_on_grid(self)
         # create the unit on grid
@@ -203,6 +213,7 @@ class GuiSetup(Tkinter.Tk):
     def gui_dBattle2(self):
         monster = Mob()
         monster.populate_space_on_grid(self)
+
         # create the monster unit on grid
         self.monsterAvatar=self.canvas.create_oval(monster.x0, monster.y0, monster.x1, monster.y1, fill="red")
         self.updateGameInfo(self.hero,monster)
@@ -266,7 +277,9 @@ class GuiSetup(Tkinter.Tk):
         if action == 1:
             RouteStep = int(self.pathFindStep(myself, enemy)[0])
             self.canvas.move(avatar, self.dx[RouteStep]*self.horizonLength, self.dy[RouteStep]*self.verticalLength )
-            myself.startLocation = ( myself.startLocation[0] + self.dx[RouteStep] ,  myself.startLocation[1] + self.dy[RouteStep] )
+            myself.location = ( myself.location[0] + self.dx[RouteStep] ,  myself.location[1] + self.dy[RouteStep] )
+            self.myMap.mapMatrix[ myself.location ][0]=  
+            print self.myMap.mapMatrix
             self.update()
 
         if action == 2:
@@ -341,7 +354,7 @@ class GuiSetup(Tkinter.Tk):
         return the_map
 
     def pathFindStep(self, startObject, endObject):
-        return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.startLocation[0], startObject.startLocation[1], endObject.startLocation[0], endObject.startLocation[1], self.myMap.columns, self.myMap.rows)
+        return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.location[0], startObject.location[1], endObject.location[0], endObject.location[1], self.myMap.columns, self.myMap.rows)
 
 
     ################ not in use ####################
@@ -371,23 +384,23 @@ class GuiSetup(Tkinter.Tk):
         figuresSizeY = self.canvasHeight/self.myMap.rows
 
         #generation of the start and the finish sells path of the unit
-        startLocation = random.choice(self.myMap.mapMatrix.keys())
+        location = random.choice(self.myMap.mapMatrix.keys())
         endLocation = random.choice(self.myMap.mapMatrix.keys())
 
         #calculate size for the unit
-        x0 = startLocation[0]*figuresSizeX
-        x1 = (1+startLocation[0])*figuresSizeX
-        y0 = startLocation[1]*figuresSizeY
-        y1 = (1+startLocation[1])*figuresSizeY
+        x0 = location[0]*figuresSizeX
+        x1 = (1+location[0])*figuresSizeX
+        y0 = location[1]*figuresSizeY
+        y1 = (1+location[1])*figuresSizeY
 
         #create the unit
         figure1=self.canvas.create_oval(x0, y0, x1, y1, fill="blue")
         self.update()
 
         #for pathfinding start x0,y0 and end of path x1 y1
-        xA = startLocation[0]
+        xA = location[0]
         xB = endLocation[0]
-        yA = startLocation[1]
+        yA = location[1]
         yB = endLocation[1]
 
         # use A*star algorithm to find the path from start to end
@@ -434,14 +447,14 @@ class Unit:
         self.inventory	= {}
 
     def populate_space_on_grid(self,gui):
-        self.startLocation = random.choice(gui.myMap.mapMatrix.keys())
+        self.location = random.choice(gui.myMap.mapMatrix.keys())
         self.figuresSizeX = gui.canvasWidth/gui.myMap.columns
         self.figuresSizeY = gui.canvasHeight/gui.myMap.rows
         #calculate size for the unit
-        self.x0 = self.startLocation[0]*self.figuresSizeX
-        self.x1 = (1+self.startLocation[0])*self.figuresSizeX
-        self.y0 = self.startLocation[1]*self.figuresSizeY
-        self.y1 = (1+self.startLocation[1])*self.figuresSizeY
+        self.x0 = self.location[0]*self.figuresSizeX
+        self.x1 = (1+self.location[0])*self.figuresSizeX
+        self.y0 = self.location[1]*self.figuresSizeY
+        self.y1 = (1+self.location[1])*self.figuresSizeY
 
     def dmgCalc(self):
         dmg = int(self.Str/4)
@@ -490,7 +503,7 @@ class Mob(Unit):
     def __init__(self):
         Unit.__init__(self,"")
 
-        self.name = random.choice(random.choice(challenge_all))
+        self.name = random.choice(challenge_1)
         mobParams =  MD.monsterDict[self.name]
         self.dRaceName	= "monster"
         self.dRace		= "monster"
@@ -549,6 +562,15 @@ def abilityGen(numOfRolls):
         rollsList.append(randGen(1,6))
 
     return sum(sorted(rollsList)[1:])
+
+
+def setCanvasGrid(canv , rows , columns):
+    for line in range(rows):
+        x = line*(canv.canvasWidth/rows)
+        canv.canvas.create_line(x,0,x,canv.canvasHeight,fill="black")
+    for line in range(columns):
+        y = line*(canv.canvasWidth/columns)
+        canv.canvas.create_line(0,y,canv.canvasWidth,y,fill="black")
 
 
 def gui_test():
