@@ -195,7 +195,6 @@ class GuiSetup(Tkinter.Tk):
 
         while self.hero.alive:
             self.gui_dBattle2()
-            # self.gui_dBattle()
 
         # clear the board
         self.canvas.delete(self.heroAvatar)
@@ -288,92 +287,6 @@ class GuiSetup(Tkinter.Tk):
         if hero_initiative >= monster_initiative:
             return True
         return False
-
-
-    def gui_dBattle(self):
-        monster = Mob()
-        monster.populate_space_on_grid(self)
-        # create the monster unit on grid
-        self.monsterAvatar=self.canvas.create_oval(monster.x0, monster.y0, monster.x1, monster.y1, fill="red")
-        self.updateGameInfo(self.hero,monster)
-        self.update()
-        sleep(1)
-
-        # seek and angage
-        #
-        # ##select action for both units , one action = one turn.
-        # hunt - move one square towords the target
-        # attack - if in next square attack target
-        # flee - move away one square away from target
-        # heal - use HitDice if avalble for healing
-        # get loot
-        # equip items
-        # unequip items
-
-        # self.hero.action = self.selectAction(monster)
-        # monster.action = self.selectAction(self.hero)
-
-        # walking towords each other hero and monster
-        while True:
-
-            heroRouteStep = self.pathFindStep(self.hero , monster)[0]
-            monsterRouteStep = self.pathFindStep( monster, self.hero)[0]
-
-            # move hero
-            sleep(0.5)
-            self.canvas.move(self.heroAvatar, self.dx[int(heroRouteStep)]*self.horizonLength, self.dy[int(heroRouteStep)]*self.verticalLength )
-            self.hero.startLocation = (int( self.hero.startLocation[0] + self.dx[int(heroRouteStep)] ) , int( self.hero.startLocation[1] + self.dy[int(heroRouteStep)] ) )
-            self.update()
-
-            if  abs(self.hero.startLocation[0] - monster.startLocation[0])<=1 and abs(self.hero.startLocation[1] - monster.startLocation[1])<=1:
-                break
-
-            # move monster
-            sleep(0.5)
-            self.canvas.move(self.monsterAvatar, self.dx[int(monsterRouteStep)]*self.horizonLength, self.dy[int(monsterRouteStep)]*self.verticalLength )
-            monster.startLocation = (int( monster.startLocation[0] + self.dx[int(monsterRouteStep)]) , int( monster.startLocation[1] + self.dy[int(monsterRouteStep)] ) )
-            self.update()
-
-            if  abs(self.hero.startLocation[0] - monster.startLocation[0])<=1 and abs(self.hero.startLocation[1] - monster.startLocation[1])<=1:
-                break
-
-        self.gui_dFight(self.hero,monster)
-        if self.hero.alive:
-            self.hero.XP += monster.XpReword
-            self.hero.kills += 1
-            self.hero.dCheckStatus()
-
-    def	gui_dFight(self, hero, monster):
-
-        while hero.alive and monster.alive:
-            sleep(1)
-            hero_initiative = dScoreModifier[hero.dDex]
-            monster_initiative = dScoreModifier[monster.dDex]
-            if hero_initiative >= monster_initiative:
-                self.gui_dAttack(hero,monster)
-            else:
-                self.gui_dAttack(monster,hero)
-
-
-            self.text_hero_HitPoints_V.config(text=hero.HitPoints)
-            self.text_monster_HitPoints_V.config(text=monster.HitPoints)
-            hero.dCheckStatus()
-            monster.dCheckStatus()
-            self.update()
-
-        # remove dead monster
-        self.canvas.delete(self.monsterAvatar)
-        self.update()
-
-    def gui_dAttack(self, first, second):
-        # first attacks
-        if randGen(1,20) > second.AC:
-            self.gui_dAttackTurns(first,second)
-            second.dCheckStatus()
-        # second attacks
-        if randGen(1,20) > first.AC and second.alive:
-            self.gui_dAttackTurns(second,first)
-
 
     def gui_dAttackTurns(self, attacker, attacked):
         diceRoll = randGen(1,20)
