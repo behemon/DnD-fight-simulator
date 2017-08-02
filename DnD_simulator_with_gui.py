@@ -177,7 +177,6 @@ class GuiSetup(Tkinter.Tk):
         self.text_monster_AC.grid(			column=6, row=4)
         self.text_monster_AC_V.grid(		column=6, row=5)
 
-
     def runSimulator(self):
         '''
         1. two randomly generated locatios for mob and hero
@@ -211,47 +210,85 @@ class GuiSetup(Tkinter.Tk):
         self.update()
         sleep(1)
 
+        turn = self.check_initiative(self.hero,monster)
+
         while True:
-            sleep(0.5)
-            heroAction = self.selectAction(self.hero, monster)
-            print "hero action: ", heroAction
-            self.doAction(heroAction, self.hero, self.heroAvatar, monster)
+            if turn:
+                sleep(0.5)
+                heroAction = self.selectAction(self.hero, monster)
+                # print "hero action: ", heroAction
+                self.doAction(heroAction, self.hero, self.heroAvatar, monster)
+                turn = False
 
-            sleep(0.5)
-            monsterAction = self.selectAction(monster, self.hero)
-            print "monster action: ", monsterAction
-            self.doAction(monsterAction, monster, self.monsterAvatar, self.hero)
+            else:
+                sleep(0.5)
+                monsterAction = self.selectAction(monster, self.hero)
+                # print "monster action: ", monsterAction
+                self.doAction(monsterAction, monster, self.monsterAvatar, self.hero)
+                turn = True
 
+            self.text_hero_HitPoints_V.config(text=self.hero.HitPoints)
+            self.text_monster_HitPoints_V.config(text=monster.HitPoints)
+            self.hero.dCheckStatus()
+            monster.dCheckStatus()
+            self.update()
+
+            if not monster.alive or not self.hero.alive:
+                self.canvas.delete(self.monsterAvatar)
+                self.update()
+                if self.hero.alive:
+                    self.hero.XP += monster.XpReword
+                    self.hero.kills += 1
+                    self.hero.dCheckStatus()
+                break
 
     def selectAction(self, myself, enemy):
         hunt = 0
         attack = 0
         heal = 0
+
         walk_path = self.pathFindStep(myself, enemy)
-        print "walk length: ",len(walk_path)
+        # print "walk length: ",len(walk_path),walk_path
         if len(walk_path) > 1 :
             hunt = 1
 
         if len(walk_path) <= 1 :
             attack = 2
 
-        if myself.HitPoints/float(myself.MaxHP) <= 0.3 and myself.canHeal :
+        if myself.HitPoints/float(myself.MaxHP) <= 0.3 and myself.canHeal and myself.HitDiceCount > 0:
             heal = 3
 
         actionSelection = [hunt, attack, heal]
+        # print actionSelection
         return max(actionSelection)
 
     def doAction(self, action, myself, avatar, enemy):
         # hunt
         if action == 1:
-            RouteStep = self.pathFindStep(myself, enemy)[0]
-            self.canvas.move(avatar, self.dx[int(RouteStep)]*self.horizonLength, self.dy[int(RouteStep)]*self.verticalLength )
-            self.hero.startLocation = (int( myself.startLocation[0] + self.dx[int(RouteStep)] ) , int( myself.startLocation[1] + self.dy[int(RouteStep)] ) )
+            RouteStep = int(self.pathFindStep(myself, enemy)[0])
+            self.canvas.move(avatar, self.dx[RouteStep]*self.horizonLength, self.dy[RouteStep]*self.verticalLength )
+            myself.startLocation = ( myself.startLocation[0] + self.dx[RouteStep] ,  myself.startLocation[1] + self.dy[RouteStep] )
             self.update()
-        else:
 
-            print "foo",action
-            sys.exit()
+        if action == 2:
+            self.gui_dAttack2(myself,enemy)
+
+        if action == 3:
+            myself.heal()
+
+    def gui_dAttack2(self, first, second):
+        # first attacks
+        if randGen(1,20) > second.AC:
+            self.gui_dAttackTurns(first,second)
+            second.dCheckStatus()
+
+    def check_initiative(self,hero,monster):
+        hero_initiative = dScoreModifier[hero.dDex]
+        monster_initiative = dScoreModifier[monster.dDex]
+        if hero_initiative >= monster_initiative:
+            return True
+        return False
+
 
     def gui_dBattle(self):
         monster = Mob()
@@ -273,7 +310,7 @@ class GuiSetup(Tkinter.Tk):
         # equip items
         # unequip items
 
-        self.hero.action = self.selectAction(monster)
+        # self.hero.action = self.selectAction(monster)
         # monster.action = self.selectAction(self.hero)
 
         # walking towords each other hero and monster
@@ -306,7 +343,6 @@ class GuiSetup(Tkinter.Tk):
             self.hero.kills += 1
             self.hero.dCheckStatus()
 
-
     def	gui_dFight(self, hero, monster):
 
         while hero.alive and monster.alive:
@@ -329,7 +365,6 @@ class GuiSetup(Tkinter.Tk):
         self.canvas.delete(self.monsterAvatar)
         self.update()
 
-
     def gui_dAttack(self, first, second):
         # first attacks
         if randGen(1,20) > second.AC:
@@ -349,7 +384,6 @@ class GuiSetup(Tkinter.Tk):
         else:
             attacked.HitPoints -= self.demageCalc(attacker)
 
-
     def demageCalc(self, attacker):
         #mele attack
         x = randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dStr]
@@ -358,7 +392,6 @@ class GuiSetup(Tkinter.Tk):
         return x
         #ranged attack
         return randGen(dItemsWeaponsRanged.get(attacker.weapon)[0],dItemsWeaponsRanged.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
-
 
     def updateGameInfo(self, hero, monster):
         self.text_hero_name_V.config(		text=hero.name)
@@ -387,7 +420,6 @@ class GuiSetup(Tkinter.Tk):
         self.text_monster_HitPoints_V.config(	text=monster.HitPoints)
         self.text_monster_AC_V.config(		text=monster.AC)
 
-
     def pathfindingMapGenerator(self):
         the_map = []
         row = [0] * self.myMap.columns
@@ -395,9 +427,9 @@ class GuiSetup(Tkinter.Tk):
             the_map.append(list(row))
         return the_map
 
-
     def pathFindStep(self, startObject, endObject):
         return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.startLocation[0], startObject.startLocation[1], endObject.startLocation[0], endObject.startLocation[1], self.myMap.columns, self.myMap.rows)
+
 
     ################ not in use ####################
     def move_N(self,unit):
@@ -531,7 +563,8 @@ class Unit:
         self.HitPoints += randGen(1,self.HitDice)
         if self.HitPoints > self.MaxHP:
             self.HitPoints = copy.deepcopy(self.MaxHP)
-        self.HitDice -= 1
+        self.HitDiceCount -= 1
+
 
 class Hero(Unit):
     def __init__(self,name):
@@ -544,7 +577,7 @@ class Mob(Unit):
     def __init__(self):
         Unit.__init__(self,"")
 
-        self.name = random.choice(challenge_0)
+        self.name = random.choice(random.choice(challenge_all))
         mobParams =  MD.monsterDict[self.name]
         self.dRaceName	= "monster"
         self.dRace		= "monster"

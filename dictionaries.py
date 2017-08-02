@@ -371,7 +371,7 @@ challenge_9 = [
                 ]
 
 # Challenge 7 (2',900 XP)
-challenge_10 = ['Giant ape']
+challenge_10 = ['Giant Ape']
 
 # Challenge 8 (3',900 XP)
 challenge_11 = [
