@@ -28,7 +28,7 @@ class mainMap():
     def makeMatrixDict(self):
         for x in range(self.columns):
             for y in range(self.rows):
-                self.mapMatrix[y,x]=[None,None]
+                self.mapMatrix[y,x]=[None, None]
 
 
 class GuiSetup(Tkinter.Tk):
@@ -203,6 +203,14 @@ class GuiSetup(Tkinter.Tk):
         self.heroAvatar=self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
         self.update()
 
+        sell = random.choice(self.myMap.mapMatrix.keys())
+        item = random.choice(dItemsArmors.keys())
+        self.myMap.mapMatrix[sell][1] = item
+        for key, value in self.myMap.mapMatrix.items():
+            if value[1] != None:
+                print(key, value)
+        sys.exit()
+
         while self.hero.alive:
             self.gui_dBattle2()
 
@@ -256,6 +264,7 @@ class GuiSetup(Tkinter.Tk):
         hunt = 0
         attack = 0
         heal = 0
+        moveToLoot = 0
 
         walk_path = self.pathFindStep(myself, enemy)
         # print "walk length: ",len(walk_path),walk_path
@@ -267,6 +276,9 @@ class GuiSetup(Tkinter.Tk):
 
         if myself.HitPoints/float(myself.MaxHP) <= 0.3 and myself.canHeal and myself.HitDiceCount > 0:
             heal = 3
+
+        # if not None in self.myMap.mapMatrix.values():
+        #     print self.myMap.mapMatrix.values()
 
         actionSelection = [hunt, attack, heal]
         # print actionSelection

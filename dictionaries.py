@@ -90,7 +90,7 @@ dItemsArmors = {
 '''
 
 
-dItemsSields = {	
+dItemsShields = {
                     'Bukler':(1,'a'),
                     'Wicker shield':(1,'a'),
                     'Wyvern Bone Shield':(2,'a'),
