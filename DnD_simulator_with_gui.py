@@ -277,9 +277,9 @@ class GuiSetup(Tkinter.Tk):
         if action == 1:
             RouteStep = int(self.pathFindStep(myself, enemy)[0])
             self.canvas.move(avatar, self.dx[RouteStep]*self.horizonLength, self.dy[RouteStep]*self.verticalLength )
+            self.myMap.mapMatrix[myself.location][0] = None
             myself.location = ( myself.location[0] + self.dx[RouteStep] ,  myself.location[1] + self.dy[RouteStep] )
-            self.myMap.mapMatrix[ myself.location ][0]=  
-            print self.myMap.mapMatrix
+            self.myMap.mapMatrix[ myself.location ][0]= myself
             self.update()
 
         if action == 2:
