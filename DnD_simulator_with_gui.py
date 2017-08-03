@@ -320,7 +320,7 @@ class GuiSetup(Tkinter.Tk):
         if myself.canLoot and lootExist and len(walk_path_loot) > 1:
             getLoot = 4
 
-        if lootExist and len(walk_path_loot) <= 1:
+        if lootExist and len(walk_path_loot) <= 1 and myself.canLoot:
             pick_up_loot = 5
 
         # if not None in self.myMap.mapMatrix.values():
@@ -356,10 +356,7 @@ class GuiSetup(Tkinter.Tk):
 
         if action == 5:
             myself.armor = self.loot.name
-            print myself.armor
-            print myself.AC
             myself.calcAC()
-            print myself.AC
             self.update()
             self.myMap.mapMatrix[self.loot.location] = [None,None]
             self.canvas.delete(self.lootAvatar)
@@ -543,7 +540,6 @@ class Unit:
         AC = 10
         if self.armor != None:
             AC = dItemsArmors.get(self.armor)[0]
-        print AC, int(self.shield), dScoreModifier[self.dDex]
         newAC = AC + int(self.shield) + dScoreModifier[self.dDex]
         self.AC = newAC
 
@@ -589,6 +585,7 @@ class Mob(Unit):
         mobParams =  MD.monsterDict[self.name]
         self.dRaceName	= "monster"
         self.dRace		= "monster"
+        self.dClass		= "monster"
         self.dStr		= mobParams[5][0]
         self.dDex		= mobParams[5][1]
         self.dCons		= mobParams[5][2]
