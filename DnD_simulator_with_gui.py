@@ -31,6 +31,35 @@ class mainMap():
                 self.mapMatrix[y,x]=[None, None]
 
 
+class Loot():
+    def __init__(self):
+        self.name = None
+        self.location = None
+        # self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged)
+        self.all_items_dicts = dItemsArmors
+        self.figuresSizeX = None
+        self.figuresSizeY = None
+        self.x0 = None
+        self.x1 = None
+        self.y0 = None
+        self.y1 = None
+
+
+    def populate_space_on_grid(self, gui, sell = None ):
+        if sell != None:
+            self.location = sell
+        else:
+            self.location = random.choice(gui.myMap.mapMatrix.keys())
+
+        self.figuresSizeX = gui.canvasWidth/gui.myMap.columns
+        self.figuresSizeY = gui.canvasHeight/gui.myMap.rows
+        #calculate size for the unit
+        self.x0 = self.location[0]*self.figuresSizeX
+        self.x1 = (1+self.location[0])*self.figuresSizeX
+        self.y0 = self.location[1]*self.figuresSizeY
+        self.y1 = (1+self.location[1])*self.figuresSizeY
+
+
 class GuiSetup(Tkinter.Tk):
     def __init__(self,parent,heroName):
         Tkinter.Tk.__init__(self,parent)
@@ -197,20 +226,23 @@ class GuiSetup(Tkinter.Tk):
         4. try to disengage when low on health
         5. death and new round , mob random location ,hero from his spot
         '''
+        # create Hero
         self.hero = Hero(self.heroName)
         self.hero.populate_space_on_grid(self)
         # create the unit on grid
         self.heroAvatar=self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
         self.update()
 
-        sell = random.choice(self.myMap.mapMatrix.keys())
-        item = random.choice(dItemsArmors.keys())
-        self.myMap.mapMatrix[sell][1] = item
-        for key, value in self.myMap.mapMatrix.items():
-            if value[1] != None:
-                print(key, value)
-        sys.exit()
+        # create loot
+        self.loot = Loot()
+        self.loot.name = random.choice(self.loot.all_items_dicts.keys())
+        self.loot.location = random.choice(self.myMap.mapMatrix.keys())
+        self.myMap.mapMatrix[self.loot.location][1] = self.loot.name
 
+        self.loot.populate_space_on_grid(self, self.loot.location)
+        self.lootAvatar = self.canvas.create_oval(self.loot.x0, self.loot.y0, self.loot.x1, self.loot.y1, fill="yellow")
+
+        # start battle
         while self.hero.alive:
             self.gui_dBattle2()
 
@@ -232,21 +264,20 @@ class GuiSetup(Tkinter.Tk):
 
         while True:
             if turn:
-                sleep(0.5)
+                sleep(0.2)
                 heroAction = self.selectAction(self.hero, monster)
                 # print "hero action: ", heroAction
                 self.doAction(heroAction, self.hero, self.heroAvatar, monster)
                 turn = False
 
             else:
-                sleep(0.5)
+                sleep(0.2)
                 monsterAction = self.selectAction(monster, self.hero)
                 # print "monster action: ", monsterAction
                 self.doAction(monsterAction, monster, self.monsterAvatar, self.hero)
                 turn = True
 
-            self.text_hero_HitPoints_V.config(text=self.hero.HitPoints)
-            self.text_monster_HitPoints_V.config(text=monster.HitPoints)
+            self.updateGameInfo(self.hero, monster)
             self.hero.dCheckStatus()
             monster.dCheckStatus()
             self.update()
@@ -264,10 +295,19 @@ class GuiSetup(Tkinter.Tk):
         hunt = 0
         attack = 0
         heal = 0
-        moveToLoot = 0
+        getLoot = 0
+        lootExist = False
+        walk_path_loot = 0
+        pick_up_loot = 0
 
         walk_path = self.pathFindStep(myself, enemy)
-        # print "walk length: ",len(walk_path),walk_path
+
+        for key, value in self.myMap.mapMatrix.items():
+            if value[1] != None:
+                # print(key, value)
+                lootExist = True
+                walk_path_loot = self.pathFindStep(myself, self.loot)
+
         if len(walk_path) > 1 :
             hunt = 1
 
@@ -277,10 +317,16 @@ class GuiSetup(Tkinter.Tk):
         if myself.HitPoints/float(myself.MaxHP) <= 0.3 and myself.canHeal and myself.HitDiceCount > 0:
             heal = 3
 
+        if myself.canLoot and lootExist and len(walk_path_loot) > 1:
+            getLoot = 4
+
+        if lootExist and len(walk_path_loot) <= 1:
+            pick_up_loot = 5
+
         # if not None in self.myMap.mapMatrix.values():
         #     print self.myMap.mapMatrix.values()
 
-        actionSelection = [hunt, attack, heal]
+        actionSelection = [hunt, attack, heal,getLoot,pick_up_loot]
         # print actionSelection
         return max(actionSelection)
 
@@ -300,11 +346,25 @@ class GuiSetup(Tkinter.Tk):
         if action == 3:
             myself.heal()
 
-    def gui_dAttack2(self, first, second):
-        # first attacks
-        if randGen(1,20) > second.AC:
-            self.gui_dAttackTurns(first,second)
-            second.dCheckStatus()
+        if action == 4:
+            RouteStep = int(self.pathFindStep(myself, self.loot)[0])
+            self.canvas.move(avatar, self.dx[RouteStep]*self.horizonLength, self.dy[RouteStep]*self.verticalLength )
+            self.myMap.mapMatrix[myself.location][0] = None
+            myself.location = ( myself.location[0] + self.dx[RouteStep] ,  myself.location[1] + self.dy[RouteStep] )
+            self.myMap.mapMatrix[ myself.location ][0]= myself
+            self.update()
+
+        if action == 5:
+            myself.armor = self.loot.name
+            print myself.armor
+            print myself.AC
+            myself.calcAC()
+            print myself.AC
+            self.update()
+            self.myMap.mapMatrix[self.loot.location] = [None,None]
+            self.canvas.delete(self.lootAvatar)
+            self.loot.location = None
+            self.loot.name = None
 
     def check_initiative(self,hero,monster):
         hero_initiative = dScoreModifier[hero.dDex]
@@ -313,14 +373,15 @@ class GuiSetup(Tkinter.Tk):
             return True
         return False
 
-    def gui_dAttackTurns(self, attacker, attacked):
+    def gui_dAttack2(self, attacker, attacked):
         diceRoll = randGen(1,20)
         if diceRoll == 1:
             return
         elif diceRoll == 20:
             attacked.HitPoints -= self.demageCalc(attacker)+self.demageCalc(attacker)
         else:
-            attacked.HitPoints -= self.demageCalc(attacker)
+            if diceRoll + dScoreModifier[attacker.dStr] > attacked.AC:
+                attacked.HitPoints -= self.demageCalc(attacker)
 
     def demageCalc(self, attacker):
         #mele attack
@@ -332,31 +393,31 @@ class GuiSetup(Tkinter.Tk):
         return randGen(dItemsWeaponsRanged.get(attacker.weapon)[0],dItemsWeaponsRanged.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
 
     def updateGameInfo(self, hero, monster):
-        self.text_hero_name_V.config(		text=hero.name)
-        self.text_hero_race_V.config(		text=hero.dRaceName)
-        self.text_hero_class_V.config(		text=hero.dClass)
-        self.text_hero_Str_V.config(		text=hero.dStr)
-        self.text_hero_Dex_V.config(		text=hero.dDex)
-        self.text_hero_Con_V.config(		text=hero.dCons)
-        self.text_hero_Int_V.config(		text=hero.dInt)
-        self.text_hero_Wis_V.config(		text=hero.dWis)
-        self.text_hero_Cha_V.config(		text=hero.dCha)
-        self.text_hero_HitPoints_V.config(	text=hero.HitPoints)
-        self.text_hero_AC_V.config(			text=hero.AC)
-        self.text_hero_kills_V.config(		text=hero.kills)
-        self.text_hero_XP_V.config(			text=hero.XP)
+        self.text_hero_name_V.config(		    text=hero.name)
+        self.text_hero_race_V.config(		    text=hero.dRaceName)
+        self.text_hero_class_V.config(		    text=hero.dClass)
+        self.text_hero_Str_V.config(		    text=hero.dStr)
+        self.text_hero_Dex_V.config(		    text=hero.dDex)
+        self.text_hero_Con_V.config(		    text=hero.dCons)
+        self.text_hero_Int_V.config(		    text=hero.dInt)
+        self.text_hero_Wis_V.config(		    text=hero.dWis)
+        self.text_hero_Cha_V.config(		    text=hero.dCha)
+        self.text_hero_HitPoints_V.config(	    text=hero.HitPoints)
+        self.text_hero_AC_V.config(			    text=hero.AC)
+        self.text_hero_kills_V.config(		    text=hero.kills)
+        self.text_hero_XP_V.config(			    text=hero.XP)
 
-        self.text_monster_name_V.config(	text=monster.name)
-        self.text_monster_race_V.config(	text=monster.dRaceName)
-        self.text_monster_class_V.config(	text=monster.dClass)
-        self.text_monster_Str_V.config(		text=monster.dStr)
-        self.text_monster_Dex_V.config(		text=monster.dDex)
-        self.text_monster_Con_V.config(		text=monster.dCons)
-        self.text_monster_Int_V.config(		text=monster.dInt)
-        self.text_monster_Wis_V.config(		text=monster.dWis)
-        self.text_monster_Cha_V.config(		text=monster.dCha)
+        self.text_monster_name_V.config(	    text=monster.name)
+        self.text_monster_race_V.config(	    text=monster.dRaceName)
+        self.text_monster_class_V.config(	    text=monster.dClass)
+        self.text_monster_Str_V.config(		    text=monster.dStr)
+        self.text_monster_Dex_V.config(		    text=monster.dDex)
+        self.text_monster_Con_V.config(		    text=monster.dCons)
+        self.text_monster_Int_V.config(		    text=monster.dInt)
+        self.text_monster_Wis_V.config(		    text=monster.dWis)
+        self.text_monster_Cha_V.config(		    text=monster.dCha)
         self.text_monster_HitPoints_V.config(	text=monster.HitPoints)
-        self.text_monster_AC_V.config(		text=monster.AC)
+        self.text_monster_AC_V.config(		    text=monster.AC)
 
     def pathfindingMapGenerator(self):
         the_map = []
@@ -453,13 +514,17 @@ class Unit:
         self.MaxHP		= copy.deepcopy(self.HitPoints)
         self.armor		= None
         self.shield		= 0
-        self.AC			= self.calcAC()
+        self.AC			= 10
         self.weapon		= random.choice(dItemsWeaponsMele.keys())
         self.XpReword	= 300
         self.inventory	= {}
 
-    def populate_space_on_grid(self,gui):
-        self.location = random.choice(gui.myMap.mapMatrix.keys())
+    def populate_space_on_grid(self, gui, sell = None ):
+        if sell != None:
+            self.location = sell
+        else:
+            self.location = random.choice(gui.myMap.mapMatrix.keys())
+
         self.figuresSizeX = gui.canvasWidth/gui.myMap.columns
         self.figuresSizeY = gui.canvasHeight/gui.myMap.rows
         #calculate size for the unit
@@ -478,7 +543,9 @@ class Unit:
         AC = 10
         if self.armor != None:
             AC = dItemsArmors.get(self.armor)[0]
-        return AC + self.shield + dScoreModifier[self.dDex]
+        print AC, int(self.shield), dScoreModifier[self.dDex]
+        newAC = AC + int(self.shield) + dScoreModifier[self.dDex]
+        self.AC = newAC
 
     def dCheckStatus(self):
         if self.HitPoints > 0:
@@ -509,6 +576,8 @@ class Hero(Unit):
         Unit.__init__(self,name)
         self.kills = 0
         self.canHeal = True
+        self.canLoot = True
+        self.calcAC()
 
 
 class Mob(Unit):
@@ -516,6 +585,7 @@ class Mob(Unit):
         Unit.__init__(self,"")
 
         self.name = random.choice(challenge_1)
+        # self.name = random.choice(random.choice(challenge_all))
         mobParams =  MD.monsterDict[self.name]
         self.dRaceName	= "monster"
         self.dRace		= "monster"
@@ -537,6 +607,7 @@ class Mob(Unit):
         self.weapon		= random.choice(dItemsWeaponsMele.keys())
         self.XpReword	= int(mobParams[9])
         self.canHeal    = False
+        self.canLoot    = False
 
 
     def calcHP(self,x):
@@ -583,6 +654,17 @@ def setCanvasGrid(canv , rows , columns):
     for line in range(columns):
         y = line*(canv.canvasWidth/columns)
         canv.canvas.create_line(0,y,canv.canvasWidth,y,fill="black")
+
+
+def merge_dicts(*dict_args):
+    """
+    Given any number of dicts, shallow copy and merge into a new dict,
+    precedence goes to key value pairs in latter dicts.
+    """
+    result = {}
+    for dictionary in dict_args:
+        result.update(dictionary)
+    return result
 
 
 def gui_test():
