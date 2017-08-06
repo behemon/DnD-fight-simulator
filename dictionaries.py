@@ -135,6 +135,13 @@ dItemsWeaponsRanged = {
                         }
 
 
+dItemsHealingPotions = {
+                        'Healing'           :('2d4 + 2'),
+                        'Greater healing'   :('4d4 + 4'),
+                        'Superior healing'  :('8d4 + 8'),
+                        'Supreme healing'   :('10d4 + 20')
+}
+
 dListOfNamesD = {
                 'Dian':(), 'Nese':(), 'Falledrick':(), 'Mae':(), 'Valhein':(), 'Dol':(), 'Earl':(), 'Cedria':(),
                 'Azulei':(), 'Yun':(), 'Cybel':(), 'Ina':(), 'Foolly':(), 'Skili':(), 'Juddol':(), 'Janver':(),
