@@ -248,6 +248,12 @@ class GuiSetup(Tkinter.Tk):
 
         # clear the board
         self.canvas.delete(self.heroAvatar)
+        # looks ugly need to change and make it support more loot.
+        if self.loot.name != None:
+            self.myMap.mapMatrix[self.loot.location] = [None,None]
+            self.canvas.delete(self.lootAvatar)
+            self.loot.location = None
+            self.loot.name = None
         self.update()
 
     def gui_dBattle2(self):
@@ -381,12 +387,14 @@ class GuiSetup(Tkinter.Tk):
                 attacked.HitPoints -= self.demageCalc(attacker)
 
     def demageCalc(self, attacker):
-        #mele attack
-        x = randGen(dItemsWeaponsMele.get(attacker.weapon)[0],dItemsWeaponsMele.get(attacker.weapon)[1]) + dScoreModifier[attacker.dStr]
+        # melee attack
+
+        x = fullDiceRoll(attacker.weapon) + dScoreModifier[attacker.dStr]
         if x<0:
-            x= 0
+            return 0
         return x
-        #ranged attack
+
+        #ranged attack not implemented
         return randGen(dItemsWeaponsRanged.get(attacker.weapon)[0],dItemsWeaponsRanged.get(attacker.weapon)[1]) + dScoreModifier[attacker.dDex]
 
     def updateGameInfo(self, hero, monster):
@@ -512,7 +520,8 @@ class Unit:
         self.armor		= None
         self.shield		= 0
         self.AC			= 10
-        self.weapon		= random.choice(dItemsWeaponsMele.keys())
+        self.weaponName	= None
+        self.weapon		= None
         self.XpReword	= 300
         self.inventory	= {}
 
@@ -570,9 +579,11 @@ class Unit:
 class Hero(Unit):
     def __init__(self,name):
         Unit.__init__(self,name)
-        self.kills = 0
-        self.canHeal = True
-        self.canLoot = True
+        self.kills      = 0
+        self.canHeal    = True
+        self.canLoot    = True
+        self.weaponName	= random.choice(dItemsWeaponsMele.keys())
+        self.weapon		= dItemsWeaponsMele[self.weaponName]
         self.calcAC()
 
 
@@ -580,7 +591,7 @@ class Mob(Unit):
     def __init__(self):
         Unit.__init__(self,"")
 
-        self.name = random.choice(challenge_1)
+        self.name = random.choice(challenge_0)
         # self.name = random.choice(random.choice(challenge_all))
         mobParams =  MD.monsterDict[self.name]
         self.dRaceName	= "monster"
@@ -601,7 +612,8 @@ class Mob(Unit):
         self.armor		= None
         self.shield		= 0
         self.AC			= int(mobParams[2])
-        self.weapon		= random.choice(dItemsWeaponsMele.keys())
+        # self.weapon		= random.choice(dItemsWeaponsMele.keys())
+        self.weapon		= mobParams[7]
         self.XpReword	= int(mobParams[9])
         self.canHeal    = False
         self.canLoot    = False
@@ -616,6 +628,18 @@ class Mob(Unit):
         if result <= 0:
             result = 1
         return result
+
+
+def fullDiceRoll(x):
+    x = x.split()
+    result = diceRoll(x[0])
+    if len(x)> 1:
+        stringa = "%s%s%s"%(result, x[1],x[2])
+        result = eval(stringa)
+    if result <= 0:
+        result = 1
+    print "dmg type:",x,result
+    return result
 
 
 def diceRoll(dice):

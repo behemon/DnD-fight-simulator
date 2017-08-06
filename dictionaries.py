@@ -99,11 +99,11 @@ dItemsShields = {
 
 
 dItemsWeaponsMele = {
-                        'Sword':(1,4)
+                        'Sword':('1d4')
                         }
 
 dItemsWeaponsRanged = {
-                        'bow':(1,4)
+                        'bow':('1d4')
                         }
 
 
