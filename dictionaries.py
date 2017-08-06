@@ -99,7 +99,35 @@ dItemsShields = {
 
 
 dItemsWeaponsMele = {
-                        'Sword':('1d4')
+                        'Sword'         :('1d4'),
+                        'Club'          :('1d4'),
+                        'Dagger'        :('1d4'),
+                        'Greatclub'     :('1d8'),
+                        'Handaxe'       :('1d6'),
+                        'Javelin'       :('1d6'),
+                        'Light hammer'  :('1d4'),
+                        'Mace'          :('1d6'),
+                        'Quarterstaff'  :('1d6'),
+                        'Sickle'        :('1d4'),
+                        'Spear'         :('1d6'),
+                        'Battleaxe'     :('1d8'),
+                        'Flail'         :('1d8'),
+                        'Glaive'        :('1d10'),
+                        'Greataxe'      :('1d12'),
+                        'Greatsword'    :('2d6'),
+                        'Halberd'       :('1d10'),
+                        'Lance'         :('1d12'),
+                        'Longsword'     :('1d8'),
+                        'Maul'          :('2d6'),
+                        'Morningstar'   :('1d8'),
+                        'Pike'          :('1d10'),
+                        'Rapier'        :('1d8'),
+                        'Scimitar'      :('1d6'),
+                        'Shortsword'    :('1d6'),
+                        'Trident'       :('1d6'),
+                        'War pick'      :('1d8'),
+                        'Warhammer'     :('1d8'),
+                        'Whip'          :('1d4')
                         }
 
 dItemsWeaponsRanged = {
