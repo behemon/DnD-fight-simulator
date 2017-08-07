@@ -253,23 +253,6 @@ class GuiSetup(Tkinter.Tk):
                 loot = None
         self.update()
 
-    def createLoot(self):
-        # create loot
-        loot = Loot()
-        loot.name = random.choice(loot.all_items_dicts.keys())
-        loot.location = random.choice(self.myMap.mapMatrix.keys())
-        self.myMap.mapMatrix[loot.location][1] = loot.name
-        loot.populate_space_on_grid(self, loot.location)
-        loot.lootAvatar = self.canvas.create_oval(loot.x0, loot.y0, loot.x1, loot.y1, fill="yellow")
-        return loot
-
-    def removeLoot(self,loot):
-        self.myMap.mapMatrix[loot.location] = [None, None]
-        self.canvas.delete(loot.lootAvatar)
-        loot = None
-        # loot.location = None
-        # loot.name = None
-
     def gui_dBattle2(self):
         monster = Mob()
         monster.populate_space_on_grid(self)
@@ -458,6 +441,22 @@ class GuiSetup(Tkinter.Tk):
     def pathFindStep(self, startObject, endObject):
         return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.location[0], startObject.location[1], endObject.location[0], endObject.location[1], self.myMap.columns, self.myMap.rows)
 
+    def createLoot(self):
+        # create loot
+        loot = Loot()
+        loot.name = random.choice(loot.all_items_dicts.keys())
+        loot.location = random.choice(self.myMap.mapMatrix.keys())
+        self.myMap.mapMatrix[loot.location][1] = loot.name
+        loot.populate_space_on_grid(self, loot.location)
+        loot.lootAvatar = self.canvas.create_oval(loot.x0, loot.y0, loot.x1, loot.y1, fill="yellow")
+        return loot
+
+    def removeLoot(self,loot):
+        self.myMap.mapMatrix[loot.location] = [None, None]
+        self.canvas.delete(loot.lootAvatar)
+        loot = None
+        # loot.location = None
+        # loot.name = None
 
     ################ not in use ####################
     def move_N(self,unit):
