@@ -65,19 +65,20 @@ dScoreModifier = {
 
 
 # name : AR , set or add,score Modifer addon
-dItemsArmors = {	
-                    'Light Armor Padded':(11,'s','DEX'),
-                    'Light Armor Leather':(11,'s','DEX'),
-                    'Light Armor Studded leather':(12,'s','DEX'),
-                    'Medium Armor Hide':(12,'s','DEX'),
-                    'Medium Armor Chain shirt':(13,'s','DEX'),
-                    'Medium Armor Scale mail':(14,'s','DEX'),
-                    'Medium Armor Breastplate':(14,'s','DEX'),
-                    'Medium Armor Half plate':(15,'s','DEX'),
-                    'Heavy Armor Ring mail':(14,'s',''),
-                    'Heavy Armor Chain mail':(16,'s',''),
-                    'Heavy Armor Splint':(17,'s',''),
-                    'Heavy Armor Plate':(18,'s','')
+dItemsArmors = {
+                    'No Armor'                      :(10,'s','DEX'),
+                    'Light Armor Padded'            :(11,'s','DEX'),
+                    'Light Armor Leather'           :(11,'s','DEX'),
+                    'Light Armor Studded leather'   :(12,'s','DEX'),
+                    'Medium Armor Hide'             :(12,'s','DEX'),
+                    'Medium Armor Chain shirt'      :(13,'s','DEX'),
+                    'Medium Armor Scale mail'       :(14,'s','DEX'),
+                    'Medium Armor Breastplate'      :(14,'s','DEX'),
+                    'Medium Armor Half plate'       :(15,'s','DEX'),
+                    'Heavy Armor Ring mail'         :(14,'s',''),
+                    'Heavy Armor Chain mail'        :(16,'s',''),
+                    'Heavy Armor Splint'            :(17,'s',''),
+                    'Heavy Armor Plate'             :(18,'s','')
                 }
 '''	'Leather Lamellar':(12,'s','DEX'),
 'Plated Leather Armor':(13,'s','DEX'),
@@ -91,6 +92,7 @@ dItemsArmors = {
 
 
 dItemsShields = {
+                    'No Sheild':(0,'a'),
                     'Bukler':(1,'a'),
                     'Wicker shield':(1,'a'),
                     'Wyvern Bone Shield':(2,'a'),
@@ -99,6 +101,7 @@ dItemsShields = {
 
 
 dItemsWeaponsMele = {
+                        'Fist'          :('1d1'),
                         'Sword'         :('1d4'),
                         'Club'          :('1d4'),
                         'Dagger'        :('1d4'),
@@ -136,7 +139,7 @@ dItemsWeaponsRanged = {
 
 
 dItemsHealingPotions = {
-                        'Healing'           :('2d4 + 2'),
+                        'Minor Healing'     :('2d4 + 2'),
                         'Greater healing'   :('4d4 + 4'),
                         'Superior healing'  :('8d4 + 8'),
                         'Supreme healing'   :('10d4 + 20')

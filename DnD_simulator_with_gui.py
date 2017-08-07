@@ -35,8 +35,8 @@ class Loot():
     def __init__(self):
         self.name = None
         self.location = None
-        # self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged)
-        self.all_items_dicts = dItemsArmors
+        self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged)
+        # self.all_items_dicts = dItemsArmors
         self.figuresSizeX = None
         self.figuresSizeY = None
         self.x0 = None
@@ -233,14 +233,11 @@ class GuiSetup(Tkinter.Tk):
         self.heroAvatar=self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
         self.update()
 
-        # create loot
-        self.loot = Loot()
-        self.loot.name = random.choice(self.loot.all_items_dicts.keys())
-        self.loot.location = random.choice(self.myMap.mapMatrix.keys())
-        self.myMap.mapMatrix[self.loot.location][1] = self.loot.name
+        self.lootList = []
+        for x in range(5):
+            self.lootList.append(self.createLoot())
 
-        self.loot.populate_space_on_grid(self, self.loot.location)
-        self.lootAvatar = self.canvas.create_oval(self.loot.x0, self.loot.y0, self.loot.x1, self.loot.y1, fill="yellow")
+
 
         # start battle
         while self.hero.alive:
@@ -249,12 +246,29 @@ class GuiSetup(Tkinter.Tk):
         # clear the board
         self.canvas.delete(self.heroAvatar)
         # looks ugly need to change and make it support more loot.
-        if self.loot.name != None:
-            self.myMap.mapMatrix[self.loot.location] = [None,None]
-            self.canvas.delete(self.lootAvatar)
-            self.loot.location = None
-            self.loot.name = None
+        # if self.loot.name is not None:
+        #     self.removeLoot(self.loot)
+        if self.lootList:
+            for loot in self.lootList:
+                loot = None
         self.update()
+
+    def createLoot(self):
+        # create loot
+        loot = Loot()
+        loot.name = random.choice(loot.all_items_dicts.keys())
+        loot.location = random.choice(self.myMap.mapMatrix.keys())
+        self.myMap.mapMatrix[loot.location][1] = loot.name
+        loot.populate_space_on_grid(self, loot.location)
+        loot.lootAvatar = self.canvas.create_oval(loot.x0, loot.y0, loot.x1, loot.y1, fill="yellow")
+        return loot
+
+    def removeLoot(self,loot):
+        self.myMap.mapMatrix[loot.location] = [None, None]
+        self.canvas.delete(loot.lootAvatar)
+        loot = None
+        # loot.location = None
+        # loot.name = None
 
     def gui_dBattle2(self):
         monster = Mob()
@@ -303,21 +317,23 @@ class GuiSetup(Tkinter.Tk):
         heal = 0
         getLoot = 0
         lootExist = False
+        lootPathList = []
         walk_path_loot = 0
         pick_up_loot = 0
 
         walk_path = self.pathFindStep(myself, enemy)
 
-        for key, value in self.myMap.mapMatrix.items():
-            if value[1] != None:
-                # print(key, value)
-                lootExist = True
-                walk_path_loot = self.pathFindStep(myself, self.loot)
+        if self.lootList:
+            lootExist = True
+            for loot in self.lootList:
+                path = self.pathFindStep(myself,loot)
+                lootPathList.append([path,len(path)])
+            walk_path_loot = min(lootPathList, key = lambda t: t[1])[0]
 
-        if len(walk_path) > 1 :
+        if len(walk_path) > 1:
             hunt = 1
 
-        if len(walk_path) <= 1 :
+        if len(walk_path) <= 1:
             attack = 2
 
         if myself.HitPoints/float(myself.MaxHP) <= 0.3 and myself.canHeal and myself.HitDiceCount > 0:
@@ -333,12 +349,11 @@ class GuiSetup(Tkinter.Tk):
         #     print self.myMap.mapMatrix.values()
 
         actionSelection = [hunt, attack, heal,getLoot,pick_up_loot]
-        # print actionSelection
         return max(actionSelection)
 
     def doAction(self, action, myself, avatar, enemy):
         # hunt
-        if action == 1:
+        if action == 1: # walk to enemy
             RouteStep = int(self.pathFindStep(myself, enemy)[0])
             self.canvas.move(avatar, self.dx[RouteStep]*self.horizonLength, self.dy[RouteStep]*self.verticalLength )
             self.myMap.mapMatrix[myself.location][0] = None
@@ -346,28 +361,37 @@ class GuiSetup(Tkinter.Tk):
             self.myMap.mapMatrix[ myself.location ][0]= myself
             self.update()
 
-        if action == 2:
+        if action == 2: # attack closest enemy
             self.gui_dAttack2(myself,enemy)
 
-        if action == 3:
+        if action == 3: #heal self
             myself.heal()
 
-        if action == 4:
-            RouteStep = int(self.pathFindStep(myself, self.loot)[0])
+        if action == 4: # walk to loot
+            lootPathList = []
+            for loot in self.lootList:
+                path = self.pathFindStep(myself,loot)
+                lootPathList.append([path,len(path)])
+            # walk_path_loot = min(lootPathList, key = lambda t: t[1])[0]
+            RouteStep = int(min(lootPathList, key = lambda t: t[1])[0][0])
+            # RouteStep = int(self.pathFindStep(myself, self.loot)[0])
             self.canvas.move(avatar, self.dx[RouteStep]*self.horizonLength, self.dy[RouteStep]*self.verticalLength )
             self.myMap.mapMatrix[myself.location][0] = None
             myself.location = ( myself.location[0] + self.dx[RouteStep] ,  myself.location[1] + self.dy[RouteStep] )
             self.myMap.mapMatrix[ myself.location ][0]= myself
             self.update()
 
-        if action == 5:
-            myself.armor = self.loot.name
-            myself.calcAC()
-            self.update()
-            self.myMap.mapMatrix[self.loot.location] = [None,None]
-            self.canvas.delete(self.lootAvatar)
-            self.loot.location = None
-            self.loot.name = None
+        if action == 5: # pickup loot
+            for loot in self.lootList:
+                path = self.pathFindStep(myself, loot)
+                if len(path)<=1:
+                    myself.inventory.append(loot.name)
+                    myself.updateEquipment()
+                    # myself.armor = loot.name
+                    # myself.calcAC()
+                    self.removeLoot(loot)
+                    self.lootList.remove(loot)
+                    self.update()
 
     def check_initiative(self,hero,monster):
         hero_initiative = dScoreModifier[hero.dDex]
@@ -518,12 +542,12 @@ class Unit:
         self.HitPoints 	= self.HitDice + dScoreModifier[self.dCons]
         self.MaxHP		= copy.deepcopy(self.HitPoints)
         self.armor		= None
-        self.shield		= 0
+        self.shieldName	= 'No Sheild'
         self.AC			= 10
         self.weaponName	= None
         self.weapon		= None
         self.XpReword	= 300
-        self.inventory	= {}
+        self.inventory	= []
 
     def populate_space_on_grid(self, gui, sell = None ):
         if sell != None:
@@ -549,7 +573,7 @@ class Unit:
         AC = 10
         if self.armor != None:
             AC = dItemsArmors.get(self.armor)[0]
-        newAC = AC + int(self.shield) + dScoreModifier[self.dDex]
+        newAC = AC + int(dItemsShields.get(self.shieldName)[0]) + dScoreModifier[self.dDex]
         self.AC = newAC
 
     def dCheckStatus(self):
@@ -574,6 +598,33 @@ class Unit:
         if self.HitPoints > self.MaxHP:
             self.HitPoints = copy.deepcopy(self.MaxHP)
         self.HitDiceCount -= 1
+
+    def updateEquipment(self):
+        bestMeleeWeapon     = self.weaponName
+        bestRangedWeapon    = 0
+        bestAromr           = 'No Armor'
+        bestShield          = 'No Sheild'
+        print self.armor,",",self.weaponName,",",self.shieldName
+        for item in self.inventory:
+            if item in dItemsArmors:
+                if dItemsArmors[item][0] > dItemsArmors[bestAromr][0]:
+                    bestAromr = item
+
+            if item in dItemsShields:
+                if dItemsShields[item][0] > dItemsShields[bestShield][0]:
+                    bestShield = item
+
+            if item in dItemsWeaponsMele:
+                newWeapon =  eval(dItemsWeaponsMele[item].replace('d','*'))
+                oldWeapon =  eval(dItemsWeaponsMele[bestMeleeWeapon].replace('d','*'))
+                if newWeapon > oldWeapon:
+                    bestMeleeWeapon = item
+
+        self.armor = bestAromr
+        self.shieldName = bestShield
+        self.weaponName = bestMeleeWeapon
+        print self.armor,",",self.weaponName,",",self.shieldName
+        self.calcAC()
 
 
 class Hero(Unit):
