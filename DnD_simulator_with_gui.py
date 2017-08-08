@@ -313,13 +313,17 @@ class GuiSetup(Tkinter.Tk):
                 lootPathList.append([path,len(path)])
             walk_path_loot = min(lootPathList, key = lambda t: t[1])[0]
 
+        if myself.canLoot:
+            print myself.name, "AC advantage:", myself.AC - enemy.AC
+            print myself.name, "HP percentage:", (100.0/myself.MaxHP)*myself.HitPoints
+
         if len(walk_path) > 1:
             hunt = 1
 
         if len(walk_path) <= 1:
             attack = 2
 
-        if myself.HitPoints/float(myself.MaxHP) <= 0.3 and myself.canHeal and myself.HitDiceCount > 0:
+        if myself.HitPoints/float(myself.MaxHP) <= 0.35 and myself.canHeal and myself.HitDiceCount > 0:
             heal = 3
 
         if myself.canLoot and lootExist and len(walk_path_loot) > 1:
@@ -603,7 +607,7 @@ class Unit:
         bestRangedWeapon    = 0
         bestAromr           = 'No Armor'
         bestShield          = 'No Sheild'
-        print self.armor,",",self.weaponName,",",self.shieldName
+        # print self.armor,",",self.weaponName,",",self.shieldName
         for item in self.inventory:
             if item in dItemsArmors:
                 if dItemsArmors[item][0] > dItemsArmors[bestAromr][0]:
@@ -622,7 +626,7 @@ class Unit:
         self.armor = bestAromr
         self.shieldName = bestShield
         self.weaponName = bestMeleeWeapon
-        print self.armor,",",self.weaponName,",",self.shieldName
+        # print self.armor,",",self.weaponName,",",self.shieldName
         self.calcAC()
 
 
@@ -688,7 +692,7 @@ def fullDiceRoll(x):
         result = eval(stringa)
     if result <= 0:
         result = 1
-    print "dmg type:",x,result
+    # print "dmg type:",x,result
     return result
 
 
