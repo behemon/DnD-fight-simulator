@@ -10,13 +10,13 @@ import random
 import sys
 import copy
 from time import sleep
-import Tkinter
-from Tkinter import N, S, E, W
+import tkinter
+from tkinter import N, S, E, W
 from A_star_algorithm import pathFind
-
+# import A_star_algorithm
 # import canvas_test as maps
 from dictionaries import *
-import monster_dictionary as MD
+from monster_dictionary import *
 
 
 class mainMap():
@@ -60,9 +60,9 @@ class Loot():
         self.y1 = (1 + self.location[1]) * self.figuresSizeY
 
 
-class GuiSetup(Tkinter.Tk):
+class GuiSetup(tkinter.Tk):
     def __init__(self, parent, heroName):
-        Tkinter.Tk.__init__(self, parent)
+        tkinter.Tk.__init__(self, parent)
         self.parent = parent
         self.heroName = heroName
         self.initialize()
@@ -73,7 +73,7 @@ class GuiSetup(Tkinter.Tk):
         # canvas size configuration
         self.canvasWidth = 300
         self.canvasHeight = 300
-        self.canvas = Tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
+        self.canvas = tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
         self.canvas.grid(row=0, column=11, rowspan=11)
 
         # making the map chess grid
@@ -97,69 +97,69 @@ class GuiSetup(Tkinter.Tk):
             self.dx = [1, 1, 0, -1, -1, -1, 0, 1]
             self.dy = [0, 1, 1, 1, 0, -1, -1, -1]
 
-        mainFrame = Tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
+        mainFrame = tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
         mainFrame.grid(column=0, row=0, columnspan=10, rowspan=11, sticky=(N, S, E, W))
 
-        self.button1 = Tkinter.Button(self, text=u"run simulator", command=self.runSimulator)
-        self.text_title = Tkinter.Label(self, text="Battle:")
+        self.button1 = tkinter.Button(self, text=u"run simulator", command=self.runSimulator)
+        self.text_title = tkinter.Label(self, text="Battle:")
         self.text_title.grid(column=5, row=0)
         self.button1.grid(column=5, row=10, sticky=N + S + E + W)
 
         # ##################################################
         # window setup
-        self.text_hero_name = Tkinter.Label(self, text="Name:")
-        self.text_hero_race = Tkinter.Label(self, text="Race:")
-        self.text_hero_class = Tkinter.Label(self, text="Class:")
-        self.text_hero_Str = Tkinter.Label(self, text="Str:")
-        self.text_hero_Dex = Tkinter.Label(self, text="Dex:")
-        self.text_hero_Con = Tkinter.Label(self, text="Con:")
-        self.text_hero_Int = Tkinter.Label(self, text="Int:")
-        self.text_hero_Wis = Tkinter.Label(self, text="Wis:")
-        self.text_hero_Cha = Tkinter.Label(self, text="Cha:")
+        self.text_hero_name = tkinter.Label(self, text="Name:")
+        self.text_hero_race = tkinter.Label(self, text="Race:")
+        self.text_hero_class = tkinter.Label(self, text="Class:")
+        self.text_hero_Str = tkinter.Label(self, text="Str:")
+        self.text_hero_Dex = tkinter.Label(self, text="Dex:")
+        self.text_hero_Con = tkinter.Label(self, text="Con:")
+        self.text_hero_Int = tkinter.Label(self, text="Int:")
+        self.text_hero_Wis = tkinter.Label(self, text="Wis:")
+        self.text_hero_Cha = tkinter.Label(self, text="Cha:")
 
-        self.text_hero_name_V = Tkinter.Label(self)
-        self.text_hero_race_V = Tkinter.Label(self)
-        self.text_hero_class_V = Tkinter.Label(self)
-        self.text_hero_Str_V = Tkinter.Label(self)
-        self.text_hero_Dex_V = Tkinter.Label(self)
-        self.text_hero_Con_V = Tkinter.Label(self)
-        self.text_hero_Int_V = Tkinter.Label(self)
-        self.text_hero_Wis_V = Tkinter.Label(self)
-        self.text_hero_Cha_V = Tkinter.Label(self)
+        self.text_hero_name_V = tkinter.Label(self)
+        self.text_hero_race_V = tkinter.Label(self)
+        self.text_hero_class_V = tkinter.Label(self)
+        self.text_hero_Str_V = tkinter.Label(self)
+        self.text_hero_Dex_V = tkinter.Label(self)
+        self.text_hero_Con_V = tkinter.Label(self)
+        self.text_hero_Int_V = tkinter.Label(self)
+        self.text_hero_Wis_V = tkinter.Label(self)
+        self.text_hero_Cha_V = tkinter.Label(self)
 
-        self.text_hero_HitPoints = Tkinter.Label(self, text="Hit Points")
-        self.text_hero_HitPoints_V = Tkinter.Label(self)
-        self.text_hero_AC = Tkinter.Label(self, text="AC")
-        self.text_hero_AC_V = Tkinter.Label(self)
-        self.text_hero_kills = Tkinter.Label(self, text="Kills")
-        self.text_hero_kills_V = Tkinter.Label(self)
-        self.text_hero_XP = Tkinter.Label(self, text="XP")
-        self.text_hero_XP_V = Tkinter.Label(self)
+        self.text_hero_HitPoints = tkinter.Label(self, text="Hit Points")
+        self.text_hero_HitPoints_V = tkinter.Label(self)
+        self.text_hero_AC = tkinter.Label(self, text="AC")
+        self.text_hero_AC_V = tkinter.Label(self)
+        self.text_hero_kills = tkinter.Label(self, text="Kills")
+        self.text_hero_kills_V = tkinter.Label(self)
+        self.text_hero_XP = tkinter.Label(self, text="XP")
+        self.text_hero_XP_V = tkinter.Label(self)
 
-        self.text_monster_name = Tkinter.Label(self, text="Name:")
-        self.text_monster_race = Tkinter.Label(self, text="Race:")
-        self.text_monster_class = Tkinter.Label(self, text="Class:")
-        self.text_monster_Str = Tkinter.Label(self, text="Str:")
-        self.text_monster_Dex = Tkinter.Label(self, text="Dex:")
-        self.text_monster_Con = Tkinter.Label(self, text="Con:")
-        self.text_monster_Int = Tkinter.Label(self, text="Int:")
-        self.text_monster_Wis = Tkinter.Label(self, text="Wis:")
-        self.text_monster_Cha = Tkinter.Label(self, text="Cha:")
+        self.text_monster_name = tkinter.Label(self, text="Name:")
+        self.text_monster_race = tkinter.Label(self, text="Race:")
+        self.text_monster_class = tkinter.Label(self, text="Class:")
+        self.text_monster_Str = tkinter.Label(self, text="Str:")
+        self.text_monster_Dex = tkinter.Label(self, text="Dex:")
+        self.text_monster_Con = tkinter.Label(self, text="Con:")
+        self.text_monster_Int = tkinter.Label(self, text="Int:")
+        self.text_monster_Wis = tkinter.Label(self, text="Wis:")
+        self.text_monster_Cha = tkinter.Label(self, text="Cha:")
 
-        self.text_monster_name_V = Tkinter.Label(self)
-        self.text_monster_race_V = Tkinter.Label(self)
-        self.text_monster_class_V = Tkinter.Label(self)
-        self.text_monster_Str_V = Tkinter.Label(self)
-        self.text_monster_Dex_V = Tkinter.Label(self)
-        self.text_monster_Con_V = Tkinter.Label(self)
-        self.text_monster_Int_V = Tkinter.Label(self)
-        self.text_monster_Wis_V = Tkinter.Label(self)
-        self.text_monster_Cha_V = Tkinter.Label(self)
+        self.text_monster_name_V = tkinter.Label(self)
+        self.text_monster_race_V = tkinter.Label(self)
+        self.text_monster_class_V = tkinter.Label(self)
+        self.text_monster_Str_V = tkinter.Label(self)
+        self.text_monster_Dex_V = tkinter.Label(self)
+        self.text_monster_Con_V = tkinter.Label(self)
+        self.text_monster_Int_V = tkinter.Label(self)
+        self.text_monster_Wis_V = tkinter.Label(self)
+        self.text_monster_Cha_V = tkinter.Label(self)
 
-        self.text_monster_HitPoints = Tkinter.Label(self, text="Hit Points")
-        self.text_monster_HitPoints_V = Tkinter.Label(self)
-        self.text_monster_AC = Tkinter.Label(self, text="AC")
-        self.text_monster_AC_V = Tkinter.Label(self)
+        self.text_monster_HitPoints = tkinter.Label(self, text="Hit Points")
+        self.text_monster_HitPoints_V = tkinter.Label(self)
+        self.text_monster_AC = tkinter.Label(self, text="AC")
+        self.text_monster_AC_V = tkinter.Label(self)
 
         # GRID
         self.text_hero_name.grid(column=1, row=1, sticky=W + E)
@@ -308,8 +308,8 @@ class GuiSetup(Tkinter.Tk):
             walk_path_loot = min(lootPathList, key=lambda t: t[1])[0]
 
         if myself.canLoot:
-            print myself.name, "AC advantage:", myself.AC - enemy.AC
-            print myself.name, "HP percentage:", (100.0 / myself.MaxHP) * myself.HitPoints
+            print (myself.name, "AC advantage:", myself.AC - enemy.AC)
+            print (myself.name, "HP percentage:", (100.0 / myself.MaxHP) * myself.HitPoints)
 
         if len(walk_path) > 1:
             hunt = 1
@@ -445,8 +445,8 @@ class GuiSetup(Tkinter.Tk):
     def createLoot(self):
         # create loot
         loot = Loot()
-        loot.name = random.choice(loot.all_items_dicts.keys())
-        loot.location = random.choice(self.myMap.mapMatrix.keys())
+        loot.name = random.choice(list(loot.all_items_dicts))
+        loot.location = random.choice(list(self.myMap.mapMatrix))
         self.myMap.mapMatrix[loot.location][1] = loot.name
         loot.populate_space_on_grid(self, loot.location)
         loot.lootAvatar = self.canvas.create_oval(loot.x0, loot.y0, loot.x1, loot.y1, fill="yellow")
@@ -514,7 +514,7 @@ class GuiSetup(Tkinter.Tk):
         # use A*star algorithm to find the path from start to end
         route = pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, xA, yA, xB, yB,
                          self.myMap.columns, self.myMap.rows)
-        print route
+        print (route)
 
         # move the unit all the way from start location to finish location
         for i in route:
@@ -535,7 +535,8 @@ class Unit:
         self.XP = 0
         self.lvl = 1
         ############################
-        self.dRaceName = random.choice(dRacess.keys())
+        # self.dRaceName = random.choice(dRacess.keys())
+        self.dRaceName = random.choice(list(dRacess))
         self.dRace = dRacess[self.dRaceName]
         self.dStr = abilityGen(4) + self.dRace[2][0]
         self.dDex = abilityGen(4) + self.dRace[2][1]
@@ -543,7 +544,7 @@ class Unit:
         self.dInt = abilityGen(4) + self.dRace[2][3]
         self.dWis = abilityGen(4) + self.dRace[2][4]
         self.dCha = abilityGen(4) + self.dRace[2][5]
-        self.dClass = random.choice(dClasses.keys())
+        self.dClass = random.choice(list(dClasses))
         self.HitDice = dClasses.get(self.dClass)
         self.HitDiceCount = 1
         self.HitPoints = self.HitDice + dScoreModifier[self.dCons]
@@ -560,7 +561,7 @@ class Unit:
         if sell != None:
             self.location = sell
         else:
-            self.location = random.choice(gui.myMap.mapMatrix.keys())
+            self.location = random.choice(list(gui.myMap.mapMatrix))
 
         self.figuresSizeX = gui.canvasWidth / gui.myMap.columns
         self.figuresSizeY = gui.canvasHeight / gui.myMap.rows
@@ -640,7 +641,7 @@ class Hero(Unit):
         self.kills = 0
         self.canHeal = True
         self.canLoot = True
-        self.weaponName = random.choice(dItemsWeaponsMele.keys())
+        self.weaponName = random.choice(list(dItemsWeaponsMele))
         self.weapon = dItemsWeaponsMele[self.weaponName]
         self.calcAC()
 
@@ -651,7 +652,7 @@ class Mob(Unit):
 
         self.name = random.choice(challenge_0)
         # self.name = random.choice(random.choice(challenge_all))
-        mobParams = MD.monsterDict[self.name]
+        mobParams = monsterDict[self.name]
         self.dRaceName = "monster"
         self.dRace = "monster"
         self.dClass = "monster"
@@ -712,7 +713,7 @@ def randGen(startNum, endNum):
 
 
 def mobNameGen():
-    print random.choice(random.choice(challenge_all))
+    print (random.choice(random.choice(challenge_all)))
 
     return random.choice(dListOfNamesD.keys())
 

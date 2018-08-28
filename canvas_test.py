@@ -1,6 +1,6 @@
-import Tkinter as tk
+import tkinter as tk
 from time import sleep
-from Tkinter import *
+from tkinter import *
 class Gui():
     def __init__(self, root):
         self.root=root
@@ -23,7 +23,7 @@ class Gui():
     def runSimulation(self,x,y):
         self.canvas.move(self.figure1,x,y)
 def runSimulation():
-    print "foo"
+    print ("foo")
 
 class mainMap():
     def __init__(self,gui):
