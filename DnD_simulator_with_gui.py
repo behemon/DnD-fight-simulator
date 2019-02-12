@@ -247,6 +247,17 @@ class GuiSetup(tkinter.Tk):
                 loot = None
         self.update()
 
+    def gui_dBattle3(self):
+        monsters = generate_mobs()
+
+        turn = self.check_initiative(self.hero, monsters)
+
+        while True:
+            if turn:
+                pass
+            else:
+                pass
+
     def gui_dBattle2(self):
         monster = Mob()
         monster.populate_space_on_grid(self)
