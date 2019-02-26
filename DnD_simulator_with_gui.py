@@ -32,18 +32,10 @@ class mainMap():
                 self.mapMatrix[y, x] = [None, None]
 
 
-class Loot():
+class Objects:
     def __init__(self):
         self.name = None
         self.location = None
-        self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged)
-        # self.all_items_dicts = dItemsArmors
-        self.figuresSizeX = None
-        self.figuresSizeY = None
-        self.x0 = None
-        self.x1 = None
-        self.y0 = None
-        self.y1 = None
 
     def populate_space_on_grid(self, gui, sell=None):
         if sell != None:
@@ -58,6 +50,21 @@ class Loot():
         self.x1 = (1 + self.location[0]) * self.figuresSizeX
         self.y0 = self.location[1] * self.figuresSizeY
         self.y1 = (1 + self.location[1]) * self.figuresSizeY
+
+
+class Loot(Objects):
+    def __init__(self):
+        Objects.__init__(self)
+        # self.name = None
+        # self.location = None
+        self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged)
+        # self.all_items_dicts = dItemsArmors
+        self.figuresSizeX = None
+        self.figuresSizeY = None
+        self.x0 = None
+        self.x1 = None
+        self.y0 = None
+        self.y1 = None
 
 
 class GuiSetup(Tkinter.Tk):
@@ -229,6 +236,10 @@ class GuiSetup(Tkinter.Tk):
         self.heroAvatar = self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
         self.update()
 
+        self.walls = []
+        self.walls = self.generateWalls()
+
+
         self.lootList = []
         for x in range(5):
             self.lootList.append(self.createLoot())
@@ -244,7 +255,13 @@ class GuiSetup(Tkinter.Tk):
         #     self.removeLoot(self.loot)
         if self.lootList:
             for loot in self.lootList:
-                loot = None
+                # loot = None
+                self.removeLoot(loot)
+
+        if self.walls:
+            for wall in self.walls:
+                # loot = None
+                self.removeWall(wall)
         self.update()
 
     def gui_dBattle2(self):
@@ -437,7 +454,12 @@ class GuiSetup(Tkinter.Tk):
             the_map.append(list(row))
         return the_map
 
+    def updateMap(self):
+        for xy in self.walls:
+            self.pathfindingMap[xy.location[1]][xy.location[0]] = 1
+
     def pathFindStep(self, startObject, endObject):
+        self.updateMap()
         return pathFind(self.pathfindingMap, self.fredom_directions, self.dx, self.dy, startObject.location[0],
                         startObject.location[1], endObject.location[0], endObject.location[1], self.myMap.columns,
                         self.myMap.rows)
@@ -458,6 +480,26 @@ class GuiSetup(Tkinter.Tk):
         loot = None
         # loot.location = None
         # loot.name = None
+
+    def generateWalls(self):
+        walls = []
+        for x in range(5,10):
+            walls.append(self.generateWall(10,x))
+        return walls
+
+    def generateWall(self,x,y):
+        wall = Objects()
+        wall.name = "wall"
+        # wall.location = random.choice(self.myMap.mapMatrix.keys())
+        wall.location = [x,y]
+        wall.populate_space_on_grid(self,wall.location)
+        wall.wallAvatar = self.canvas.create_rectangle(wall.x0, wall.y0, wall.x1, wall.y1, fill="black")
+        return wall
+
+    def removeWall(self,wall):
+        self.myMap.mapMatrix[wall.location] = [None, None]
+        self.canvas.delete(wall.lootAvatar)
+        loot = None
 
     ################ not in use ####################
     def move_N(self, unit):

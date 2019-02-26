@@ -29,7 +29,7 @@ class node:
             self.distance += 10
         else:
             self.distance += 14
-    
+
     # Estimation function for the remaining distance to the goal.
     def estimate(self, xDest, yDest):
         xd = xDest - self.xPos
@@ -123,82 +123,87 @@ def pathFind(the_map, directions, dx, dy, xStart, yStart, xFinish, yFinish, n, m
                         pqi = 1 - pqi
                     while len(pq[pqi]) > 0:
                         heappush(pq[1-pqi], pq[pqi][0])
-                        heappop(pq[pqi])       
+                        heappop(pq[pqi])
                     pqi = 1 - pqi
                     heappush(pq[pqi], m0) # add the better node instead
     return '' # no route found
 if __name__== '__main__':
-	# MAIN
-	directions = 8 # number of possible directions to move on the map
-	if directions == 4:
-		dx = [1, 0, -1, 0]
-		dy = [0, 1, 0, -1]
-	elif directions == 8:
-		dx = [1, 1, 0, -1, -1, -1, 0, 1]
-		dy = [0, 1, 1, 1, 0, -1, -1, -1]
+    # MAIN
+    directions = 8 # number of possible directions to move on the map
+    if directions == 4:
+        dx = [1, 0, -1, 0]
+        dy = [0, 1, 0, -1]
+    elif directions == 8:
+        dx = [1, 1, 0, -1, -1, -1, 0, 1]
+        dy = [0, 1, 1, 1, 0, -1, -1, -1]
 
-	# map matrix
-	n = 10 # horizontal size
-	m = 10 # vertical size
-	the_map = []
-	row = [0] * n
-	for i in range(m):
-		the_map.append(list(row))
+    # map matrix
+    n = 10 # horizontal size
+    m = 10 # vertical size
+    the_map = []
+    row = [0] * n
+    for i in range(m):
+        the_map.append(list(row))
 
-	# fillout the map matrix with a '+' pattern
-	for x in range(n / 8, n * 7 / 8):
-		the_map[m / 2][x] = 1
-	for y in range(m/8, m * 7 / 8):
-		the_map[y][n / 2] = 1
+    # fillout the map matrix with a '+' pattern
+    for x in range(int(n / 8),int( n * 7 / 8)):
+        the_map[int(m / 2)][x] = 1
+    for y in range(int(m/8), int(m * 7 / 8)):
+        the_map[y][int(n / 2)] = 1
 
-	# randomly select start and finish locations from a list
-	sf = []
-	sf.append((0, 0, n - 1, m - 1))
-	sf.append((0, m - 1, n - 1, 0))
-	sf.append((n / 2 - 1, m / 2 - 1, n / 2 + 1, m / 2 + 1))
-	sf.append((n / 2 - 1, m / 2 + 1, n / 2 + 1, m / 2 - 1))
-	sf.append((n / 2 - 1, 0, n / 2 + 1, m - 1))
-	sf.append((n / 2 + 1, m - 1, n / 2 - 1, 0))
-	sf.append((0, m / 2 - 1, n - 1, m / 2 + 1))
-	sf.append((n - 1, m / 2 + 1, 0, m / 2 - 1))
-	(xA, yA, xB, yB) = random.choice(sf)
+    # randomly select start and finish locations from a list
+    sf = []
+    sf.append((0, 0, n - 1, m - 1))
+    sf.append((0, m - 1, n - 1, 0))
+    sf.append((n / 2 - 1, m / 2 - 1, n / 2 + 1, m / 2 + 1))
+    sf.append((n / 2 - 1, m / 2 + 1, n / 2 + 1, m / 2 - 1))
+    sf.append((n / 2 - 1, 0, n / 2 + 1, m - 1))
+    sf.append((n / 2 + 1, m - 1, n / 2 - 1, 0))
+    sf.append((0, m / 2 - 1, n - 1, m / 2 + 1))
+    sf.append((n - 1, m / 2 + 1, 0, m / 2 - 1))
+    (xA, yA, xB, yB) = random.choice(sf)
 
-	print 'Map Size (X,Y): ', n, m
-	print 'Start: ', xA, yA
-	print 'Finish: ', xB, yB
-	t = time.time()
-	route = pathFind(the_map, directions, dx, dy, xA, yA, xB, yB)
-	print 'Time to generate the route (s): ', time.time() - t
-	print 'Route:'
-	print route
+    print( 'Map Size (X,Y): ', n, m)
+    print('Start: ', xA, yA)
+    print( 'Finish: ', xB, yB)
+    t = time.time()
+    route = pathFind(the_map, directions, dx, dy, int(xA), int(yA), int(xB), int(yB) ,n ,m)
+    print( 'Time to generate the route (s): ', time.time() - t)
+    print( 'Route:')
+    print( route)
 
-	# mark the route on the map
-	if len(route) > 0:
-		x = xA
-		y = yA
-		the_map[y][x] = 2
-		for i in range(len(route)):
-			j = int(route[i])
-			x += dx[j]
-			y += dy[j]
-			the_map[y][x] = 3
-		the_map[y][x] = 4
+    # mark the route on the map
+    if len(route) > 0:
+        x = xA
+        y = yA
+        the_map[y][x] = 2
+        for i in range(len(route)):
+            j = int(route[i])
+            x += dx[j]
+            y += dy[j]
+            the_map[y][x] = 3
+        the_map[y][x] = 4
 
-	# display the map with the route
-	print 'Map:'
-	for y in range(m):
-		for x in range(n):
-			xy = the_map[y][x]
-			if xy == 0:
-				print '.', # space
-			elif xy == 1:
-				print 'O', # obstacle
-			elif xy == 2:
-				print 'S', # start
-			elif xy == 3:
-				print 'R', # route
-			elif xy == 4:
-				print 'F', # finish
-		print
-
-	raw_input('Press Enter...')
+    # display the map with the route
+    print ('Map:')
+    for y in range(m):
+        line = ""
+        for x in range(n):
+            xy = the_map[y][x]
+            if xy == 0:
+                # print ('.',) # space
+                line += ' . '
+            elif xy == 1:
+                # print ('O',) # obstacle
+                line += ' O '
+            elif xy == 2:
+                # print ('S',) # start
+                line += ' S '
+            elif xy == 3:
+                # print ('R',) # route
+                line += ' R '
+            elif xy == 4:
+                # print ('F',) # finish
+                line += ' F '
+        print(line)
+    raw_input('Press Enter...')
