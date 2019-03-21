@@ -57,7 +57,7 @@ class Loot(Objects):
         Objects.__init__(self)
         # self.name = None
         # self.location = None
-        self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged)
+        self.all_items_dicts = merge_dicts(dItemsArmors, dItemsShields, dItemsWeaponsMele, dItemsWeaponsRanged, dItemsHealingPotions)
         # self.all_items_dicts = dItemsArmors
         self.figuresSizeX = None
         self.figuresSizeY = None
@@ -320,13 +320,14 @@ class GuiSetup(tkinter.Tk):
         if self.lootList:
             lootExist = True
             for loot in self.lootList:
+                print (loot.name,)
                 path = self.pathFindStep(myself, loot)
                 lootPathList.append([path, len(path)])
             walk_path_loot = min(lootPathList, key=lambda t: t[1])[0]
 
-        if myself.canLoot:
-            print (myself.name, "AC advantage:", myself.AC - enemy.AC)
-            print (myself.name, "HP percentage:", (100.0 / myself.MaxHP) * myself.HitPoints)
+        # if myself.canLoot:
+        #     print (myself.name, "AC advantage:", myself.AC - enemy.AC)
+        #     print (myself.name, "HP percentage:", (100.0 / myself.MaxHP) * myself.HitPoints)
 
         if len(walk_path) > 1:
             hunt = 1
@@ -421,7 +422,7 @@ class GuiSetup(tkinter.Tk):
                dScoreModifier[attacker.dDex]
 
     def updateGameInfo(self, hero, monster):
-        self.text_hero_name_V.config(text=hero.name)
+        self.text_hero_name_V.config(text=hero.name +" (lvl "+str(hero.lvl)+")")
         self.text_hero_race_V.config(text=hero.dRaceName)
         self.text_hero_class_V.config(text=hero.dClass)
         self.text_hero_Str_V.config(text=hero.dStr)
@@ -430,10 +431,10 @@ class GuiSetup(tkinter.Tk):
         self.text_hero_Int_V.config(text=hero.dInt)
         self.text_hero_Wis_V.config(text=hero.dWis)
         self.text_hero_Cha_V.config(text=hero.dCha)
-        self.text_hero_HitPoints_V.config(text=hero.HitPoints)
+        self.text_hero_HitPoints_V.config(text=str(hero.HitPoints)+" ("+str(hero.MaxHP)+")")
         self.text_hero_AC_V.config(text=hero.AC)
         self.text_hero_kills_V.config(text=hero.kills)
-        self.text_hero_XP_V.config(text=hero.XP)
+        self.text_hero_XP_V.config(text=str(hero.XP)+" ("+str(dXPlevelUP[hero.lvl + 1][0])+")")
 
         self.text_monster_name_V.config(text=monster.name)
         self.text_monster_race_V.config(text=monster.dRaceName)
@@ -444,7 +445,7 @@ class GuiSetup(tkinter.Tk):
         self.text_monster_Int_V.config(text=monster.dInt)
         self.text_monster_Wis_V.config(text=monster.dWis)
         self.text_monster_Cha_V.config(text=monster.dCha)
-        self.text_monster_HitPoints_V.config(text=monster.HitPoints)
+        self.text_monster_HitPoints_V.config(text=str(monster.HitPoints)+" ("+str(monster.MaxHP)+")")
         self.text_monster_AC_V.config(text=monster.AC)
 
     def pathfindingMapGenerator(self):
