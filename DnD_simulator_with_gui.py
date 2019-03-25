@@ -5,6 +5,16 @@
 #   https://www.dandwiki.com/wiki/5e_Weapons
 #   https://stackoverflow.com/questions/20149483/python-canvas-and-grid-tkinter
 #   http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
+#
+#   1.map - make random rooms
+#   2.hero - smart decision making
+#   3.monster - more than one monster, loot drops
+#   4.loot - add reach to melee weapons and use it
+#   5.fight - ranged fight,
+#   6.NPC's - in safe spaces, sell,buy
+#   7.shrines - health regen
+#   8.action tick - use units speed as base of movement
+#
 ########
 import random
 import sys
@@ -21,15 +31,131 @@ import monster_dictionary as MD
 
 class mainMap():
     def __init__(self, gui):
-        self.columns = 10
-        self.rows = 10
+        self.columns = 30
+        self.rows = 30
+        self.numberOfRooms = 8
+        self.roomMinSize = 3
+        self.roomMaxSize = 6
         self.mapMatrix = {}
         self.makeMatrixDict()
+        self.roomsList = []
 
     def makeMatrixDict(self):
         for x in range(self.columns):
             for y in range(self.rows):
-                self.mapMatrix[y, x] = [None, None]
+                self.roomsList = []
+                self.mapMatrix[y, x] = [1, None]
+
+    def makeRoom(self):
+        for tries in range(20):
+            size = random.randrange(self.roomMinSize, self.roomMaxSize)# + 2
+            x_start = random.randrange(0, self.rows - size)
+            y_start = random.randrange(0, self.columns - size)
+            room = [x_start,y_start,size]
+            if self.checkRoomLocation(room):
+                self.roomsList.append(room)
+                for x in range(x_start, x_start + size ):
+                    for y in range(y_start, y_start + size):
+                        self.mapMatrix[x,y][0] = None
+
+                # for x in range(x_start, x_start + size + 1):
+                #     self.mapMatrix[x, y_start][0] = 1
+                #     self.mapMatrix[x, y_start + size][0] = 1
+                #
+                # for y in range(y_start, y_start + size + 1):
+                #     self.mapMatrix[x_start, y][0] = 1
+                #     self.mapMatrix[x_start + size, y][0] = 1
+
+                break
+
+    def checkRoomLocation(self,testRoom):
+
+        def intersects(testRoom, room):
+            # (R1.topLeft.x < R2.bottomRight.x) &&
+            # (R1.bottomRight.x > R2.topLeft.x) &&
+            # (R1.topLeft.y < R2.bottomRight.y) &&
+            # (R1.bottomRight.y > R2.topLeft.y)
+            return not (
+                    testRoom[0] <= room[0] + room[2] and
+                    testRoom[0] + testRoom[2] >= room[0] and
+                    testRoom[1] <= room[1] + room[2] and
+                    testRoom[1] + testRoom[2] >= room[1]
+            )
+        for room in self.roomsList:
+            if not intersects(testRoom,room):
+                return False
+        return True
+
+    def makeRooms(self):
+        for room in range(self.numberOfRooms):
+            self.makeRoom()
+
+    def makeRoomPath(self,point_a,point_b):
+        def forx(x,y,d):
+            for xa in range(d):
+                self.mapMatrix[x+xa, y][0] = None
+
+        def fory(x,y,d):
+            for ya in range(d):
+                self.mapMatrix[x, y+ya][0] = None
+
+        if point_a[0] > point_b[0]:
+            forx(point_b[0], point_a[1], point_a[0] - point_b[0]+1)
+            if point_a[1] > point_b[1]:
+                fory(point_b[0], point_b[1], point_a[1] - point_b[1]+1)
+            else:
+                fory(point_b[0], point_a[1], point_b[1] - point_a[1]+1)
+        else:
+            forx(point_a[0], point_b[1], point_b[0] - point_a[0]+1)
+            if point_b[1] > point_a[1]:
+                fory(point_a[0], point_a[1], point_b[1] - point_a[1]+1)
+            else:
+                fory(point_a[0], point_b[1], point_a[1] - point_b[1]+1)
+
+    def makeRoomPaths(self):
+        points = []
+        for room in self.roomsList:
+            room_senter_x = random.randrange(room[0],room[0]+room[2])
+            room_senter_y = random.randrange(room[1],room[1]+room[2])
+            # print (room_senter_x,room_senter_y)
+            points.append([room_senter_x,room_senter_y])
+
+        # create a pathway from point a to point b
+        for n in range(len(points)-1):
+            self.makeRoomPath(points[n],points[n+1])
+            # print (points[n],points[n+1])
+
+    def printMap(self):
+
+        self.makeRooms()
+        self.makeRoomPaths()
+        print ('Map:')
+        for x in range(self.rows):
+            for y in range(self.columns):
+                xy = self.mapMatrix[x,y][0]
+                if xy is None:
+                    print (' . ',end="") # space
+                elif xy == 1:
+                    print (' O ',end="") # obstacle
+                elif xy == 2:
+                    print (' S ',end="") # start
+                elif xy == 3:
+                    print (' R ',end="") # route
+                elif xy == 4:
+                    print (' F ',end="") # finish
+                else:
+                    print (' X ',end="")
+            print ("")
+        # print("exiting on map print for debug")
+        # sys.exit()
+
+    def freeSpaces(self):
+        freespace = []
+        for xy in list(self.mapMatrix.keys()):
+            # print (xy)
+            if self.mapMatrix[xy][0] != 1:
+                freespace.append(xy)
+        return freespace
 
 
 class Objects:
@@ -85,9 +211,6 @@ class GuiSetup(tkinter.Tk):
 
         # making the map chess grid
         self.myMap = mainMap(self)
-        # grid X*Y configuration
-        self.myMap.rows = 20
-        self.myMap.columns = 20
         self.myMap.makeMatrixDict()
         # create the grid
         setCanvasGrid(self, self.myMap.rows, self.myMap.columns)
@@ -229,6 +352,19 @@ class GuiSetup(tkinter.Tk):
         4. try to disengage when low on health
         5. death and new round , mob random location ,hero from his spot
         '''
+        # for x in range(5):
+        #     self.myMap.makeMatrixDict()
+        #     self.myMap.printMap()
+        # sys.exit()
+
+        # generate map
+        self.walls = []
+        self.myMap.makeMatrixDict()
+        self.myMap.makeRooms()
+        self.myMap.makeRoomPaths()
+        self.updateWalls()
+        self.update()
+
         # create Hero
         self.hero = Hero(self.heroName)
         self.hero.populate_space_on_grid(self)
@@ -236,8 +372,8 @@ class GuiSetup(tkinter.Tk):
         self.heroAvatar = self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
         self.update()
 
-        self.walls = []
-        self.walls = self.generateWalls()
+        # self.walls = []
+        # self.walls = self.generateWalls()
 
 
         self.lootList = []
@@ -258,10 +394,11 @@ class GuiSetup(tkinter.Tk):
                 # loot = None
                 self.removeLoot(loot)
 
-        if self.walls:
-            for wall in self.walls:
-                # loot = None
-                self.removeWall(wall)
+        self.removeWalls()
+        # if self.walls:
+        #     for wall in self.walls:
+        #         # loot = None
+        #         self.removeWall(wall)
         self.update()
 
     def gui_dBattle2(self):
@@ -456,7 +593,14 @@ class GuiSetup(tkinter.Tk):
         return the_map
 
     def updateMap(self):
+        # for x in range(self.myMap.rows):
+        #     for y in range(self.myMap.columns):
+        #         xy = self.myMap.mapMatrix[x,y][0]
+        #         # print (xy)
+        #         if xy is 1:
+        #             self.pathfindingMap[x][y] = 1
         for xy in self.walls:
+            # print (xy.location[1],xy.location[0])
             self.pathfindingMap[xy.location[1]][xy.location[0]] = 1
 
     def pathFindStep(self, startObject, endObject):
@@ -469,7 +613,7 @@ class GuiSetup(tkinter.Tk):
         # create loot
         loot = Loot()
         loot.name = random.choice(list(loot.all_items_dicts.keys()))
-        loot.location = random.choice(list(self.myMap.mapMatrix.keys()))
+        loot.location = random.choice(list(self.myMap.freeSpaces()))
         self.myMap.mapMatrix[loot.location][1] = loot.name
         loot.populate_space_on_grid(self, loot.location)
         loot.lootAvatar = self.canvas.create_oval(loot.x0, loot.y0, loot.x1, loot.y1, fill="yellow")
@@ -482,25 +626,25 @@ class GuiSetup(tkinter.Tk):
         # loot.location = None
         # loot.name = None
 
-    def generateWalls(self):
-        walls = []
-        for x in range(5,10):
-            walls.append(self.generateWall(10,x))
-        return walls
+    def updateWalls(self):
+        for x in range(self.myMap.rows):
+            for y in range(self.myMap.columns):
+                if self.myMap.mapMatrix[x,y][0]==1:
+                    self.walls.append(self.generateWall(x,y))
 
     def generateWall(self,x,y):
         wall = Objects()
         wall.name = "wall"
-        # wall.location = random.choice(self.myMap.mapMatrix.keys())
         wall.location = [x,y]
         wall.populate_space_on_grid(self,wall.location)
         wall.wallAvatar = self.canvas.create_rectangle(wall.x0, wall.y0, wall.x1, wall.y1, fill="black")
         return wall
 
-    def removeWall(self,wall):
-        self.myMap.mapMatrix[wall.location] = [None, None]
-        self.canvas.delete(wall.lootAvatar)
-        loot = None
+    def removeWalls(self):
+        for wall in self.walls:
+            self.myMap.mapMatrix[wall.location] = [None, None]
+            self.canvas.delete(wall.lootAvatar)
+            loot = None
 
     ################ not in use ####################
     def move_N(self, unit):
@@ -603,7 +747,10 @@ class Unit:
         if sell != None:
             self.location = sell
         else:
-            self.location = random.choice(list(gui.myMap.mapMatrix.keys()))
+            # self.location = random.choice(list(gui.myMap.mapMatrix.keys()))
+            print (random.choice(list(gui.myMap.mapMatrix.keys())))
+            print (random.choice(list(gui.myMap.freeSpaces())))
+            self.location = random.choice(list(gui.myMap.freeSpaces()))
 
         self.figuresSizeX = gui.canvasWidth / gui.myMap.columns
         self.figuresSizeY = gui.canvasHeight / gui.myMap.rows
