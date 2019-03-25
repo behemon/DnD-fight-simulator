@@ -6,9 +6,17 @@
 #   https://stackoverflow.com/questions/20149483/python-canvas-and-grid-tkinter
 #   http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
 #
-#   1.map - make random rooms
+#   1.map - make random rooms - done
+#       a. doors
+#       b. water
+#       c. fog of war
 #   2.hero - smart decision making
+#       a. explore the dungeon
+#       b. line of sight
+#       c.
 #   3.monster - more than one monster, loot drops
+#       a. monster in every room
+#       a. loot drop chance on monsters
 #   4.loot - add reach to melee weapons and use it
 #   5.fight - ranged fight,
 #   6.NPC's - in safe spaces, sell,buy
@@ -363,6 +371,7 @@ class GuiSetup(tkinter.Tk):
         self.myMap.makeRooms()
         self.myMap.makeRoomPaths()
         self.updateWalls()
+        self.pathfindingMap = self.pathfindingMapGenerator()
         self.update()
 
         # create Hero
@@ -371,10 +380,6 @@ class GuiSetup(tkinter.Tk):
         # create the unit on grid
         self.heroAvatar = self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
         self.update()
-
-        # self.walls = []
-        # self.walls = self.generateWalls()
-
 
         self.lootList = []
         for x in range(5):
@@ -457,7 +462,7 @@ class GuiSetup(tkinter.Tk):
         if self.lootList:
             lootExist = True
             for loot in self.lootList:
-                print (loot.name,)
+                # print (loot.name,)
                 path = self.pathFindStep(myself, loot)
                 lootPathList.append([path, len(path)])
             walk_path_loot = min(lootPathList, key=lambda t: t[1])[0]
@@ -642,8 +647,8 @@ class GuiSetup(tkinter.Tk):
 
     def removeWalls(self):
         for wall in self.walls:
-            self.myMap.mapMatrix[wall.location] = [None, None]
-            self.canvas.delete(wall.lootAvatar)
+            self.myMap.mapMatrix[tuple(wall.location)] = [None, None]
+            self.canvas.delete(wall.wallAvatar)
             loot = None
 
     ################ not in use ####################
@@ -748,8 +753,6 @@ class Unit:
             self.location = sell
         else:
             # self.location = random.choice(list(gui.myMap.mapMatrix.keys()))
-            print (random.choice(list(gui.myMap.mapMatrix.keys())))
-            print (random.choice(list(gui.myMap.freeSpaces())))
             self.location = random.choice(list(gui.myMap.freeSpaces()))
 
         self.figuresSizeX = gui.canvasWidth / gui.myMap.columns
