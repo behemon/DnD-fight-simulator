@@ -6,22 +6,25 @@
 #   https://stackoverflow.com/questions/20149483/python-canvas-and-grid-tkinter
 #   http://media.wizards.com/2016/downloads/DND/DMBasicRulesV05.pdf
 #
-#   1.map - make random rooms - done
-#       a. doors
-#       b. water
-#       c. fog of war
-#   2.hero - smart decision making
-#       a. explore the dungeon
-#       b. line of sight
-#       c.
-#   3.monster - more than one monster, loot drops
-#       a. monster in every room
-#       a. loot drop chance on monsters
-#   4.loot - add reach to melee weapons and use it
-#   5.fight - ranged fight,
-#   6.NPC's - in safe spaces, sell,buy
-#   7.shrines - health regen
-#   8.action tick - use units speed as base of movement
+'''
+  1.map - make random rooms - done
+      a. doors
+      b. water
+      c. fog of war
+  2.hero - smart decision making
+      a. explore the dungeon
+      b. line of sight
+      c.
+  3.monster - more than one monster, loot drops
+      a. monster in every room
+      a. loot drop chance on monsters
+  4.loot - add reach to melee weapons and use it
+  5.fight - ranged fight,
+  6.NPC's - in safe spaces, sell,buy
+  7.shrines - health regen
+  8.action tick - use units speed as base of movement
+  9.spells
+'''
 #
 ########
 import random
@@ -456,6 +459,20 @@ class GuiSetup(tkinter.Tk):
         lootPathList = []
         walk_path_loot = 0
         pick_up_loot = 0
+
+        '''
+        1. heal 40%
+        2. attack monster
+            a. weight monster distance to loot distance
+        3. go after loot
+            a. weight loot closer than monster , is it worth it ?
+        4. explore
+        5. hunt
+            a. go after moster/player
+            b. random roaming
+        '''
+
+
 
         walk_path = self.pathFindStep(myself, enemy)
 
