@@ -424,15 +424,19 @@ class GuiSetup(tkinter.Tk):
         while True:
             if turn:
                 sleep(0.2)
-                heroAction = self.selectAction(self.hero, monster)
-                # print "hero action: ", heroAction
+                # self.selectAction2(self.hero, monster)
+                # heroAction = self.selectAction(self.hero, monster)
+                heroAction = self.selectAction2(self.hero, monster)
+                print ("hero action: ", heroAction)
                 self.doAction(heroAction, self.hero, self.heroAvatar, monster)
                 turn = False
 
             else:
                 sleep(0.2)
-                monsterAction = self.selectAction(monster, self.hero)
-                # print "monster action: ", monsterAction
+                # self.selectAction2(monster, self.hero)
+                # monsterAction = self.selectAction(monster, self.hero)
+                monsterAction = self.selectAction2(monster, self.hero)
+                print ("monster action: ", monsterAction)
                 self.doAction(monsterAction, monster, self.monsterAvatar, self.hero)
                 turn = True
 
@@ -449,6 +453,52 @@ class GuiSetup(tkinter.Tk):
                     self.hero.kills += 1
                     self.hero.dCheckStatus()
                 break
+
+    def selectAction2(self,myself,enemy):
+        action_dict = {
+            'hunt'          :[1,0],
+            'attack'        :[2,0],
+            'heal'          :[3,0],
+            'getLoot'       :[4,0],
+            'pick_up_loot'  :[5,0],
+            'explore'       :[6,0],
+            'idle'          :[7,0],
+            'flee'          :[8,0],
+            'cast_spell'    :[9,0],
+        }
+
+        lootExist = False
+        lootPathList = []
+        walk_path_loot = 0
+
+        walk_path = len(self.pathFindStep(myself, enemy))
+
+        if self.lootList:
+            lootExist = True
+            for loot in self.lootList:
+                path = self.pathFindStep(myself, loot)
+                lootPathList.append([path, len(path)])
+            walk_path_loot = len(min(lootPathList, key=lambda t: t[1])[0])
+
+        if walk_path > 1:
+            action_dict['hunt'][1] = 1
+
+        if walk_path <= 1:
+            action_dict['attack'][1] = 1
+
+        if myself.canLoot and lootExist and walk_path_loot < walk_path and walk_path_loot > 1:
+            action_dict['getLoot'][1] = 1
+
+        if myself.canLoot and lootExist and walk_path_loot <= 1:
+            action_dict['pick_up_loot'][1] = 1
+
+        if myself.canHeal and myself.HitDiceCount > 0 and myself.HitPoints/myself.MaxHP <= 0.4:
+            action_dict['heal'][1] = 1
+
+        myDict = {key: val for key, val in action_dict.items() if val[1] != 0}
+        myList = list(myDict.items())
+        myListWeights  = [item[1][1] for item in myList]
+        return random.choices(population=myList,weights=myListWeights,k=1)[0][1][0]
 
     def selectAction(self, myself, enemy):
         hunt = 0
@@ -497,7 +547,7 @@ class GuiSetup(tkinter.Tk):
         if myself.HitPoints / float(myself.MaxHP) <= 0.35 and myself.canHeal and myself.HitDiceCount > 0:
             heal = 3
 
-        if myself.canLoot and lootExist and len(walk_path_loot) > 1:
+        if myself.canLoot and lootExist and len(walk_path_loot) > 1 and len(walk_path) > len(walk_path_loot):
             getLoot = 4
 
         if lootExist and len(walk_path_loot) <= 1 and myself.canLoot:
@@ -512,6 +562,7 @@ class GuiSetup(tkinter.Tk):
     def doAction(self, action, myself, avatar, enemy):
         # hunt
         if action == 1:  # walk to enemy
+            # print (self.pathFindStep(myself, enemy))
             RouteStep = int(self.pathFindStep(myself, enemy)[0])
             self.canvas.move(avatar, self.dx[RouteStep] * self.horizonLength, self.dy[RouteStep] * self.verticalLength)
             self.myMap.mapMatrix[myself.location][0] = None

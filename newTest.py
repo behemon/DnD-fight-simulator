@@ -8,8 +8,8 @@
 import random
 import sys
 from time import sleep
-import Tkinter
-from Tkinter import N,S,E,W
+import tkinter
+from tkinter import N,S,E,W
 
 
 #Race name: size,speed,[Str,Dex,Con,Int,Wis,Cha]
@@ -100,9 +100,9 @@ dItemsWeaponsRanged = {
 						}
 
 
-class GuiSetup(Tkinter.Tk):
+class GuiSetup(tkinter.Tk):
 	def __init__(self,parent,heroName):
-		Tkinter.Tk.__init__(self,parent)
+		tkinter.Tk.__init__(self,parent)
 		self.parent = parent
 		self.heroName = heroName
 		# self.geometry("400x250+600+600")
@@ -115,70 +115,70 @@ class GuiSetup(Tkinter.Tk):
 		
 		self.canvasWidth = 300
 		self.canvasHeight = 300
-		self.canvas=Tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
+		self.canvas=tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
 		self.canvas.grid(row=0,column=11,rowspan=11)
 		
 		
-		mainFrame = Tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
+		mainFrame = tkinter.Frame(self, borderwidth=5, relief="sunken", width=500, height=200)
 		mainFrame.grid(column=0, row=0, columnspan=10, rowspan=11, sticky=(N, S, E, W))
 
 		
-		self.button1 = Tkinter.Button(self,text=u"run simulator",command=self.runSimulator)
-		self.text_title = Tkinter.Label(self,text="Battle:")
+		self.button1 = tkinter.Button(self,text=u"run simulator",command=self.runSimulator)
+		self.text_title = tkinter.Label(self,text="Battle:")
 		self.text_title.grid(	column=5,row=0)
 		self.button1.grid(		column=5,row=10,sticky=N+S+E+W)
 
 		
-		# self.text_KILLS = Tkinter.Label(self,text="KILLS:")
+		# self.text_KILLS = tkinter.Label(self,text="KILLS:")
 		# self.text_KILLS.grid(				column=0,row=6)	
 		
 		###################################################
 		# window setup
-		self.text_hero_name			= Tkinter.Label(self,text="Name:")
-		self.text_hero_race			= Tkinter.Label(self,text="Race:")
-		self.text_hero_class		= Tkinter.Label(self,text="Class:")
-		self.text_hero_Str			= Tkinter.Label(self,text="Str:")
-		self.text_hero_Dex			= Tkinter.Label(self,text="Dex:")
-		self.text_hero_Con			= Tkinter.Label(self,text="Con:")
-		self.text_hero_Int			= Tkinter.Label(self,text="Int:")
-		self.text_hero_Wis			= Tkinter.Label(self,text="Wis:")
-		self.text_hero_Cha			= Tkinter.Label(self,text="Cha:")
-		self.text_hero_name_V		= Tkinter.Label(self)
-		self.text_hero_race_V		= Tkinter.Label(self)
-		self.text_hero_class_V		= Tkinter.Label(self)
-		self.text_hero_Str_V		= Tkinter.Label(self)
-		self.text_hero_Dex_V		= Tkinter.Label(self)
-		self.text_hero_Con_V		= Tkinter.Label(self)
-		self.text_hero_Int_V		= Tkinter.Label(self)
-		self.text_hero_Wis_V		= Tkinter.Label(self)
-		self.text_hero_Cha_V		= Tkinter.Label(self)
-		self.text_hero_HitPoints	= Tkinter.Label(self,text="Hit Points")
-		self.text_hero_HitPoints_V	= Tkinter.Label(self)
-		self.text_hero_AC			= Tkinter.Label(self,text="AC")
-		self.text_hero_AC_V			= Tkinter.Label(self)
+		self.text_hero_name			= tkinter.Label(self,text="Name:")
+		self.text_hero_race			= tkinter.Label(self,text="Race:")
+		self.text_hero_class		= tkinter.Label(self,text="Class:")
+		self.text_hero_Str			= tkinter.Label(self,text="Str:")
+		self.text_hero_Dex			= tkinter.Label(self,text="Dex:")
+		self.text_hero_Con			= tkinter.Label(self,text="Con:")
+		self.text_hero_Int			= tkinter.Label(self,text="Int:")
+		self.text_hero_Wis			= tkinter.Label(self,text="Wis:")
+		self.text_hero_Cha			= tkinter.Label(self,text="Cha:")
+		self.text_hero_name_V		= tkinter.Label(self)
+		self.text_hero_race_V		= tkinter.Label(self)
+		self.text_hero_class_V		= tkinter.Label(self)
+		self.text_hero_Str_V		= tkinter.Label(self)
+		self.text_hero_Dex_V		= tkinter.Label(self)
+		self.text_hero_Con_V		= tkinter.Label(self)
+		self.text_hero_Int_V		= tkinter.Label(self)
+		self.text_hero_Wis_V		= tkinter.Label(self)
+		self.text_hero_Cha_V		= tkinter.Label(self)
+		self.text_hero_HitPoints	= tkinter.Label(self,text="Hit Points")
+		self.text_hero_HitPoints_V	= tkinter.Label(self)
+		self.text_hero_AC			= tkinter.Label(self,text="AC")
+		self.text_hero_AC_V			= tkinter.Label(self)
 
-		self.text_monster_name		= Tkinter.Label(self,text="Name:")
-		self.text_monster_race		= Tkinter.Label(self,text="Race:")
-		self.text_monster_class		= Tkinter.Label(self,text="Class:")
-		self.text_monster_Str		= Tkinter.Label(self,text="Str:")
-		self.text_monster_Dex		= Tkinter.Label(self,text="Dex:")
-		self.text_monster_Con		= Tkinter.Label(self,text="Con:")
-		self.text_monster_Int		= Tkinter.Label(self,text="Int:")
-		self.text_monster_Wis		= Tkinter.Label(self,text="Wis:")
-		self.text_monster_Cha		= Tkinter.Label(self,text="Cha:")
-		self.text_monster_name_V	= Tkinter.Label(self)
-		self.text_monster_race_V	= Tkinter.Label(self)
-		self.text_monster_class_V	= Tkinter.Label(self)
-		self.text_monster_Str_V		= Tkinter.Label(self)
-		self.text_monster_Dex_V		= Tkinter.Label(self)
-		self.text_monster_Con_V		= Tkinter.Label(self)
-		self.text_monster_Int_V		= Tkinter.Label(self)
-		self.text_monster_Wis_V		= Tkinter.Label(self)
-		self.text_monster_Cha_V		= Tkinter.Label(self)
-		self.text_monster_HitPoints	= Tkinter.Label(self,text="Hit Points")
-		self.text_monster_HitPoints_V	= Tkinter.Label(self)
-		self.text_monster_AC		= Tkinter.Label(self,text="AC")
-		self.text_monster_AC_V		= Tkinter.Label(self)
+		self.text_monster_name		= tkinter.Label(self,text="Name:")
+		self.text_monster_race		= tkinter.Label(self,text="Race:")
+		self.text_monster_class		= tkinter.Label(self,text="Class:")
+		self.text_monster_Str		= tkinter.Label(self,text="Str:")
+		self.text_monster_Dex		= tkinter.Label(self,text="Dex:")
+		self.text_monster_Con		= tkinter.Label(self,text="Con:")
+		self.text_monster_Int		= tkinter.Label(self,text="Int:")
+		self.text_monster_Wis		= tkinter.Label(self,text="Wis:")
+		self.text_monster_Cha		= tkinter.Label(self,text="Cha:")
+		self.text_monster_name_V	= tkinter.Label(self)
+		self.text_monster_race_V	= tkinter.Label(self)
+		self.text_monster_class_V	= tkinter.Label(self)
+		self.text_monster_Str_V		= tkinter.Label(self)
+		self.text_monster_Dex_V		= tkinter.Label(self)
+		self.text_monster_Con_V		= tkinter.Label(self)
+		self.text_monster_Int_V		= tkinter.Label(self)
+		self.text_monster_Wis_V		= tkinter.Label(self)
+		self.text_monster_Cha_V		= tkinter.Label(self)
+		self.text_monster_HitPoints	= tkinter.Label(self,text="Hit Points")
+		self.text_monster_HitPoints_V	= tkinter.Label(self)
+		self.text_monster_AC		= tkinter.Label(self,text="AC")
+		self.text_monster_AC_V		= tkinter.Label(self)
 
 
 		#GRID
@@ -441,12 +441,12 @@ def fight(hero,mob):
 def battle(hero):	
 	while hero.alive:
 		mob = Mob()
-		print ""
+		print ("")
 		fight(hero,mob)
 		if hero.alive:
 			hero.XP += mob.XpReword
 			hero.kills += 1
-	print "\nKills:",hero.kills
+	print ("\nKills:",hero.kills)
 
 		
 def main(name):
@@ -494,9 +494,16 @@ def mof():
 	surf = mlab.surf(xg, yg, height, colormap='gist_earth', warp_scale='auto')
 	mlab.show()
 
+def choises():
+	print (random.choices(
+		population = [['a', 'b'], ['b', 'a'], ['c', 'b']],
+		weights = [1, 1, 1],
+		k = 10))
+
 if(__name__ == "__main__"):
 	# main(sys.argv[1])
-	gui_test()
+	# gui_test()
+	choises()
 
 	
 	
