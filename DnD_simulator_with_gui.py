@@ -24,6 +24,19 @@
   7.shrines - health regen
   8.action tick - use units speed as base of movement
   9.spells
+
+  FOV:
+  http://roguebasin.roguelikedevelopment.org/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod,_part_4
+  http://roguebasin.roguelikedevelopment.org/index.php?title=Comparative_study_of_field_of_view_algorithms_for_2D_grid_based_worlds
+  https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/
+  http://roguebasin.roguelikedevelopment.org/index.php?title=Field_of_Vision
+  http://roguebasin.roguelikedevelopment.org/index.php?title=Line_of_Sight
+  http://roguebasin.roguelikedevelopment.org/index.php?title=Permissive_Field_of_View
+  http://roguebasin.roguelikedevelopment.org/index.php?title=Shadow_casting
+  http://www.adammil.net/blog/v125_roguelike_vision_algorithms.html
+  http://www.roguebasin.com/index.php?title=Permissive_Field_of_View_in_Python
+  http://www.adammil.net/blog/v125_Roguelike_Vision_Algorithms.html
+
 '''
 #
 ########
@@ -38,6 +51,7 @@ from A_star_algorithm import pathFind
 # import canvas_test as maps
 from dictionaries import *
 import monster_dictionary as MD
+# import PermissiveFieldofView
 
 
 class mainMap():
