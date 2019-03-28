@@ -404,6 +404,8 @@ class GuiSetup(tkinter.Tk):
 
         # start battle
         while self.hero.alive:
+            # self.gui_dBattle3()
+            # sys.exit()
             self.gui_dBattle2()
 
         # clear the board
@@ -423,6 +425,30 @@ class GuiSetup(tkinter.Tk):
         #         self.removeWall(wall)
         self.update()
 
+    def gui_dBattle3(self):
+        monster_max_number = 3
+        monster_list = []
+
+        for monster in range(monster_max_number):
+            monster = Mob()
+            monster.populate_space_on_grid(self)
+            monsterAvatar = self.canvas.create_oval(monster.x0, monster.y0, monster.x1, monster.y1, fill="red")
+            monster_list.append([monster,monsterAvatar])
+            self.updateGameInfo(self.hero, monster)
+            self.update()
+            sleep(1)
+
+        turn = 0
+        while True:
+            # sleep(0.2)
+            for monster in monster_list:
+                heroAction = self.selectAction2(self.hero, monster[0])
+                self.doAction(heroAction, self.hero, self.heroAvatar, monster[0])
+
+            for monster in monster_list:
+                monsterAction = self.selectAction2(monster[0], self.hero)
+                self.doAction(monsterAction, monster[0], monster[1], self.hero)
+
     def gui_dBattle2(self):
         monster = Mob()
         monster.populate_space_on_grid(self)
@@ -441,7 +467,7 @@ class GuiSetup(tkinter.Tk):
                 # self.selectAction2(self.hero, monster)
                 # heroAction = self.selectAction(self.hero, monster)
                 heroAction = self.selectAction2(self.hero, monster)
-                print ("hero action: ", heroAction)
+                # print ("hero action: ", heroAction)
                 self.doAction(heroAction, self.hero, self.heroAvatar, monster)
                 turn = False
 
@@ -450,7 +476,7 @@ class GuiSetup(tkinter.Tk):
                 # self.selectAction2(monster, self.hero)
                 # monsterAction = self.selectAction(monster, self.hero)
                 monsterAction = self.selectAction2(monster, self.hero)
-                print ("monster action: ", monsterAction)
+                # print ("monster action: ", monsterAction)
                 self.doAction(monsterAction, monster, self.monsterAvatar, self.hero)
                 turn = True
 
@@ -495,24 +521,33 @@ class GuiSetup(tkinter.Tk):
             walk_path_loot = len(min(lootPathList, key=lambda t: t[1])[0])
 
         if walk_path > 1:
-            action_dict['hunt'][1] = 1
+            action_dict['hunt'][1] = 5
 
         if walk_path <= 1:
-            action_dict['attack'][1] = 1
+            action_dict['attack'][1] = 10
 
         if myself.canLoot and lootExist and walk_path_loot < walk_path and walk_path_loot > 1:
-            action_dict['getLoot'][1] = 1
+            action_dict['getLoot'][1] = 6
 
         if myself.canLoot and lootExist and walk_path_loot <= 1:
-            action_dict['pick_up_loot'][1] = 1
+            action_dict['pick_up_loot'][1] = 9
 
         if myself.canHeal and myself.HitDiceCount > 0 and myself.HitPoints/myself.MaxHP <= 0.4:
-            action_dict['heal'][1] = 1
+            action_dict['heal'][1] = 11
 
         myDict = {key: val for key, val in action_dict.items() if val[1] != 0}
         myList = list(myDict.items())
         myListWeights  = [item[1][1] for item in myList]
+        # print (myList)
+        # print ([item[1][1] for item in myList])
+        x= max([item[1][1] for item in myList])
+        for l in myList:
+            if l[1][1]== x:
+                print (l[0])
+                return l[1][0]
+        # the random is bad need to get it better
         return random.choices(population=myList,weights=myListWeights,k=1)[0][1][0]
+        # return max()
 
     def selectAction(self, myself, enemy):
         hunt = 0
