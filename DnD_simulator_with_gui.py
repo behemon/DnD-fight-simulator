@@ -461,6 +461,8 @@ class GuiSetup(tkinter.Tk):
 
         turn = self.check_initiative(self.hero, monster)
 
+        battle = Battle(self.myMap,self.hero,monster)
+
         while True:
             if turn:
                 sleep(0.2)
@@ -833,6 +835,15 @@ class GuiSetup(tkinter.Tk):
 
         # terminate the unit from memory and the board
         self.canvas.delete(figure1)
+
+
+class Battle():
+    def __init__(self,map,hero,monster_list):
+        self.dBattle_a(map,hero,monster_list)
+    def dBattle_a(self,map,hero,monster_list):
+        print (map)
+        print (hero)
+        print (monster_list)
 
 
 class Unit:
