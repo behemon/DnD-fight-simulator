@@ -229,8 +229,8 @@ class GuiSetup(tkinter.Tk):
         self.grid()
 
         # canvas size configuration
-        self.canvasWidth = 300
-        self.canvasHeight = 300
+        self.canvasWidth = 600
+        self.canvasHeight = 600
         self.canvas = tkinter.Canvas(self, width=self.canvasWidth, height=self.canvasHeight, background='white')
         self.canvas.grid(row=0, column=11, rowspan=11)
 
@@ -395,7 +395,7 @@ class GuiSetup(tkinter.Tk):
         self.hero = Hero(self.heroName)
         self.hero.populate_space_on_grid(self)
         # create the unit on grid
-        self.heroAvatar = self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="blue")
+        self.heroAvatar = self.canvas.create_oval(self.hero.x0, self.hero.y0, self.hero.x1, self.hero.y1, fill="green")
         self.update()
 
         self.lootList = []
