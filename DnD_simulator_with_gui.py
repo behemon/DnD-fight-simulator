@@ -47,6 +47,10 @@ from time import sleep
 import tkinter
 from tkinter import N, S, E, W
 from A_star_algorithm import pathFind
+from PyQt5 import uic
+
+import PyQt5
+uic.loadUiType("DnD_gui.ui")
 
 # import canvas_test as maps
 from dictionaries import *
