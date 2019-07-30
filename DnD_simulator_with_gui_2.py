@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QPushButton
 from dictionaries import *
 import monster_dictionary as MD
 from map_generator import mainMap
+import NPC_class
 
 
 config = configparser.ConfigParser(strict=False)
@@ -21,13 +22,14 @@ config.read("settings.cfg")
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
-        super(Ui_MainWindow, self).__init__() # Call the inherited classes __init__ method
-        ui = uic.loadUi('DnD_gui.ui', self) # Load the .ui file
+        super(Ui_MainWindow, self).__init__()  # Call the inherited classes __init__ method
+        self.ui = uic.loadUi('DnD_gui.ui', self)  # Load the .ui file
         self.myMap = mainMap()
-        # self.create_map_matrix(myMap)
         self.update_map_matrix(self.myMap)
         self.show()  # Show the GUI
-        ui.Button1.clicked.connect(self.on_click)
+        self.ui.Button1.clicked.connect(self.on_click)
+
+        self.hero = None
 
         self.show()
 
@@ -35,6 +37,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def on_click(self):
         print('Running Game')
         self.create_map_matrix(self.myMap)
+        self.hero = NPC_class.Hero(config.get('Hero_conf', 'Hname'))
+        self.generate_char()
+
+
 
     def create_map_matrix(self, myMap):
         myMap.__init__()
@@ -72,9 +78,20 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 else:
                     scene.addRect(r, pen)
 
+    def generate_char(self):
+        self.ui.label_H_AC.setText(str(self.hero.AC))
+        self.ui.label_H_HP.setText(str(self.hero.HitPoints))
+        self.ui.label_H_class.setText(str(self.hero.dClass))
+        self.ui.label_H_race.setText(str(self.hero.dRaceName))
+        self.ui.label_H_name.setText(str(self.hero.name))
+        self.ui.label_H_str.setText(str(self.hero.dStr))
+        self.ui.label_H_dex.setText(str(self.hero.dDex))
+        self.ui.label_H_con.setText(str(self.hero.dCons))
+        self.ui.label_H_int.setText(str(self.hero.dInt))
+        self.ui.label_H_wiz.setText(str(self.hero.dWis))
+        self.ui.label_H_cha.setText(str(self.hero.dCha))
 
 def main():
-
     app = QtWidgets.QApplication(sys.argv)
     window = Ui_MainWindow()
     app.exec_()
