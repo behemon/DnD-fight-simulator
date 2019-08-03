@@ -1,5 +1,6 @@
 import random
 import copy
+from PyQt5 import QtCore
 from dictionaries import *
 import monster_dictionary as MD
 
@@ -32,14 +33,20 @@ class Unit:
         self.weapon = None
         self.XpReword = 300
         self.inventory = []
+        self.figuresSizeX = 0
+        self.figuresSizeY = 0
+        self.x0 = 0
+        self.x1 = 0
+        self.y0 = 0
+        self.y1 = 0
 
     def populate_space_on_grid(self, gui, sell=None):
         if sell != None:
+            print('mof')
             self.location = sell
         else:
             # self.location = random.choice(list(gui.myMap.mapMatrix.keys()))
             self.location = random.choice(list(gui.myMap.freeSpaces()))
-
         self.figuresSizeX = gui.canvasWidth / gui.myMap.columns
         self.figuresSizeY = gui.canvasHeight / gui.myMap.rows
         # calculate size for the unit
@@ -47,6 +54,24 @@ class Unit:
         self.x1 = (1 + self.location[0]) * self.figuresSizeX
         self.y0 = self.location[1] * self.figuresSizeY
         self.y1 = (1 + self.location[1]) * self.figuresSizeY
+
+    def populate_space_on_grid_pyqt5(self, gui, side, sell=None):
+
+        if sell != None:
+            self.location = sell
+        else:
+            # self.location = random.choice(list(gui.myMap.mapMatrix.keys()))
+
+            self.location = random.choice(list(gui.freeSpaces()))
+
+        self.figuresSizeX = side / gui.columns
+        self.figuresSizeY = side / gui.rows
+        # calculate size for the unit
+        self.x0 = self.location[0] * self.figuresSizeX
+        self.x1 = (1 + self.location[0]) * self.figuresSizeX
+        self.y0 = self.location[1] * self.figuresSizeY
+        self.y1 = (1 + self.location[1]) * self.figuresSizeY
+
 
     def dmgCalc(self):
         dmg = int(self.Str / 4)
@@ -121,6 +146,7 @@ class Hero(Unit):
         self.weaponName = random.choice(list(dItemsWeaponsMele.keys()))
         self.weapon = dItemsWeaponsMele[self.weaponName]
         self.calcAC()
+        self.color = QtCore.Qt.green
 
 
 class Mob(Unit):
@@ -153,6 +179,7 @@ class Mob(Unit):
         self.XpReword = int(mobParams[9])
         self.canHeal = False
         self.canLoot = False
+        self.color = QtCore.Qt.red
 
     def calcHP(self, x):
         x = x.split()

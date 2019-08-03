@@ -13,6 +13,7 @@ class mainMap():
         self.mapMatrix = {}
         self.makeMatrixDict()
         self.roomsList = []
+        self.side = 0
 
     def makeMatrixDict(self):
         for x in range(self.columns):
@@ -100,9 +101,6 @@ class mainMap():
             # print (points[n],points[n+1])
 
     def printMap(self):
-
-        self.makeRooms()
-        self.makeRoomPaths()
         print('Map:')
         for x in range(self.rows):
             for y in range(self.columns):
@@ -130,3 +128,19 @@ class mainMap():
             if self.mapMatrix[xy][0] != 1:
                 freespace.append(xy)
         return freespace
+
+    def DIJFreeSpaces(self):
+        xy=[]
+        for x in range(self.rows):
+            row = ""
+            for y in range(self.columns):
+                sell = self.mapMatrix[y,x][0]
+                if sell == 1:
+                    row = row + "X"
+                else:
+                    row = row + "."
+            xy.append(row)
+        # for row in xy:
+        #     print (row)
+        return xy
+
