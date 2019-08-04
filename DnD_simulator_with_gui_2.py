@@ -22,7 +22,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui_MainWindow, self).__init__()  # Call the inherited classes __init__ method
         self.ui = uic.loadUi('DnD_gui.ui', self)  # Load the .ui file
-
+        self.scene = None
         self.myMap = mainMap()
         self.myMap.side = 600 / config.getint("map", "columns") - 0.2
         self.side = 600 / config.getint("map", "columns") - 0.2
@@ -145,18 +145,24 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             weight, direction = self.check_neighbors_sells(self.hero, dij)
             self.move_unit(self.hero,dij,direction)
             sleep(1)
+            if weight < 1:
+                break
 
 
     def move_unit(self,unit, dij, direction):
         # if dij[unit.location[0]+self.dx[direction]][unit.location[1]+self.dy[direction]] == 2000:
         #     print("can't move in this direction")
         #     return
+
+        # self.scene.removeItem(self.scene.itemAt(unit.location))
+        if unit.qtitem:
+            self.scene.removeItem(unit.qtitem)
         new_x = unit.location[0] + self.dx[direction]
         new_y = unit.location[1] + self.dy[direction]
         unit.location = (new_x, new_y)
         self.update_unit_on_map(unit)
 
-    def check_neighbors_sells(self,unit,map):
+    def check_neighbors_sells(self, unit, map):
         xy = [0,0]
         weight = 2000
         direction = 0
@@ -179,7 +185,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         x_offset = unit.location[0] * self.side
         y_offset = unit.location[1] * self.side
         diameter = self.side
-        self.scene.addEllipse(x_offset, y_offset, diameter, diameter, pen, brush)
+        unit.qtitem = self.scene.addEllipse(x_offset, y_offset, diameter, diameter, pen, brush)
         self.show()
 
 

@@ -146,7 +146,7 @@ class Hero(Unit):
         self.weaponName = random.choice(list(dItemsWeaponsMele.keys()))
         self.weapon = dItemsWeaponsMele[self.weaponName]
         self.calcAC()
-        self.color = QtCore.Qt.green
+        self.color = QtCore.Qt.blue
 
 
 class Mob(Unit):
