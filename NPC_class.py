@@ -39,6 +39,7 @@ class Unit:
         self.x1 = 0
         self.y0 = 0
         self.y1 = 0
+        self.dij = []
 
     def populate_space_on_grid(self, gui, sell=None):
         if sell != None:
@@ -140,6 +141,7 @@ class Unit:
 class Hero(Unit):
     def __init__(self, name):
         Unit.__init__(self, name)
+        self.type = "hero"
         self.kills = 0
         self.canHeal = True
         self.canLoot = True
@@ -153,6 +155,7 @@ class Mob(Unit):
     def __init__(self):
         Unit.__init__(self, "")
 
+        self.type = "monster"
         self.name = random.choice(challenge_0)
         # self.name = random.choice(random.choice(challenge_all))
         mobParams = MD.monsterDict[self.name]

@@ -119,7 +119,7 @@ costable = [
 # X center ,Y center, radius, rays, steps of 360
 
 
-def fov_calc(px, py, rad, fov, level, rays=360, step=3 ):
+def fov_calc(px, py, rad, fov, level, W, H, rays=360, step=3 ):
     for i in range(0, rays + 1, step):
         ax = sintable[i]  # Get precalculated value sin(x / (180 / pi))
         ay = costable[i]  # cos(x / (180 / pi))
@@ -133,7 +133,6 @@ def fov_calc(px, py, rad, fov, level, rays=360, step=3 ):
 
             if x < 0 or y < 0 or x > W or y > H:  # If ray is out of range
                 break
-
             fov[int(round(x))][int(round(y))] = 1  # Make tile visible
 
             if level[int(round(x))][int(round(y))] == 1:  # Stop ray if it hit
@@ -151,4 +150,4 @@ if __name__ == "__main__":
 
     xy = random.choice(mymap.freeSpaces())
     print(mymap.mapMatrix)
-    fov_calc(xy[0], xy[1], 5, mymap.mapMatrix, mymap.mapMatrix)
+    fov_calc(xy[0], xy[1], 5, mymap.mapMatrix, mymap.mapMatrix, mymap.rows, mymap.columns)
