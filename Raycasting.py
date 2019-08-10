@@ -119,7 +119,7 @@ costable = [
 # X center ,Y center, radius, rays, steps of 360
 
 
-def fov_calc(px, py, rad, fov, level, W, H, rays=360, step=3 ):
+def fov_calc(px, py, rad, fov, level, W, H, rays=360, step=3):
     for i in range(0, rays + 1, step):
         ax = sintable[i]  # Get precalculated value sin(x / (180 / pi))
         ay = costable[i]  # cos(x / (180 / pi))
@@ -133,13 +133,12 @@ def fov_calc(px, py, rad, fov, level, W, H, rays=360, step=3 ):
 
             if x < 0 or y < 0 or x > W or y > H:  # If ray is out of range
                 break
-            fov[int(round(x))][int(round(y))] = 1  # Make tile visible
-
-            if level[int(round(x))][int(round(y))] == 1:  # Stop ray if it hit
+            fov[int(round(x))][int(round(y))] = "- "  # Make tile visible
+            # if level[int(round(x))][int(round(y))][0] == 1:  # Stop ray if it hit
+            if level[round(x),round(y)][0] == 1:  # Stop ray if it hit
                 break  # a wall.
 
-
-if __name__ == "__main__":
+def test1():
     import random
     import map_generator
 
@@ -151,3 +150,36 @@ if __name__ == "__main__":
     xy = random.choice(mymap.freeSpaces())
     print(mymap.mapMatrix)
     fov_calc(xy[0], xy[1], 5, mymap.mapMatrix, mymap.mapMatrix, mymap.rows, mymap.columns)
+
+def test2():
+    import random
+    import gog
+
+    mymap = gog.Map()
+    mymap.generateLevel()
+    mymap.useCellularAutomata()
+    mymap.make_map_dict()
+
+    rand_spot = random.choice(mymap.freeSpaces())
+
+    fov_calc(rand_spot[0], rand_spot[1], 5, mymap.level, mymap.mdict, 50, 50)
+    # momo = [[[] for f in range(50)] for i in range(50)]
+
+    for x in range(len(mymap.level)):
+        for y in range(len(mymap.level[x])):
+            if mymap.level[x][y] == 1:
+                mymap.level[x][y] = "# "
+            if mymap.level[x][y] == 0:
+                mymap.level[x][y] = ". "
+            if (x,y) == rand_spot:
+                mymap.level[x][y] = "F "
+
+    for x in mymap.level:
+        print(''.join(x))
+
+
+if __name__ == "__main__":
+    test2()
+
+
+
