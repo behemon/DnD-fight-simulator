@@ -40,6 +40,7 @@ class Unit:
         self.y0 = 0
         self.y1 = 0
         self.dij = []
+        self.qtitem = None
 
     def populate_space_on_grid(self, gui, sell=None):
         if sell != None:

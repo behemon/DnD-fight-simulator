@@ -14,6 +14,7 @@ from map_generator import mainMap
 from NPC_class import *
 import dijkstra_algorithm as dij
 import gog
+import Raycasting
 
 config = configparser.ConfigParser(strict=False)
 config.read("settings.cfg")
@@ -45,8 +46,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         self.hero = None
         self.units_list = []
-
-        self.show()
 
     @pyqtSlot()
     def on_click(self):
@@ -133,6 +132,41 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 else:
                     scene.addRect(r, pen)
 
+    def update_map_FOV(self):
+
+        black_pen = QtGui.QPen(QtCore.Qt.black)
+        white_brush = QtGui.QPen(QtCore.Qt.white)
+        gray_brush = QtGui.QBrush(QtCore.Qt.gray)
+        black_brush = QtGui.QBrush(QtCore.Qt.black)
+        # self.graphicsView.setScene(self.scene)
+        print(len(self.scene.items()))  # counts the amount of items on board
+
+        for x in range(self.myMap.rows):
+            for y in range(self.myMap.columns):
+
+                transform = QtGui.QTransform()
+                transform.reset()
+                # xy = x * self.side, y * self.side
+                # xy = QtCore.QPointF((x+0.5) * self.side, (y+0.5) * self.side)
+                xy = QtCore.QPointF(x * self.side, y * self.side)
+                item = self.scene.itemAt(xy, transform)
+                # print(dir(item))
+                self.scene.removeItem(item)  # remove old squere
+                # self.scene.removeItem(self.scene.itemAt(xy, transform))  # remove old squere
+
+                if self.myMap.level[x][y] is 0:
+                    r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
+                    self.scene.addRect(r, black_pen, gray_brush)
+
+                elif self.myMap.level[x][y] is "- ":
+                    r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
+                    self.scene.addRect(r, black_pen, white_brush)
+                #
+                elif self.myMap.level[x][y] is 1:
+                    r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
+                    self.scene.addRect(r, black_pen, black_brush)
+
+
     def generate_char(self):
         self.ui.label_H_AC.setText(str(self.hero.AC))
         self.ui.label_H_HP.setText(str(self.hero.HitPoints))
@@ -161,24 +195,39 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.test_actions()
 
     def test_actions(self):
+        # while len(self.units_list) > 1 or self.hero not in self.units_list:
         while True:
             for unit in self.units_list:
-                if unit.type is "monster":
+                if unit.type is "monster":  # monster move
                     unit.dij = self.DIJmap([self.hero.location], False)
-                    self.update()
-                    QtWidgets.QApplication.processEvents()
+                    # self.update()
+
                     weight, direction = self.check_neighbors_sells(unit, unit.dij)
-                    if weight > 0: # distance to target 0 - the target is next cell
+                    if weight > 0 and direction is not -1: # distance to target 0 - the target is next cell
                         self.move_unit(unit, direction)
-                    sleep(0.8/len(self.units_list))
-                else:
-                    pass
+                    else:
+                        self.delete_unit(unit)
+                    sleep(0.1/len(self.units_list))
+                else:  # hero moves
+                    sleep(0.8 / len(self.units_list))
+                    self.move_unit(unit, random.choice(range(self.freedom_directions)))
+                    Raycasting.fov_calc(unit.location[0], unit.location[1], 15, self.myMap.level, self.myMap.mdict, 50, 50)
+                    # print(self.myMap.level)
+
+                QtWidgets.QApplication.processEvents()  # UPDATES THE scene !!!! not self.show or self.update !!!!
+            self.update_map_FOV()
+            QtWidgets.QApplication.processEvents()  # UPDATES THE scene !!!! not self.show or self.update !!!!
+
+    def delete_unit(self, unit):
+        self.scene.removeItem(unit.qtitem)
+        self.myMap.mdict[unit.location] = [0, None]
+        self.units_list.remove(unit)
 
     def test_movment(self):
         dij = self.DIJmap(verbose=False)
 
         while True:
-            self.update()
+            # self.update()
             QtWidgets.QApplication.processEvents()
             weight, direction = self.check_neighbors_sells(self.hero, dij)
             self.move_unit(self.hero, dij, direction)
@@ -191,12 +240,14 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         #     print("can't move in this direction")
         #     return
 
-        # self.scene.removeItem(self.scene.itemAt(unit.location))
+        new_x = unit.location[0] + self.dx[direction]
+        new_y = unit.location[1] + self.dy[direction]
+        if self.myMap.mdict[(new_x,new_y)][0] is 1:
+            return
+
         if unit.qtitem:
             self.scene.removeItem(unit.qtitem)
 
-        new_x = unit.location[0] + self.dx[direction]
-        new_y = unit.location[1] + self.dy[direction]
         if self.myMap.mdict[new_x, new_y][1] is None:
             self.myMap.mdict[unit.location][1] = None
             unit.location = (new_x, new_y)
@@ -205,22 +256,26 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def check_neighbors_sells(self, unit, map):
         xy = [0,0]
-        weight = 2000
-        direction = 0
+        weight = 1000
+        direction = -1
+        dot = []
         for cell in range(self.freedom_directions):
             xy_new = ([unit.location[1]+self.dy[cell]], [unit.location[0]+self.dx[cell]])
             x_new = unit.location[1] + self.dy[cell]
             y_new = unit.location[0] + self.dx[cell]
             weight_new = (map[x_new][y_new])
-            if weight > weight_new:
+            if 2000 > weight >= weight_new:
                 weight = weight_new
                 xy = xy_new
                 direction = cell
+                dot.append(cell)
         # direction mapping
         #   5   6   7
         #   4   X   0
         #   3   2   1
+        # print(dot)
         return weight, direction
+        # return weight, random.choice(dot)
 
     def update_unit_on_map(self, unit):
         unit.populate_space_on_grid_pyqt5(self.myMap, self.side, unit.location)
@@ -231,7 +286,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         y_offset = unit.location[1] * self.side
         diameter = self.side
         unit.qtitem = self.scene.addEllipse(x_offset, y_offset, diameter, diameter, pen, brush)
-        self.show()
+        # self.show()
 
 
 def main():

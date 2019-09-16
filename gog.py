@@ -5,7 +5,8 @@ from math import sqrt
 
 class Map:
     def __init__(self):
-        self.level = []
+        self.level = []  # 1 - wall 0 - free space
+        self.fov = []  # 1 - wall 0 - revealed area 2 - visited area
         config = configparser.ConfigParser(strict=False)
         config.read("settings.cfg")
         self.columns = config.getint("map", "columns")
@@ -90,14 +91,14 @@ class Map:
         for x in range(self.rows):
             row = ""
             for y in range(self.columns):
-                sell = self.mdict[y,x][0]
-                xsell = self.mdict[x,y][1]
+                sell = self.mdict[y, x][0]
+                xsell = self.mdict[x, y][1]
                 if sell == 1:
-                    row = row + "X"
+                    row = row + 'X' # wall
                 elif xsell is not None:
-                    row = row + "X"
+                    row = row + 'X' # entity
                 else:
-                    row = row + "."
+                    row = row + '.' # free space
             xy.append(row)
         # for row in xy:
         #     print (row)
