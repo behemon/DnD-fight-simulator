@@ -25,6 +25,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         super(Ui_MainWindow, self).__init__()  # Call the inherited classes __init__ method
         self.ui = uic.loadUi('DnD_gui.ui', self)  # Load the .ui file
         self.scene = None
+        self.FOV_list = []
 
         # self.myMap = mainMap()
         # self.myMap.side = 600 / config.getint("map", "columns") - 0.2
@@ -137,9 +138,14 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         black_pen = QtGui.QPen(QtCore.Qt.black)
         white_brush = QtGui.QPen(QtCore.Qt.white)
         gray_brush = QtGui.QBrush(QtCore.Qt.gray)
+        light_gray_brush = QtGui.QBrush(QtCore.Qt.lightGray)
         black_brush = QtGui.QBrush(QtCore.Qt.black)
         # self.graphicsView.setScene(self.scene)
         print(len(self.scene.items()))  # counts the amount of items on board
+
+        for sq in self.FOV_list:
+            self.scene.removeItem(sq)
+        self.FOV_list = []
 
         for x in range(self.myMap.rows):
             for y in range(self.myMap.columns):
@@ -151,20 +157,24 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 xy = QtCore.QPointF(x * self.side, y * self.side)
                 item = self.scene.itemAt(xy, transform)
                 # print(dir(item))
-                self.scene.removeItem(item)  # remove old squere
+                # self.scene.removeItem(item)  # remove old squere
                 # self.scene.removeItem(self.scene.itemAt(xy, transform))  # remove old squere
 
                 if self.myMap.level[x][y] is 0:
                     r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
-                    self.scene.addRect(r, black_pen, gray_brush)
+                    self.FOV_list.append(self.scene.addRect(r, black_pen, gray_brush))
+
+                if self.myMap.level[x][y] is 2:
+                    r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
+                    self.FOV_list.append(self.scene.addRect(r, black_pen, light_gray_brush))
 
                 elif self.myMap.level[x][y] is "- ":
                     r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
-                    self.scene.addRect(r, black_pen, white_brush)
+                    self.FOV_list.append(self.scene.addRect(r, black_pen, white_brush))
                 #
                 elif self.myMap.level[x][y] is 1:
                     r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
-                    self.scene.addRect(r, black_pen, black_brush)
+                    self.FOV_list.append(self.scene.addRect(r, black_pen, black_brush))
 
 
     def generate_char(self):
@@ -211,6 +221,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 else:  # hero moves
                     sleep(0.8 / len(self.units_list))
                     self.move_unit(unit, random.choice(range(self.freedom_directions)))
+                    print (self.myMap.mdict)
                     Raycasting.fov_calc(unit.location[0], unit.location[1], 15, self.myMap.level, self.myMap.mdict, 50, 50)
                     # print(self.myMap.level)
 
