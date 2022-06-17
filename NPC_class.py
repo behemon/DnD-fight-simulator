@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from dictionaries import *
 import monster_dictionary as MD
 
+
 class Unit:
     def __init__(self, name):
         # charecter configuration
@@ -140,7 +141,7 @@ class Unit:
 
 
 class Hero(Unit):
-    def __init__(self, name):
+    def __init__(self, name: str):
         Unit.__init__(self, name)
         self.type = "hero"
         self.kills = 0
@@ -153,12 +154,13 @@ class Hero(Unit):
 
 
 class Mob(Unit):
-    def __init__(self):
+    def __init__(self, mob_name=None):
         Unit.__init__(self, "")
 
         self.type = "monster"
-        self.name = random.choice(challenge_0)
+        # self.name = random.choice(challenge_0)
         # self.name = random.choice(random.choice(challenge_all))
+        self.name = mob_name
         mobParams = MD.monsterDict[self.name]
         self.dRaceName = "monster"
         self.dRace = "monster"
@@ -195,14 +197,16 @@ class Mob(Unit):
             result = 1
         return result
 
-def diceRoll(dice):
+
+def diceRoll(dice: str):
     x = dice.split("d")
     result = 0
     for times in range(int(x[0])):
         result += random.randint(1, int(x[1]))
     return result
 
-def abilityGen(numOfRolls):
+
+def abilityGen(numOfRolls: int):
     rollsList = []
     for x in range(numOfRolls):
         rollsList.append(random.randint(1, 6))

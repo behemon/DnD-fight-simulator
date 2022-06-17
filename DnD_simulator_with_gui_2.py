@@ -176,7 +176,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                     r = QtCore.QRectF(QtCore.QPointF(x * self.side, y * self.side), QtCore.QSizeF(self.side, self.side))
                     self.FOV_list.append(self.scene.addRect(r, black_pen, black_brush))
 
-
     def generate_char(self):
         self.ui.label_H_AC.setText(str(self.hero.AC))
         self.ui.label_H_HP.setText(str(self.hero.HitPoints))
