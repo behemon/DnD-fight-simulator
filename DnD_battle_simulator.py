@@ -166,6 +166,15 @@ def test_map_generator():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                column = pos[0] // (pixel_width + margin)
+                row = pos[1] // (pixel_height + margin)
+                print("Click ", pos, "Grid coordinates: ", row, column)
+
+                my_map.mdict[row, column][0] = 5
+                fov_list = Raycasting.fov_calc(row, column, 5, my_map.level, my_map.mdict, num_columns,
+                                               num_rows)
 
         scr.fill(black)
         update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.mdict)
