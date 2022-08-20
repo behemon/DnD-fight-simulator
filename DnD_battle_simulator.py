@@ -104,16 +104,25 @@ def init_pygame_window(width, height, margin, grid_size_x, grid_size_y):
 
 def update_grid(width, height, margin, grid_size_x, grid_size_y, scr, my_map):
     black = (0, 0, 0)
+    red = (255, 0, 0)
     grey = (105, 105, 105)
     white = (255, 255, 255)
 
     for row in range(grid_size_x):
         for column in range(grid_size_y):
             color = white
-            if my_map[row][column] in [1]:
+
+            # if my_map[row][column] in [1]:
+            if my_map[row, column][0] in [1]: # wall
                 color = black
-            if my_map[row][column] in [2]:
+
+            # if my_map[row][column] in [2]:
+            if my_map[row, column][0] in [2]: # FOV
                 color = grey
+
+            if my_map[row, column][0] in [5]: # player
+                color = red
+
             pygame.draw.rect(scr,
                              color,
                              [(margin + width) * column + margin,
@@ -126,6 +135,7 @@ def test_map_generator():
 
     import configparser
     import gog
+    import Raycasting
 
     config = configparser.ConfigParser(strict=False)
     config.read("settings.cfg")
@@ -140,8 +150,15 @@ def test_map_generator():
     my_map = gog.Map()
     my_map.generateLevel()
     my_map.useCellularAutomata()
-    # print (my_map.level)
-    update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.level)
+    my_map.make_map_dict()
+    update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.mdict)
+
+    rand_spot = random.choice(my_map.freeSpaces())
+    my_map.mdict[rand_spot[0], rand_spot[1]][0] = 5
+
+    fov_list = Raycasting.fov_calc(rand_spot[0], rand_spot[1], 5, my_map.level, my_map.mdict, num_columns, num_rows)
+    print(fov_list)
+
     done = False
     clock = pygame.time.Clock()
     black = (0, 0, 0)
@@ -151,7 +168,7 @@ def test_map_generator():
                 done = True
 
         scr.fill(black)
-        update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.level)
+        update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.mdict)
         clock.tick(50)
         pygame.display.flip()
     pygame.quit()

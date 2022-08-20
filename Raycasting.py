@@ -120,13 +120,23 @@ costable = [
 
 
 def fov_calc(px, py, rad, fov, level, W, H, rays=360, step=3):
+    """calculate the Field Of View of the entety
+
+    :param px: X location on map
+    :param py: Y location on map
+    :param rad: Radius of view
+    :param fov:
+    :param level:
+    :param W: map width
+    :param H: map height
+    """
+    fov_list = []
     for i in range(0, rays + 1, step):
         ax = sintable[i]  # Get precalculated value sin(x / (180 / pi))
         ay = costable[i]  # cos(x / (180 / pi))
 
         x = px  # Player's x
         y = py  # Player's y
-
         for z in range(rad):  # Cast the ray
             x += ax
             y += ay
@@ -134,9 +144,16 @@ def fov_calc(px, py, rad, fov, level, W, H, rays=360, step=3):
             if x < 0 or y < 0 or x > W or y > H:  # If ray is out of range
                 break
             fov[int(round(x))][int(round(y))] = "- "  # Make tile visible
-            # if level[int(round(x))][int(round(y))][0] == 1:  # Stop ray if it hit
-            if level[round(x),round(y)][0] == 1:  # Stop ray if it hit
+
+            if level[round(x), round(y)][0] == 0:
+                fov_list.append((round(x), round(y)))
+                level[round(x), round(y)][0] = 2
+                break
+
+            if level[round(x), round(y)][0] == 1:  # Stop ray if it hit
                 break  # a wall.
+    return fov_list
+
 
 def test1():
     import random
@@ -150,6 +167,7 @@ def test1():
     xy = random.choice(mymap.freeSpaces())
     print(mymap.mapMatrix)
     fov_calc(xy[0], xy[1], 5, mymap.mapMatrix, mymap.mapMatrix, mymap.rows, mymap.columns)
+
 
 def test2():
     import random

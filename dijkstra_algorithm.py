@@ -83,5 +83,5 @@ if __name__ == "__main__":
     '''
 
     costMap = parseInputMap(inputMap)
-    distMap = computeDistanceMap(costMap, [(1,1),(18,1)])
+    distMap = computeDistanceMap(costMap, [(1, 1), (4, 4)])
     printDistanceMap(distMap)
