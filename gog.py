@@ -9,10 +9,10 @@ class Map:
         self.fov = []  # 1 - wall 0 - revealed area 2 - visited area
         config = configparser.ConfigParser(strict=False)
         config.read("settings.cfg")
-        self.columns = config.getint("map", "columns")
-        self.rows = config.getint("map", "rows")
-        self.map_width = config.getint("map", "width")
-        self.map_height = config.getint("map", "height")
+        self.columns = config.getint("map", "num_columns")
+        self.rows = config.getint("map", "num_rows")
+        self.map_width = config.getint("map", "map_width_cells")
+        self.map_height = config.getint("map", "map_height_cells")
         '''
         level values of 1 are walls
         level values of 0 are floors
