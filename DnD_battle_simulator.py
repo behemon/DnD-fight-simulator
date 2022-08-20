@@ -1,5 +1,6 @@
 import random
 import time
+import pygame
 
 import NPC_class as npc
 import dictionaries as misc
@@ -93,5 +94,69 @@ def main():
     run_fight(hero, mob)
 
 
+def init_pygame_window(width, height, margin, grid_size_x, grid_size_y):
+    pygame.display.set_caption("Grid")
+    window_size = [(width + margin) * grid_size_x + margin, (height + margin) * grid_size_y + margin]
+    scr = pygame.display.set_mode(window_size)
+    pygame.init()
+    return scr
+
+
+def update_grid(width, height, margin, grid_size_x, grid_size_y, scr, my_map):
+    black = (0, 0, 0)
+    grey = (105, 105, 105)
+    white = (255, 255, 255)
+
+    for row in range(grid_size_x):
+        for column in range(grid_size_y):
+            color = white
+            if my_map[row][column] in [1]:
+                color = black
+            if my_map[row][column] in [2]:
+                color = grey
+            pygame.draw.rect(scr,
+                             color,
+                             [(margin + width) * column + margin,
+                              (margin + height) * row + margin,
+                              width,
+                              height])
+            
+            
+def test_map_generator():
+
+    import configparser
+    import gog
+
+    config = configparser.ConfigParser(strict=False)
+    config.read("settings.cfg")
+    num_columns     = config.getint("map", "map_height_cells")
+    num_rows        = config.getint("map", "map_width_cells")
+    pixel_width     = config.getint("map", "num_rows")
+    pixel_height    = config.getint("map", "num_columns")
+    margin          = config.getint("map", "margin")
+
+    scr = init_pygame_window(pixel_width, pixel_height, margin, num_columns, num_rows)
+
+    my_map = gog.Map()
+    my_map.generateLevel()
+    my_map.useCellularAutomata()
+    # print (my_map.level)
+    update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.level)
+    done = False
+    clock = pygame.time.Clock()
+    black = (0, 0, 0)
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+
+        scr.fill(black)
+        update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.level)
+        clock.tick(50)
+        pygame.display.flip()
+    pygame.quit()
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    test_map_generator()
