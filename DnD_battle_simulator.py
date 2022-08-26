@@ -1,3 +1,5 @@
+import os
+import sys
 import random
 import time
 import pygame
@@ -151,8 +153,93 @@ def main():
     run_fight(hero, mob)
 
 
+def populate_map(hero, npc_list, my_map):
+    pass
+
+
 def my_function():
     pass
+
+
+def tileset_test():
+
+    pygame.init()
+
+    fps = 60
+    fpsClock = pygame.time.Clock()
+    width, height = 640, 480
+    screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+
+    surfaceOne = pygame.Surface((100, 100))
+    surfaceOne.fill((200, 100, 100,))
+
+    surfaceTwo = pygame.Surface((30, 30))
+    surfaceTwo.fill((100, 200, 100,))
+
+    surfaceOne.blit(
+        surfaceTwo,
+        [10, 10],
+        [0, 0, 10, 5]
+    )
+    tiles = tileset_load()
+
+    # Game loop.
+    while True:
+        screen.fill((20, 20, 20))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        # screen.blit(surfaceOne, [10, 10])
+        screen.blit(tiles[2], [10, 10])
+
+        pygame.display.flip()
+        fpsClock.tick(fps)
+
+
+def tileset_load():
+
+    pieces = pygame.image.load(os.path.join("res/img/character_and_tileset", "Dungeon_Character.png")).convert_alpha()
+
+    char1 = pygame.Surface.subsurface(pieces, (64, 0, 16, 16))
+
+    char01a = pygame.Surface.subsurface(pieces, (0 , 0 , 16, 16))
+    char02a = pygame.Surface.subsurface(pieces, (16, 0 , 16, 16))
+    char03a = pygame.Surface.subsurface(pieces, (32, 0 , 16, 16))
+    char04a = pygame.Surface.subsurface(pieces, (48, 0 , 16, 16))
+    char05a = pygame.Surface.subsurface(pieces, (64, 0 , 16, 16))
+    char06a = pygame.Surface.subsurface(pieces, (80, 0 , 16, 16))
+    char07a = pygame.Surface.subsurface(pieces, (96, 0 , 16, 16))
+
+    mob01a = pygame.Surface.subsurface(pieces, (0 , 16, 16, 16))
+    mob02a = pygame.Surface.subsurface(pieces, (16, 16, 16, 16))
+    mob03a = pygame.Surface.subsurface(pieces, (32, 16, 16, 16))
+    mob04a = pygame.Surface.subsurface(pieces, (48, 16, 16, 16))
+    mob05a = pygame.Surface.subsurface(pieces, (64, 16, 16, 16))
+    mob06a = pygame.Surface.subsurface(pieces, (80, 16, 16, 16))
+    mob07a = pygame.Surface.subsurface(pieces, (96, 16, 16, 16))
+
+    char01b = pygame.Surface.subsurface(pieces, (0 , 32, 16, 16))
+    char02b = pygame.Surface.subsurface(pieces, (16, 32, 16, 16))
+    char03b = pygame.Surface.subsurface(pieces, (32, 32, 16, 16))
+    char04b = pygame.Surface.subsurface(pieces, (48, 32, 16, 16))
+    char05b = pygame.Surface.subsurface(pieces, (64, 32, 16, 16))
+    char06b = pygame.Surface.subsurface(pieces, (80, 32, 16, 16))
+    char07b = pygame.Surface.subsurface(pieces, (96, 32, 16, 16))
+
+    mob01b = pygame.Surface.subsurface(pieces, (0 , 48, 16, 16))
+    mob02b = pygame.Surface.subsurface(pieces, (16, 48, 16, 16))
+    mob03b = pygame.Surface.subsurface(pieces, (32, 48, 16, 16))
+    mob04b = pygame.Surface.subsurface(pieces, (48, 48, 16, 16))
+    mob05b = pygame.Surface.subsurface(pieces, (64, 48, 16, 16))
+    mob06b = pygame.Surface.subsurface(pieces, (80, 48, 16, 16))
+    mob07b = pygame.Surface.subsurface(pieces, (96, 48, 16, 16))
+
+    tileset_chars = [char01a, char02a, char03a, char04a, char05a, char06a, char07a]
+    tileset_mobs = [mob01a, mob02a, mob03a, mob04a, mob05a, mob06a, mob07a]
+    return tileset_chars, tileset_mobs
+
 
 
 def generate_map():
@@ -172,16 +259,21 @@ def main2():
     pixel_height    = config.getint("map", "num_columns")
     margin          = config.getint("map", "margin")
     my_map = None
-    extra = 1000
+    extra = (pixel_width+margin)*num_columns
     objects = []
+    run_battle = False
+    hero = None
+    npc_list = []
+    location = [0, 0]
+    selection = 0
 
     scr = init_pygame_window(pixel_width, pixel_height, margin, num_columns, num_rows, extra)
 
-    x1 = 800
+    x1 = extra + 100
     y1 = 660
     x1d = 100
     y1d = 20
-    x2 = 800
+    x2 = extra + 100
     y2 = 700
     x2d = 100
     y2d = 20
@@ -189,7 +281,7 @@ def main2():
     custom_button1 = Button(x1, y1, x1d, y1d, objects, 'Reset (onePress)', generate_map)
     custom_button2 = Button(x2, y2, x2d, y2d, objects, 'Start (onePress)', generate_map)
 
-    # my_map = generate_map()
+    tileset_chars, tileset_mobs = tileset_load()
 
     done = False
     clock = pygame.time.Clock()
@@ -197,35 +289,58 @@ def main2():
 
     # main Loop
     while not done:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                column = pos[0] // (pixel_width + margin)
-                row = pos[1] // (pixel_height + margin)
+                row = pos[0] // (pixel_width + margin)
+                column = pos[1] // (pixel_height + margin)
                 print("Click ", pos, "Grid coordinates: ", row, column)
 
                 # check if the click is on the button
                 if custom_button1.buttonRect.collidepoint(pos):
                     if custom_button1.reply:
                         my_map = custom_button1.reply
-                    # my_map = generate_map()
+
+                # check is second button pressed and the map populated then runs the battle sim
+                if custom_button2.buttonRect.collidepoint(pos) and my_map:
+                    run_battle = True
+                    hero = npc.Hero(random.choice(list(misc.dListOfNamesD.keys())))  # chose hero name randomly
+                    npc_list.append(npc.Mob(random.choice(misc.challenge_1)))
+                    populate_map(hero, npc_list, my_map)
+
+                    location = random.choice(list(my_map.freeSpaces()))
+                    selection = random.randint(0, 6)
+
 
                 # checks if we click in the battle map
                 if (pixel_width + margin) * num_columns + margin > pos[0] and \
                         (pixel_height + margin) * num_rows > pos[1]:
-                    my_map.mdict[row, column][0] = 5
+                    # my_map.mdict[row, column][0] = 5
+
                     fov_list = Raycasting.fov_calc(row, column, 5, my_map.level, my_map.mdict, num_columns,
                                                    num_rows)
-
+        if run_battle:
+            pass
+            '''
+                main logic:
+                1. divide fight to phases
+                    a. who goes first
+                    b. select action
+            '''
         scr.fill(black)
-
         for obj in objects:
             obj.process(scr)
 
         if my_map:
             update_grid(pixel_width, pixel_height, margin, num_columns, num_rows, scr, my_map.mdict)
+
+            scr.blit(tileset_chars[selection], [(pixel_width + margin) * location[0]+1, (pixel_height + margin) * location[1]+1])
+
+            # update the sprites ! not done yet
+            # update_items()
 
         clock.tick(50)
         pygame.display.flip()
@@ -253,14 +368,14 @@ def update_grid(width, height, margin, grid_size_x, grid_size_y, scr, my_map):
             color = white
 
             # if my_map[row][column] in [1]:
-            if my_map[row, column][0] in [1]: # wall
+            if my_map[column, row][0] in [1]: # wall
                 color = black
 
             # if my_map[row][column] in [2]:
-            if my_map[row, column][0] in [2]: # FOV
+            if my_map[column, row][0] in [2]: # FOV
                 color = grey
 
-            if my_map[row, column][0] in [5]: # player
+            if my_map[column, row][0] in [5]: # player
                 color = red
 
             pygame.draw.rect(scr,
@@ -413,5 +528,6 @@ def pygame_test_buttons():
 if __name__ == "__main__":
     # main()
     main2()
+    # tileset_test()
     # test_map_generator()
     # pygame_test_buttons()
